@@ -1,0 +1,47 @@
+% CSC488 - Assignment 1
+% File: A1d.488
+% Date: 2015-01-13
+% Authors: c4vinkti
+
+begin
+    % Define procedures
+    procedure proc_no_params begin
+        put "I'm a procedure with no parameters", skip
+        return
+    end
+
+    procedure proc_with_params(integer num) begin
+        put "I'm a procedure given parameter: ", num, skip
+        return
+    end
+
+    % Define functions
+    integer function func_no_params begin
+        put "I'm a function without parameters, about to return 5", skip
+        return (5)
+    end
+
+    integer function func_with_params(integer a, integer b) begin
+        put "I'm a function given two parameters: ", a, ", ", b, skip
+        put "About to return their sum.", skip
+        return (a + b)
+    end
+
+    % Invoke procedures and functions
+    put "About to invoke a procedure without parameters", skip
+    proc_no_params
+    put skip
+
+    put "About to invoke a procedure with parameter 7", skip
+    proc_with_params(7)
+    put skip
+
+    integer retval
+    put "About to invoke a function without parameters", skip
+    retval <= func_no_params
+    put "Return value: ", retval, skip
+
+    put "About to invoke a function with parameters 2 and 4", skip
+    retval <= func_with_params(2, 4)
+    put "Return value: ", retval, skip
+end
