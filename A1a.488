@@ -1,0 +1,57 @@
+% CSC488 - Assignment 1
+% File: A1a.488
+% Date: 2015-01-13
+
+begin
+    % Get two numbers from user
+    integer a, b
+    put "Enter two numbers:", skip
+    get a, b
+    put skip
+
+    % Arithmetic operators
+    put "Arithmetic", skip
+    put "------------------", skip
+    put "Unary minus:    ",    -a, skip
+    put "Addition:       ", a + b, skip
+    put "Subtraction:    ", a - b, skip
+    put "Multiplication: ", a * b, skip
+    put "Division:       ", a / b, skip
+    put skip
+
+    % Logical operators
+    put "Logical", skip
+    put "------------------", skip
+    if !false then
+        put "Not False = True"
+    end
+    if true & true then
+        put "True and True = True"
+    end
+    if true | false then
+        put "True or False = True"
+    end
+    put skip
+
+    % Comparison operators
+    put "Comparison", skip
+    put "------------------", skip
+    if a = b then
+        put "A == B", skip
+    end
+    if a != b then
+        put "A != B", skip
+    end
+    if a < b then
+        put "A < B", skip
+    end
+    if a <= b then
+        put "A <= B", skip
+    end
+    if a > b then
+        put "A > B", skip
+    end
+    if a >= b then
+        put "A >= B", skip
+    end
+end
