@@ -1,0 +1,36 @@
+% CSC488 - Assignment 1
+% File: A1c.488
+% Date: 2015-01-13
+% Authors: c4vinkti
+
+% Various ways of counting to 10
+begin
+    integer a
+
+    % Infinite loop, explicit exit
+    a <= 1
+    loop
+        put a, " "
+        if a = 10 then
+            exit
+        end
+        a <= a + 1
+    end
+    put skip
+
+    % Infinite loop, 'exit when'
+    a <= 1
+    loop
+        put a, " "
+        exit when a = 10
+        a <= a + 1
+    end
+    put skip
+
+    % Conditional loop
+    a <= 1
+    while a <= 10 do
+        put a, " "
+        a <= a + 1
+    end
+end
