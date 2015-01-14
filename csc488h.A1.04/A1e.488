@@ -43,7 +43,6 @@ begin
     end
     proc_with_params(1, 10)
 
-
     % Recursive function without parameters
     count <= 1
     integer function func_no_params begin
@@ -57,7 +56,6 @@ begin
     end
     result <= func_no_params
     put "Counted to ", result, " in a recursive function without parameters!"
-
 
     % Recursive function with parameters
     integer function func_with_params(integer from, integer to) begin
