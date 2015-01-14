@@ -1,4 +1,5 @@
 % CSC488 - Compilers
+
 % A1.a A program that uses all arithmetic, logical, and comparison operators
 
 begin
@@ -19,23 +20,16 @@ begin
 	% Logical Statements
 
 	if !T then put A, skip else put B, skip end,  
-
 	if T & F then put A, skip else put B, skip end,
-
 	if T | F then put A, skip else put B, skip end,
 
 	% Comparison Operators
 
 	if A = B then put A, skip end,
-
 	if A != B then put A, skip end,
-
 	if A < B then put A, skip end,
-
 	if A <= B then put A, skip end,
-
 	if A > B then put A, skip end,
-
 	if A >= B then put A, skip end,
-	
+
 end
