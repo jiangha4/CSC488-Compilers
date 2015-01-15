@@ -21,7 +21,7 @@ begin
         end
 
         % Check if we've counted to our target, recurse if not
-        if count < target begin
+        if count < target then
             count <= add_one(count)
             proc_no_params
         end
@@ -34,7 +34,7 @@ begin
     % Recursive procedure with parameters
     procedure proc_with_params(integer from, integer to) begin
         % Check if we've reached our target, recurse if not
-        if from < to begin
+        if from < to then
             proc_with_params(from + 1, to)
         end
 
@@ -48,7 +48,7 @@ begin
     count <= 1
     integer function func_no_params begin
         % Check if we've reached our target, recurse if not
-        if count < target begin
+        if count < target then
             count <= count + 1
             func_no_params
         end
@@ -62,7 +62,7 @@ begin
     % Recursive function with parameters
     integer function func_with_params(integer from, integer to) begin
         % Check if we've reached our target, recurse if not
-        if from < to begin
+        if from < to then
             func_with_params(from + 1, to)
         end
 
