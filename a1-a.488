@@ -1,60 +1,63 @@
 begin
+    integer x, y
+    boolean a, b
+    a <= true
+    b <= false
 
-	integer x, y
-	
-	% Get two integer values from user
-	put "Enter first number:", skip
-	get x
-	put "Enter second number:", skip
-	get y
-	put skip
-	
-	% Arithmetic operators
-	put "Arithmetic operators", skip
-	put "Unary minus (-", x, "): ", -x, skip
-	put "Unary minus (-", y, "): ", -y, skip
-	put "Addition (", x, " + ", y, "): ", x + y, skip
-	put "Subtraction (", x, " - ", y, "): ", x - y, skip
-	put "Multiplication (", x, " * ", y, "): ", x * y, skip
-	if y != 0 then
-		put "Division (", x, " / ", y, "): ", x / y, skip
-	else
-		put "Division by zero is undefined"
-	end
-	put skip
-	
-	% Logical operators
-	put "Logical operators", skip
-	put "Is ", x, " true: ", x = true, skip
-	put "Is ", x, " false: ", x = false, skip
-	put "Is ", y, " true: ", y = true, skip
-	put "Is ", y, " false: ", y = false, skip
-	put "NOT (!", x, "): ", !x, skip
-	put "NOT (!", y, "): ", !y, skip
-	put "AND (", x, " & ", y, "): ", x & y, skip
-	put "OR (", x, " | ", y, "): ", x | y, skip
-	put skip
-	
-	% Comparison operators
-	put "Comparison operators", skip
-	if x = y then
-		put x, " = ", y, skip
-	end
-	if x != y then
-		put x, " != ", y, skip
-	end
-	if x < y then
-		put x, " < ", y, skip
-	end
-	if x <= y then
-		put x, " <= ", y, skip
-	end
-	if x > y then
-		put x, " > ", y, skip
-	end
-	if x >= y then
-		put x, " >= ", y, skip
-	end
-	put skip
-	
+    % Get two integer values from user
+    put "Enter first number:", skip
+    get x
+    put "Enter second number:", skip
+    get y
+    put skip
+
+    % Arithmetic operators
+    put "Arithmetic operators", skip
+    put "Unary minus (-", x, "): ", -x, skip
+    put "Unary minus (-", y, "): ", -y, skip
+    put "Addition (", x, " + ", y, "): ", x + y, skip
+    put "Subtraction (", x, " - ", y, "): ", x - y, skip
+    put "Multiplication (", x, " * ", y, "): ", x * y, skip
+    if y != 0 then
+        put "Division (", x, " / ", y, "): ", x / y, skip
+    else
+        put "Division by zero is undefined"
+    end
+    put skip
+
+    % Logical operators
+    put "Logical operators", skip
+    put "Define: a = true, b = false", skip
+    if !a then
+        put "!a is true", skip
+    end
+    if a & b then
+        put "a & b is true", skip
+    end
+    if a | b then
+        put "a | b is true", skip
+    end
+    put skip
+
+    % Comparison operators
+    put "Comparison operators", skip
+    if x = y then
+        put x, " = ", y, skip
+    end
+    if x != y then
+        put x, " != ", y, skip
+    end
+    if x < y then
+        put x, " < ", y, skip
+    end
+    if x <= y then
+        put x, " <= ", y, skip
+    end
+    if x > y then
+        put x, " > ", y, skip
+    end
+    if x >= y then
+        put x, " >= ", y, skip
+    end
+    put skip
 end
