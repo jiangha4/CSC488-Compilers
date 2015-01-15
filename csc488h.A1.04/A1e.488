@@ -16,7 +16,7 @@ begin
         end
 
         % Prints a completion message
-        procedure print_done
+        procedure print_done begin
             put "Counted to 10 in a recursive procedure without parameters!"
         end
 
