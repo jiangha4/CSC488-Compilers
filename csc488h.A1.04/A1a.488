@@ -3,8 +3,9 @@
 
 begin
 
-integer x <= 10
-integer y <= 5
+integer x, y
+x <= 10
+y <= 5
 
 % ----- arithmetic operators ------
 put x + y, " -> should show 15", skip
