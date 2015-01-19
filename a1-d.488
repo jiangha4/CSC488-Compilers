@@ -1,0 +1,40 @@
+begin
+
+    % Non-recursive function, no parameters
+    integer function meaning_of_life begin
+        return(42)
+    end
+
+    % Non-recursive function, with parameters
+    integer function add(integer x, integer y) begin
+        return(x+y)
+    end
+
+    % Non-recursive procedure, no parameters
+    procedure greeting begin
+        put "hello, world", skip
+        return
+    end
+
+    % Non-recursive procedure, with parameters
+    procedure display(integer x) begin
+        put x, skip
+        return
+    end
+    
+
+    integer x, y
+    x <= 2
+    y <= 2
+    
+    % Call the procedures and functions
+    greeting
+    display(x)
+    
+    integer result, meaning
+    result <= add(x, y)
+    meaning <= meaning_of_life
+    put x, " + ", y, " = ", result, skip
+    put "The meaning of life is ", meaning, skip 
+
+end
