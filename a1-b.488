@@ -1,0 +1,70 @@
+begin
+    % Declare array to store fibonacci sequence numbers
+    integer fib[3]
+
+    % Declare 2D-array storing student numbers and grades
+    integer student_grades[5,2]
+
+    % Store function values for the domain [-5,5], and associated
+    % classification (0 = class A, 1 = class B)
+    integer f1[-5..5,2]
+    f1[-5,1] <= 10
+    f1[-5,2] <= 0
+    f1[-4,1] <= 8
+    f1[-4,2] <= 1
+    
+    % An 8-bit binary string representing ASCII character
+    boolean ascii_char[8]
+    ascii_char[1] <= false
+    ascii_char[2] <= true
+    ascii_char[3] <= true
+    ascii_char[4] <= false
+    ascii_char[5] <= false 
+    ascii_char[6] <= false
+    ascii_char[7] <= false
+    ascii_char[8] <= true
+
+
+    integer array_index
+
+    % Display next Fibonacci element
+    array_index <= 1
+    fib[array_index] <= 1
+    array_index <= array_index + 1
+    fib[array_index] <= 1
+    array_index <= array_index + 1
+    fib[array_index] = fib[array_index-1] + fib[array_index-2]
+    put "The Fibonacci element following ", fib[1], " and ", fib[2], " is ", fib[3], skip
+    put skip
+    
+    % Enter some student grades
+    array_index <= 1
+    integer student_num, student_grade
+    put "Enter student number: ", skip
+    get student_num
+    put "Enter student grade (as integer): ", skip
+    get student_grade
+    student_grades[array_index,1] = student_num
+    student_grades[array_index,2] = student_grade
+    put skip
+
+    % Display function f1 values, along with associated class
+    array_index <= -5
+    put "Function f1: x=", array_index, ", f1(x)=", f1[array_index,1]
+    if f1[array_index,2] = 0 then
+        put ", class A"
+    else
+        put ", class B"
+    end
+    put skip
+
+    % Display ASCII char
+    if ascii_char[1] = false & ascii_char[2] = true & ascii_char[3] = true & ascii_char[4] = false & ascii_char[5] = false & ascii_char[6] = false & ascii_char[7] = false & ascii_char[8] = true then
+        put "The character for b01100001 is 'a'", skip
+    else
+        put "Unrecognized character", skip
+    end  
+    put skip
+
+    
+end
