@@ -1,0 +1,49 @@
+begin
+    
+    integer x
+    x <= 1
+    
+    % Simple while-do loop
+    while x < 10 do
+        put "x = ", x, skip
+        x <= x + 1
+    end
+
+    % While-do loop with exit
+    x <= 1
+    while true do
+        put "x = ", x, skip
+        exit
+    end
+
+    % While-do loop with exit condition
+    x <= 1
+    while true do
+        put "x = ", x, skip
+        exit when x = 10
+        x <= x + 1
+    end
+    
+    % Infinite loop with exit
+    x <= 1
+    loop
+        put "x = ", x, skip
+        exit
+    end
+
+    % Infinite loop with exit condition
+    x <= 1
+    loop
+        put "x = ", x, skip
+        exit when x = 10
+        x <= x + 1
+    end
+
+    % Infinite loop, no exit
+    x <= 1
+    loop
+        put "x = ", x, skip
+    end
+
+    
+end
