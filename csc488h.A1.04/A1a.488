@@ -1,1 +1,97 @@
 % A program that uses all arithmetic, logical and comparison operators
+
+
+begin
+
+integer x <= 10
+integer y <= 5
+
+% ----- arithmetic operators ------
+put x + y, " -> should show 15", skip
+put x - y, " -> should show 5", skip
+put x * y, " -> should show 50", skip
+put x / y, " -> should show 2", skip
+
+% ----- comparison operators ------
+put "x = y "
+if x = y then
+    put "doesn't work"
+else
+    put "works"
+end
+put skip
+
+put "x != y "
+if x != y then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+put "x < y "
+if x < y then
+    put "doesn't work"
+else
+    put "works"
+end
+put skip
+
+put "x <= y "
+if x <= y then
+    put "doesn't work"
+else
+    put "works"
+end
+put skip
+
+put "x > y "
+if x > y then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+put "x >= y "
+if x >= y then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+% ----- logical operators ------
+put "true "
+if true then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+put "! true "
+if ! true then
+    put "doesn't work"
+else
+    put "works"
+end
+put skip
+
+put "true & true "
+if true & true then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+put "true | false "
+if true | false then
+    put "works"
+else
+    put "doesn't work"
+end
+put skip
+
+end
