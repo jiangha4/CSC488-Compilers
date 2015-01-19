@@ -1,1 +1,31 @@
 % a program using arrays including all forms of array declaration, positive and negative bounds
+
+begin
+
+% declarations
+integer one_d[3]
+integer one_d_range[2..5]
+integer one_d_neg_range[-2..2]
+
+integer two_d[2,3]
+integer two_d_range[1..3, 2..4]
+integer two_d_neg_range[-1..1, -2..0]
+
+% assignment
+one_d[2] <= 10
+one_d_range[3] <= 20
+one_d_neg_range[0] <= 30
+
+two_d[1,1] <= 40
+two_d_range[2,3] <= 50
+two_d_neg_range[0,0] <= 60
+
+% print
+put one_d[2], " -> should show 10", skip
+put one_d_range[3], " -> should show 20", skip
+put one_d_neg_range[0], " -> should show 30", skip
+put two_d[1,1] " -> should show 40", skip
+put two_d_range[2,3] " -> should show 50", skip
+put two_d_neg_range[0,0] " -> should show 60", skip
+
+end
