@@ -61,7 +61,7 @@ begin
     integer function func_with_params(integer from, integer to) begin
         % Check if we've reached our target, recurse if not
         if from < to then
-            func_with_params(from + 1, to)
+            return (func_with_params(from + 1, to))
         end
 
         return (from)
