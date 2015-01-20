@@ -1,4 +1,4 @@
-% a program using non-recursive functions and procedures without parameters
+% a program using non-recursive functions and procedures with and without parameters
 
 begin
 
@@ -18,12 +18,18 @@ integer function eleven begin
     return a
 end
 
+integer function times_10(integer a) begin
+    return a * 10
+end
+
 procedure empty begin
 end
 
 procedure print begin
     put "o hai there!", skip
 end
+
+procedure print_num
 
 % test functions
 if troo then
@@ -35,6 +41,9 @@ end
 put five, " -> should print 5", skip
 put eleven, " -> should print 11", skip
 put a, " -> should print 11", skip
+integer b
+b <= times_10(a)
+put b, " -> should print 100", skip
 
 
 % test procedures
