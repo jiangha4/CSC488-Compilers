@@ -1,1 +1,50 @@
 % a program using non-recursive functions and procedures without parameters
+
+begin
+
+a <= 10
+
+boolean function troo begin
+    return true
+end
+
+integer function five begin
+    a <= 5
+    return a
+end
+
+integer function eleven begin
+    a = a + 1
+    return a
+end
+
+procedure empty begin
+end
+
+procedure print begin
+    put "o hai there!", skip
+end
+
+% test functions
+if troo then
+    put "works", skip
+else
+    put "doesn't work", skip
+end
+
+put five, " -> should print 5", skip
+put eleven, " -> should print 11", skip
+put a, " -> should print 11", skip
+
+
+% test procedures
+put "should not print anything between begin and end:", skip
+put "begin", skip
+empty
+put "end", skip
+
+
+put "should print 'o hai there!'", skip
+print
+
+end
