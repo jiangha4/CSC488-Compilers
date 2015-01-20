@@ -1,1 +1,46 @@
 % a program using all forms of loop building and loop exit constructs
+
+begin
+
+integer a
+
+% while with explicit exit condition
+put "while with explicit exit condition"
+a <= 1
+
+put "count to 10", skip
+while a <= 10 do
+    put "a = ", a, skip
+    a <= a + 1
+end
+
+% while with exit
+while true do
+    put "should print this only once", skip
+    exit
+end
+
+% while with exit when
+a <= 1
+
+put "count to 5", skip
+while true do
+    put "a = ", a, skip
+    exit when a = 5
+end
+
+% infinite loop with exit
+loop
+    put "should print this only once", skip
+    exit
+end
+
+% infinite loop with exit when
+a <= 1
+put "count to 7", skip
+loop
+    put "a = ", a, skip
+    exit when a = 7
+end
+
+end
