@@ -1,0 +1,118 @@
+begin
+    
+    % Self-recursive function, with parameters
+    % Given an index, x, return the Fibonacci sequence number at that index
+    integer function fib(integer x) begin
+        if x = 0 then
+            return(0)
+        end
+        if x = 1 then
+            return(1)
+        end
+        return(fib(x-1) + fib(x-2))
+    end
+
+    % Self-recursive function, without parameters
+    % Using an array called "sequence" and its length defined as "len_sequence"
+    % outside of the scope of the function, the function adds up all array 
+    % elements and returns the sum.
+    integer len_sequence, sequence[3]
+    len_sequence <= 3
+    sequence[1] <= 1
+    sequence[2] <= 2
+    sequence[3] <= 3
+    integer function sum_of_sequence begin
+        if len_sequence <= 0 then
+            return(0)
+        end
+        integer current_elem
+        current_elem <= sequence[len_sequence]
+        len_sequence <= len_sequence - 1
+        
+        return(current_elem + sum_of_sequence) 
+    end
+
+    % Self-recursive procedure, with parameters
+    % Given a positive integer, x, print out the sequence from x to 0
+    procedure display_sequence(integer x) begin
+        if x < 0 then
+            put "Invalid input", skip
+        end
+        
+        put x, skip
+        if x = 0 then
+            return
+        end
+        display_sequence(x - 1)
+        return
+    end
+
+    % Self-recursive procedure, without parameters
+    % Using an array called "sequence" and its length defined as "len_sequence"
+    % outside of the scope of the procedure, the procedure displays every element
+    % of the array in descending order of index.
+    len_sequence <= 3
+    procedure display_sequence begin
+        if len_sequence <= 0 then
+            return
+        end
+        put sequence[len_sequence], skip
+        len_sequence <= len_sequence - 1
+        display_sequence
+        return
+    end
+
+
+    % Mutually recursive functions (nested function declaration)
+    % Given a positive integer, x, return true if it is even and false otherwise
+    % If the argument is less than zero, always return false
+    boolean function is_even(integer x) begin
+        
+        boolean function is_odd(integer x) begin
+            if x = 0 then
+                return(false)
+            end
+            if x < 0 then
+                return(false)
+            end
+            return(is_even(x-1))    
+        end
+
+        if x = 0 then
+            return(true)
+        end
+        if x < 0 then
+            return(false)
+        end
+        return(is_odd(x-1))
+    end
+
+    % Mutually recursive procedures (nested procedure declaration)
+    % Given a positive integer, x, print out the sequence from x to 0
+    procedure display_sequence(integer x) begin
+        
+        procedure display_helper(integer x) begin
+            if x < 0 then
+                return
+            end
+            put x, skip
+            if x = 0 then
+                return
+            end
+            display_sequence(x - 1)
+            return
+        end
+
+        if x < 0 then
+            return
+        end
+        put x, skip
+        if x = 0 then
+            return
+        end
+        display_helper(x - 1)
+        return
+
+    end
+
+end
