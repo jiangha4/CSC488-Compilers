@@ -1,3 +1,8 @@
+% CSC488 - Assignment 1
+% File: A1a.488
+% Date: 2015-01-19
+% Authors: c2yanche
+
 begin
     integer x, y
     boolean a, b
