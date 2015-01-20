@@ -1,1 +1,87 @@
-% a program using recursive functions and procedures with and without parameters. Inlcude at least one nested procedure and one nested function declaration
+% a program using recursive functions and procedures with and without parameters. Include at least one nested procedure and one nested function declaration
+
+begin
+
+integer n
+n <= 1
+
+% recursive nested procedure no params
+procedure p_no_params begin
+    
+    procedure increment begin
+        n = n + 1
+        p_no_params
+    end
+
+    put "n = ", n, skip
+
+    if n < 5 then
+        increment
+    end
+end
+
+put "count to 5", skip
+p_no_params
+
+
+% recursive nested procedure with params
+procedure count_range(integer num, integer bound) begin
+
+    procedure increment(integer num, integer bound) begin
+        num = num + 1
+        count_range(num, bound)
+    end
+
+    put "num = ", num, " | bound = ", bound, skip
+
+    if num < bound then
+        increment(num, bound)
+    end
+
+end
+
+put "count from 10 to 15", skip
+count_range(10, 15)
+
+
+% recursive func no params
+n <= 20
+
+integer function funky_without_params begin
+   
+    if n < 30 then
+        n = n + 1
+        return funky_without_params
+    end
+
+    return n
+end
+
+integer blah
+blah <= funky_without_params
+put blah, " <- should be 30", skip
+
+
+% recursive nested func with params
+integer function funkiness_but_with_params(integer n, integer bound) begin
+
+    integer function add_one_plz(integer n, integer bound) begin
+        n = n + 1
+
+        if n < bound then
+            return funkiness_but_with_params(n, bound)
+        else
+            return n
+        end
+    end
+
+    put "n = ", n, skip
+
+    return add_one_plz(n, bound)
+
+end
+
+put "count from 100 to 120", skip
+funkiness_but_with_params(100, 120)
+
+end
