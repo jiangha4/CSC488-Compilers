@@ -36,6 +36,7 @@ begin
         % Check if we've reached our target, recurse if not
         if from < to then
             proc_with_params(from + 1, to)
+            return
         end
 
         put "Counted to 10 in a recursive procedure with parameters!"
