@@ -1,21 +1,20 @@
 % CSC488 - Assignment 1
 % File: A1e.488
-% Date: 2015-01-13
-% Authors: c4vinkti
+% Authors: Team 4
 
 begin
     integer count, target, result
     target <= 10
 
-    % Recursive procedure without parameters
+    % Self recursive procedure without parameters
     count <= 1
     procedure proc_no_params begin
-        % Adds one to the given number
+        % Adds one to the given number (Nested function declaration)
         integer function add_one(integer num)
             return (num + 1)
         end
 
-        % Prints a completion message
+        % Prints a completion message (Nested procedure declaration)
         procedure print_done begin
             put "Counted to 10 in a recursive procedure without parameters!"
         end
@@ -24,12 +23,13 @@ begin
         if count < target then
             count <= add_one(count)
             proc_no_params
+            return
         end
 
         print_done
         return
     end
-    proc_no_params
+    proc_no_params 
 
     % Recursive procedure with parameters
     procedure proc_with_params(integer from, integer to) begin
@@ -49,7 +49,7 @@ begin
         % Check if we've reached our target, recurse if not
         if count < target then
             count <= count + 1
-            func_no_params
+            return (func_no_params)
         end
 
         return (count)
@@ -68,4 +68,26 @@ begin
     end
     result <= func_with_params(1, 10)
     put "Counted to ", result, " in a recursive function with parameters!"
+
+    % Mutually recursive functions (nested function declaration)
+    boolean function is_even(integer x) begin
+        
+        boolean function is_odd(integer x) begin
+            if x = 0 then
+                return (false)
+            end
+            if x < 0 then
+                return (false)
+            end
+            return (is_even(x-1))
+        end
+
+        if x = 0 then
+            return (true)
+        end
+        if x < 0 then
+            return(false)
+        end
+        return (is_odd(x-1))
+    end
 end

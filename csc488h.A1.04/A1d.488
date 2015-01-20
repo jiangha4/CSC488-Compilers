@@ -1,16 +1,17 @@
 % CSC488 - Assignment 1
 % File: A1d.488
-% Date: 2015-01-13
-% Authors: c4vinkti
+% Authors: Team 4
 
 begin
     % Define procedures
     procedure proc_no_params begin
         put "I'm a procedure with no parameters", skip
+        return
     end
 
     procedure proc_with_params(integer num) begin
         put "I'm a procedure given parameter: ", num, skip
+        return
     end
 
     % Define functions

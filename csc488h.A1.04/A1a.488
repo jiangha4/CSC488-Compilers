@@ -1,13 +1,13 @@
 % CSC488 - Assignment 1
 % File: A1a.488
-% Date: 2015-01-13
-% Authors: c4vinkti
+% Authors: Team 4
 
 begin
     % Get two numbers from user
     integer a, b
-    put "Enter two numbers:", skip
-    get a, b
+    put "Enter one number:", skip
+    get a
+    b <= 3
     put skip
 
     % Arithmetic operators
