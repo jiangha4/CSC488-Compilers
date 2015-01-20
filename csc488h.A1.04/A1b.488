@@ -1,0 +1,26 @@
+% CSC488 - Assignment 1
+% File: A1b.488
+% Date: 2015-01-13
+% Authors: c4vinkti
+
+begin
+    % One dimensional
+    integer one_single[4]
+    integer one_double[2..6]
+    integer one_negbounds[-4..-2]
+    integer one_mixedbounds[-1..5]
+
+    % Two dimensional
+    integer two_single[3, 5]
+    integer two_double[1..3, 7..9]
+    integer two_negbounds[-5..-1, -3..-2]
+    integer two_mixedbounds[-1..6, -3..7]
+
+    % Assignment
+    one_single[2] <= 6
+    two_single[2, 4] <= 8
+
+    % Access
+    put one_single[2], skip
+    put two_single[2, 4]
+end

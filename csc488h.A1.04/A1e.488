@@ -1,0 +1,71 @@
+% CSC488 - Assignment 1
+% File: A1e.488
+% Date: 2015-01-13
+% Authors: c4vinkti
+
+begin
+    integer count, target, result
+    target <= 10
+
+    % Recursive procedure without parameters
+    count <= 1
+    procedure proc_no_params begin
+        % Adds one to the given number
+        integer function add_one(integer num)
+            return (num + 1)
+        end
+
+        % Prints a completion message
+        procedure print_done begin
+            put "Counted to 10 in a recursive procedure without parameters!"
+        end
+
+        % Check if we've counted to our target, recurse if not
+        if count < target then
+            count <= add_one(count)
+            proc_no_params
+        end
+
+        print_done
+        return
+    end
+    proc_no_params
+
+    % Recursive procedure with parameters
+    procedure proc_with_params(integer from, integer to) begin
+        % Check if we've reached our target, recurse if not
+        if from < to then
+            proc_with_params(from + 1, to)
+        end
+
+        put "Counted to 10 in a recursive procedure with parameters!"
+        return
+    end
+    proc_with_params(1, 10)
+
+    % Recursive function without parameters
+    count <= 1
+    integer function func_no_params begin
+        % Check if we've reached our target, recurse if not
+        if count < target then
+            count <= count + 1
+            func_no_params
+        end
+
+        return (count)
+    end
+    result <= func_no_params
+    put "Counted to ", result, " in a recursive function without parameters!"
+
+    % Recursive function with parameters
+    integer function func_with_params(integer from, integer to) begin
+        % Check if we've reached our target, recurse if not
+        if from < to then
+            func_with_params(from + 1, to)
+        end
+
+        return (from)
+    end
+    result <= func_with_params(1, 10)
+    put "Counted to ", result, " in a recursive function with parameters!"
+end
