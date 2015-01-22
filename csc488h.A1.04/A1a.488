@@ -1,12 +1,14 @@
 % CSC488 - Assignment 1
 % File: A1a.488
-% Authors: Team 4
+% Authors: Team 4 (g3jiangh, g3arnold, g2singh, c2yanche, c4vinkti)
 
 begin
-    % Get two numbers from user
+    % Get a number from user
     integer a, b
     put "Enter one number:", skip
     get a
+	
+	% Define an integer constant
     b <= 3
     put skip
 
@@ -24,13 +26,13 @@ begin
     put "Logical", skip
     put "------------------", skip
     if !false then
-        put "Not False = True"
+        put "Not False = True", skip
     end
     if true & true then
-        put "True and True = True"
+        put "True and True = True", skip
     end
     if true | false then
-        put "True or False = True"
+        put "True or False = True", skip
     end
     put skip
 

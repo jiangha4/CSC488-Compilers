@@ -1,13 +1,13 @@
 % CSC488 - Assignment 1
 % File: A1c.488
-% Authors: Team 4
+% Authors: Team 4 (g3jiangh, g3arnold, g2singh, c2yanche, c4vinkti)
 
 % Various ways of counting to 10
 begin
     % Integer Declaration
     integer a
 
-    % Infinite loop, explicit exit, but really it's a finite loop
+    % Infinite loop, explicit exit
     a <= 1
     loop
         put a, " "
@@ -17,14 +17,8 @@ begin
         a <= a + 1
     end
     put skip
-
-    % Actually an infinite loop.
-    a <= 1
-    loop 
-        put "a = ", a, skip
-    end
-
-    % Infinite loop, 'exit when'
+	
+	% Infinite loop, 'exit when'
     a <= 1
     loop
         put a, " "
@@ -33,21 +27,30 @@ begin
     end
     put skip
 
-    % Conditional loop
+    % Infinite loop
+    a <= 1
+    loop 
+        put "a = ", a, skip
+    end
+
+    % While-do loop
     a <= 1
     while a <= 10 do
         put a, " "
         a <= a + 1
     end
 
-    % While-do with exit
+    % While-do, explicit exit
     a <= 1
     while true do
         put "a = ", a, skip
-        exit
+		if a = 10 then
+			exit
+		end
+		a <= a + 1
     end
 
-    % While-Do with exit condition
+    % While-do, 'exit when'
     a <= 1
     while true do 
         put "a = ", a, skip

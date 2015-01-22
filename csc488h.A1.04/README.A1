@@ -2,37 +2,28 @@ CSC488
 Assignment 1
 Group 4
 Group Members:
-	Haohan Jiang
-	Chris Arnold
-	Chandeep Singh
-	Maria Yancheva
-	Timo Vink
+	Haohan Jiang (g3jiangh)
+	Chris Arnold (g3arnold)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
 
 
 Who Did What
+------------
 
-	All of us wrote each of the five programs individually. When we were
-finished, we had a group meeting where we discussed our answers and combined
-the best of our answers into the final submission.
+Each of us wrote a version of each of the five programs individually. When we finished, we had a group meeting where we discussed our answers and combined the best of our answers into the final submission.
 
 
 Program Descriptions
+--------------------
 
-A1a.488: This program obtains an integer from the user which is then used
-to test each of the arithmetic, logical, and comparison operators.
+A1a.488: This program obtains an integer from the user and declares a second integer; these are used to test each of the arithmetic and comparison operators. The Boolean constants are used to test each of the logical operators.
 
-A1b.488: This program declares arrays with different bounds. Some of the arrays
-are then populated with values, and some of those values are then retrieved and
-printed to the standard output.
+A1b.488: This program declares arrays with different bounds. Some of the arrays are then populated with values, and some of those values are then retrieved and printed to the standard output.
 
-A1c.488: This program contains examples of every type of loop combined with
-every way of exiting a loop. Every example counts to ten before exiting.
+A1c.488: This program contains examples of every type of loop combined with every way of exiting a loop. Every example counts to ten before exiting (except for the infinite loop).
 
-A1d.488: This program declares several basic non-recursive functions and
-procedures, each with zero or more parameters. The functions perform very basic
-tasks, such as printing a string or adding two integers.
+A1d.488: This program declares several basic non-recursive functions and procedures, each with zero or more parameters. The functions perform very basic tasks, such as printing a string or adding two integers.
 
-A1e.488: This program declares self-recursive functions and procedures,
-some that take arguments and some that don't, each of which counts to ten.
-There is also a mutually-recursive function that can check if an integer is
-even or odd.
+A1e.488: This program declares self-recursive functions and procedures, some that take arguments and some that don't, each of which counts to ten. There is also a mutually-recursive function that can check if an integer is even or odd.

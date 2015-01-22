@@ -1,12 +1,12 @@
 % CSC488 - Assignment 1
 % File: A1e.488
-% Authors: Team 4
+% Authors: Team 4 (g3jiangh, g3arnold, g2singh, c2yanche, c4vinkti)
 
 begin
     integer count, target, result
     target <= 10
 
-    % Self recursive procedure without parameters
+    % Self-recursive procedure without parameters
     count <= 1
     procedure proc_no_params begin
         % Adds one to the given number (Nested function declaration)
@@ -31,7 +31,7 @@ begin
     end
     proc_no_params 
 
-    % Recursive procedure with parameters
+    % Self-recursive procedure with parameters
     procedure proc_with_params(integer from, integer to) begin
         % Check if we've reached our target, recurse if not
         if from < to then
@@ -39,12 +39,12 @@ begin
             return
         end
 
-        put "Counted to 10 in a recursive procedure with parameters!"
+        put "Counted up to target in a recursive procedure with parameters!"
         return
     end
     proc_with_params(1, 10)
 
-    % Recursive function without parameters
+    % Self-recursive function without parameters
     count <= 1
     integer function func_no_params begin
         % Check if we've reached our target, recurse if not
@@ -58,7 +58,7 @@ begin
     result <= func_no_params
     put "Counted to ", result, " in a recursive function without parameters!"
 
-    % Recursive function with parameters
+    % Self-recursive function with parameters
     integer function func_with_params(integer from, integer to) begin
         % Check if we've reached our target, recurse if not
         if from < to then
@@ -90,5 +90,33 @@ begin
             return(false)
         end
         return (is_odd(x-1))
+    end
+	
+	% Mutually recursive procedures (nested procedure declaration)
+    % Given a positive integer, x, print out the sequence from x to 0
+    procedure display_sequence(integer x) begin
+        
+        procedure display_helper(integer x) begin
+            if x < 0 then
+                return
+            end
+            put x, skip
+            if x = 0 then
+                return
+            end
+            display_sequence(x - 1)
+            return
+        end
+
+        if x < 0 then
+            return
+        end
+        put x, skip
+        if x = 0 then
+            return
+        end
+        display_helper(x - 1)
+        return
+
     end
 end
