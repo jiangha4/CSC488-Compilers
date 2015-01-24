@@ -43,8 +43,8 @@ Run the given test and return a TestResult.
 '''
 def run_test(path):
     # Check if this test has a valid name
-    is_pass_test = path.endswith(".pass.488")
-    is_fail_test = path.endswith(".fail.488")
+    is_pass_test = path.endswith(".pos.488")
+    is_fail_test = path.endswith(".neg.488")
     if not (is_pass_test or is_fail_test):
         return TestResult(path, ResultType.did_not_run)
 
