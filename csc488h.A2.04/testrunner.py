@@ -6,13 +6,6 @@ from timeit import default_timer as timer
 
 
 '''
-Configuration.
-'''
-COMPILER_BIN = "./dist/compiler488.jar"
-TEST_DIR = "./test"
-
-
-'''
 Enum describing the possible test result types.
 '''
 class ResultType(Enum):
@@ -41,7 +34,7 @@ def parsing_succeeded(parser_output):
 '''
 Run the given test and return a TestResult.
 '''
-def run_test(path):
+def run_test(path, compiler_path):
     # Check if this test has a valid name
     is_pass_test = path.endswith(".pos.488")
     is_fail_test = path.endswith(".neg.488")
@@ -49,7 +42,7 @@ def run_test(path):
         return TestResult(path, ResultType.did_not_run)
 
     # Run parser on test
-    args = ["java", "-jar", COMPILER_BIN, path]
+    args = ["java", "-jar", compiler_path, path]
     raw_output = subprocess.check_output(args, stderr=subprocess.STDOUT)
     parser_output = raw_output.decode("utf-8")
 
@@ -79,7 +72,7 @@ def print_test_result(result):
 '''
 Run all tests in the directory at the given path and print the results.
 '''
-def run_tests(path):
+def run_tests(path, compiler_path):
     # Get subdirectories and tests in this directory
     dir_items = [d for d in os.listdir(path) if not d.startswith(".")]
     item_paths = [os.path.join(path, d) for d in dir_items]
@@ -93,7 +86,7 @@ def run_tests(path):
         print("\033[94m" + path + "\033[0m:\n  ", end="")
     for test_path in tests:
         # Run parser on test, print result
-        result = run_test(test_path)
+        result = run_test(test_path, compiler_path)
         print_test_result(result)
         results.append(result)
     if len(tests):
@@ -116,7 +109,7 @@ def run_tests(path):
 
     # Recursively run tests in subdirectories
     for subdir in subdirs:
-        results += run_tests(subdir)
+        results += run_tests(subdir, compiler_path)
 
     return results
 
@@ -127,7 +120,7 @@ Main.
 if __name__ == '__main__':
     # Run tests, measure performance
     start = timer()
-    results = run_tests(TEST_DIR)
+    results = run_tests("./tests/", sys.argv[1])
     run_time = int(1000 * (timer() - start))
 
     # Print results
