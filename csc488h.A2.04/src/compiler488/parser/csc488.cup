@@ -116,7 +116,10 @@ The nonterminals from your grammar go here
 
 ***********************************************************/
 
-nonterminal   scope  ;
+nonterminal   scope, statement   ; //Completed or in progress
+nonterminal   variable, expression, output, input, procedurename, arguments, 
+                type, functionname, variablename, parameters ; //Not yet started
+
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -141,6 +144,7 @@ start with program;
 
 program  ::= scope ;		// the main program
 
+
 /*****************************************************************************
 
   YOUR CAREFULLY CRAFTED GRAMMAR FOR THE CSC488S SOURCE LANGUAGE
@@ -149,4 +153,27 @@ program  ::= scope ;		// the main program
 
 ****************************************************************************/
 
-scope ::= BEGIN END;
+scope ::= BEGIN END
+        | BEGIN statement END
+        ;
+
+statement ::= variable LESS EQUAL expression
+            | IF expression THEN statement END
+            | IF expression THEN statement ELSE statement END
+            | WHILE expression DO statement END
+            | LOOP statement END
+            | LOOP statement EXIT
+            | LOOP statement EXIT WHEN expression
+            | RETURN L_PAREN expression R_PAREN
+            | RETURN
+            | PUT output
+            | GET input
+            | procedurename
+            | procedurename L_PAREN arguments R_PAREN
+            | scope
+            | type FUNCTION functionname scope
+            | type FUNCTION functionname L_PAREN parameters R_PAREN scope
+            | PROCEDURE procedurename scope
+            | PROCEDURE proceurename L_PAREN parameters R_PAREN scope
+            | statement statement
+            ;
