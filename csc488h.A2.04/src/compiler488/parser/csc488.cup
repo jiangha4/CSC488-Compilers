@@ -121,7 +121,7 @@ nonterminal   scope, statements, statement, outputs, output,
                 arrayname, functionname, procedurename,
                 parametername, parameters, parameter, type, 
                 arguments, argument, numericExpr, multDivExpr,
-                plusMinusExpr; //Completed or in progress
+                plusMinusExpr, comparisonExpr; //Completed or in progress
 
 nonterminal   expression; //Not yet started
 
@@ -222,17 +222,6 @@ variable ::= variablename
             | arrayname L_SQUARE expression R_SQUARE
             | arrayname L_SQUARE expression COMMA R_SQUARE
             ;
-
-
-/* The order of precedence of the operators is:
- * 0. unary -
- * 1. multiplication and division: */
- * 2. addition and subtraction: + binary-
- * 3. = != < <= > >=
- * 4. !
- * 5. &
- * 6. |
-*/
 
 
 
