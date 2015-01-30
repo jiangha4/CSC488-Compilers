@@ -116,8 +116,9 @@ The nonterminals from your grammar go here
 
 ***********************************************************/
 
-nonterminal   scope, statements, statement   ; //Completed or in progress
-nonterminal   variable, expression, output, input, procedurename, arguments, 
+nonterminal   scope, statements, statement, outputs, output, 
+                inputs, input   ; //Completed or in progress
+nonterminal   variable, expression, procedurename, arguments, 
                 type, functionname, variablename, parameters ; //Not yet started
 
 
@@ -169,8 +170,8 @@ statement ::= variable LESS EQUAL expression
             | LOOP statement EXIT WHEN expression
             | RETURN L_PAREN expression R_PAREN
             | RETURN
-            | PUT output
-            | GET input
+            | PUT outputs
+            | GET inputs
             | procedurename
             | procedurename L_PAREN arguments R_PAREN
             | scope
@@ -178,4 +179,20 @@ statement ::= variable LESS EQUAL expression
             | type FUNCTION functionname L_PAREN parameters R_PAREN scope
             | PROCEDURE procedurename scope
             | PROCEDURE procedurename L_PAREN parameters R_PAREN scope
+            ;
+
+outputs ::= outputs COMMA output
+            | output
+            ;
+            
+output ::= expression
+            | TEXTCONST
+            | SKIP
+            ;
+
+inputs ::= inputs COMMA input
+            | input
+            ;
+            
+input ::= variable
             ;
