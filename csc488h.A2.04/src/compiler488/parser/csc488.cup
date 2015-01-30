@@ -119,10 +119,10 @@ The nonterminals from your grammar go here
 nonterminal   scope, statements, statement, outputs, output, 
                 inputs, input, variable, variablename, 
                 arrayname, functionname, procedurename,
-                parametername, parameters, parameter; //Completed or in progress
-nonterminal   expression, arguments, 
-                type ; //Not yet started
+                parametername, parameters, parameter, type, 
+                arguments, argument; //Completed or in progress
 
+nonterminal   expression; //Not yet started
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -201,6 +201,13 @@ input ::= variable
 
 type ::= INTEGER
             | BOOLEAN
+            ;
+
+arguments ::= arguments COMMA argument
+            | argument
+            ;
+
+argument ::= expression
             ;
             
 parameters ::= parameters COMMA parameter
