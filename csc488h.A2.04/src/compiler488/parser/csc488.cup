@@ -117,9 +117,11 @@ The nonterminals from your grammar go here
 ***********************************************************/
 
 nonterminal   scope, statements, statement, outputs, output, 
-                inputs, input   ; //Completed or in progress
-nonterminal   variable, expression, procedurename, arguments, 
-                type, functionname, variablename, parameters ; //Not yet started
+                inputs, input, variable, variablename, 
+                arrayname, functionname, procedurename,
+                parametername, parameters, parameter; //Completed or in progress
+nonterminal   expression, arguments, 
+                type ; //Not yet started
 
 
 // Non-terminals that have a value.
@@ -197,7 +199,32 @@ inputs ::= inputs COMMA input
 input ::= variable
             ;
 
-variable ::= IDENT
-            | IDENT L_SQUARE expression R_SQUARE
-            | IDENT L_SQUARE expression COMMA R_SQUARE
+parameters ::= parameters COMMA parameter
+            | parameter
             ;
+
+parameter ::= type parametername
+            ;
+            
+variable ::= variablename
+            | arrayname L_SQUARE expression R_SQUARE
+            | arrayname L_SQUARE expression COMMA R_SQUARE
+            ;
+
+variablename ::= IDENT
+            ;
+            
+arrayname ::= IDENT
+            ;
+
+functionname ::= IDENT
+            ;
+
+parametername ::= IDENT
+            ;
+            
+procedurename ::= IDENT
+            ;
+            
+            
+            
