@@ -196,3 +196,8 @@ inputs ::= inputs COMMA input
             
 input ::= variable
             ;
+
+variable ::= IDENT
+            | IDENT L_SQUARE expression R_SQUARE
+            | IDENT L_SQUARE expression COMMA R_SQUARE
+            ;
