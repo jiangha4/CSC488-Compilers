@@ -116,7 +116,7 @@ The nonterminals from your grammar go here
 
 ***********************************************************/
 
-nonterminal   scope, statement   ; //Completed or in progress
+nonterminal   scope, statements, statement   ; //Completed or in progress
 nonterminal   variable, expression, output, input, procedurename, arguments, 
                 type, functionname, variablename, parameters ; //Not yet started
 
@@ -153,7 +153,11 @@ program  ::= scope ;		// the main program
 ****************************************************************************/
 
 scope ::= BEGIN END
-        | BEGIN statement END
+        | BEGIN statements END
+        ;
+
+statements ::= statements statement
+        | statement
         ;
 
 statement ::= variable LESS EQUAL expression
@@ -174,5 +178,4 @@ statement ::= variable LESS EQUAL expression
             | type FUNCTION functionname L_PAREN parameters R_PAREN scope
             | PROCEDURE procedurename scope
             | PROCEDURE procedurename L_PAREN parameters R_PAREN scope
-            | statement statement
             ;
