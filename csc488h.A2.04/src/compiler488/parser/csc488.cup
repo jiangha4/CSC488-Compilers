@@ -150,7 +150,6 @@ program  ::= scope ;		// the main program
   YOUR CAREFULLY CRAFTED GRAMMAR FOR THE CSC488S SOURCE LANGUAGE
 
     GOES HERE
-
 ****************************************************************************/
 
 scope ::= BEGIN END
@@ -174,6 +173,6 @@ statement ::= variable LESS EQUAL expression
             | type FUNCTION functionname scope
             | type FUNCTION functionname L_PAREN parameters R_PAREN scope
             | PROCEDURE procedurename scope
-            | PROCEDURE proceurename L_PAREN parameters R_PAREN scope
+            | PROCEDURE procedurename L_PAREN parameters R_PAREN scope
             | statement statement
             ;
