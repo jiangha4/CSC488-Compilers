@@ -27,7 +27,7 @@ class TestResult:
 Return True iff the parser succesfully parsed the input.
 '''
 def parsing_succeeded(parser_output):
-    return "Exception during Parsing" not in parser_output
+    return "Syntax error" not in parser_output
 
 
 '''
