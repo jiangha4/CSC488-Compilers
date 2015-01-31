@@ -158,13 +158,9 @@ program ::= scope ;        // the main program
     GOES HERE
 ****************************************************************************/
 
-scope ::= BEGIN END
-        | BEGIN statements END
-        ;
-
 statements ::= statements statement
-        | statement
-        ;
+             | statement
+             ;
 
 statement ::= variable LESS EQUAL expression
             | IF expression THEN statements END
@@ -180,40 +176,61 @@ statement ::= variable LESS EQUAL expression
             | procedurename
             | procedurename L_PAREN arguments R_PAREN
             | scope
-		    | type variablenames
+            | type variablenames
             | type FUNCTION functionname scope
             | type FUNCTION functionname L_PAREN parameters R_PAREN scope
             | PROCEDURE procedurename scope
             | PROCEDURE procedurename L_PAREN parameters R_PAREN scope
             ;
 
+variablenames ::= variablenames COMMA variableDecl
+                | variableDecl
+                ;
+
+variableDecl ::= variablename
+               | variablename L_SQUARE bound R_SQUARE
+               | variablename L_SQUARE bound COMMA bound R_SQUARE
+               ;
+
+bound ::= INTCONST
+        | generalBound DOT DOT generalBound
+        ;
+
+generalBound ::= INTCONST
+               | MINUS INTCONST
+               ;
+
+scope ::= BEGIN END
+        | BEGIN statements END
+        ;
+
 outputs ::= outputs COMMA output
-            | output
-            ;
-            
+          | output
+          ;
+
 output ::= expression
-            | TEXTCONST
-            | SKIP
-            ;
+         | TEXTCONST
+         | SKIP
+         ;
 
 inputs ::= inputs COMMA input
-            | input
-            ;
-            
+         | input
+         ;
+
 input ::= variable
-            ;
+        ;
 
 type ::= INTEGER
-            | BOOLEAN
-            ;
+       | BOOLEAN
+       ;
 
 arguments ::= arguments COMMA argument
             | argument
             ;
 
 argument ::= expression
-            ;
-            
+           ;
+
 parameters ::= parameters COMMA parameter
             | parameter
             ;
@@ -221,90 +238,70 @@ parameters ::= parameters COMMA parameter
 parameter ::= type parametername
             ;
 
-variablenames ::= variablenames COMMA variable_decl
-		    | variable_decl
-			;
-			
-variable_decl ::= variablename
-			| variablename L_SQUARE bound R_SQUARE
-			| variablename L_SQUARE bound COMMA bound R_SQUARE
-			;
-
-bound ::= INTCONST	
-			| generalBound DOT DOT generalBound
-			;
-
-generalBound ::= INTCONST
-			| MINUS INTCONST
-			;
-			
 variable ::= variablename
-            | arrayname L_SQUARE expression R_SQUARE
-            | arrayname L_SQUARE expression COMMA expression R_SQUARE
-            ;
+           | arrayname L_SQUARE expression R_SQUARE
+           | arrayname L_SQUARE expression COMMA expression R_SQUARE
+           ;
 
 expression ::= booleanExpr
-			| numericExpr
-			| IDENT
-			| IDENT L_SQUARE expression R_SQUARE
-			| IDENT L_SQUARE expression COMMA expression R_SQUARE
-			| IDENT L_PAREN arguments R_PAREN
-			;
-	
-// A Boolean expression returns a Boolean value.	
+             | numericExpr
+             | IDENT
+             | IDENT L_SQUARE expression R_SQUARE
+             | IDENT L_SQUARE expression COMMA expression R_SQUARE
+             | IDENT L_PAREN arguments R_PAREN
+             ;
+
+// A Boolean expression returns a Boolean value.
 booleanExpr ::= booleanExpr OR booleanAndExpr
-			| booleanAndExpr
-			;
-			
+              | booleanAndExpr
+              ;
+
 booleanAndExpr ::= booleanAndExpr AND booleanNotExpr
-			| booleanNotExpr
-			;
-			
+                 | booleanNotExpr
+                 ;
+
 booleanNotExpr ::= NOT comparisonExpr
-			| comparisonExpr
-			;
-			
+                 | comparisonExpr
+                 ;
+
 comparisonExpr ::= numericExpr EQUAL numericExpr
-            | numericExpr NOT EQUAL numericExpr
-            | numericExpr LESS numericExpr
-            | numericExpr LESS EQUAL numericExpr
-            | numericExpr GREATER numericExpr
-            | numericExpr GREATER EQUAL numericExpr
-            ;
+                 | numericExpr NOT EQUAL numericExpr
+                 | numericExpr LESS numericExpr
+                 | numericExpr LESS EQUAL numericExpr
+                 | numericExpr GREATER numericExpr
+                 | numericExpr GREATER EQUAL numericExpr
+                 ;
 
 // All numeric expressions (which return integer value) are combined
 // with the Boolean constants (true, false) because the comparison
-// operators apply to both numeric and Boolean values.		
+// operators apply to both numeric and Boolean values.
 numericExpr ::= numericExpr PLUS multDivExpr
-            | numericExpr MINUS multDivExpr
-            | multDivExpr
-			| TRUE
-			| FALSE
-            ;
-            
+              | numericExpr MINUS multDivExpr
+              | multDivExpr
+                | TRUE
+                | FALSE
+              ;
+
 multDivExpr ::= multDivExpr TIMES intExpr
-            | multDivExpr DIVIDE intExpr
-            | intExpr
-            ;
-            
+              | multDivExpr DIVIDE intExpr
+              | intExpr
+              ;
+
 intExpr ::= MINUS intExpr
-            | INTCONST
-            ;   
-            
+          | INTCONST
+          ;
+
 variablename ::= IDENT
-            ;
-            
+               ;
+
 arrayname ::= IDENT
             ;
 
 functionname ::= IDENT
-            ;
+               ;
 
 parametername ::= IDENT
-            ;
-            
+                ;
+
 procedurename ::= IDENT
-            ;
-            
-            
-            
+                ;
