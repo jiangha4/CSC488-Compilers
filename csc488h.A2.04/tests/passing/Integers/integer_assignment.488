@@ -1,0 +1,6 @@
+begin
+
+    integer a
+    a <= 3
+
+end
