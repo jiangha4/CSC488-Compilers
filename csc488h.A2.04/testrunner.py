@@ -58,6 +58,7 @@ def print_test_result(result):
         print("\033[92m.\033[0m", end="")
     else:
         print("\033[91mF\033[0m", end="")
+    sys.stdout.flush()
 
 
 '''
