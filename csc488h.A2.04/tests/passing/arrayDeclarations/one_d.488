@@ -1,0 +1,8 @@
+begin
+    integer one_single[4]
+    integer one_double[2..6]
+    integer one_negbounds[-4..-2]
+    integer one_mixedbounds[-1..5]
+    boolean one_single_boolean[4]
+    boolean one_double_boolean[2..6]
+end

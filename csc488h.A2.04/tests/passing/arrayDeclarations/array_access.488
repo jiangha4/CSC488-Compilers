@@ -1,0 +1,10 @@
+begin
+    integer one_single[4]
+    one_single[2] <= 6
+    put one_single[2], skip
+
+
+    integer two_single[3, 5]
+    two_single[2, 4] <= 8
+    put two_single[2, 4], skip
+end
