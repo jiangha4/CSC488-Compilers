@@ -1,0 +1,6 @@
+begin
+    integer a, b
+    a <= 3
+    b <= 3
+    put a - b, skip
+end

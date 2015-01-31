@@ -1,0 +1,9 @@
+begin
+    integer a
+    a <= 1
+    while true do
+        put "a =", a, skip
+        if a = 10 then exit end
+        a <= a + 1
+    end 
+end

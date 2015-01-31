@@ -1,0 +1,7 @@
+begin
+    integer a
+    a <= 1
+    loop 
+        put "a = ", a, skip
+    end
+end

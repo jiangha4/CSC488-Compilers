@@ -1,0 +1,4 @@
+begin
+    integer a
+    if true then a <= 3 end
+end
