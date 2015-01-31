@@ -126,8 +126,9 @@ Main.
 if __name__ == '__main__':
     # Run tests, measure performance
     start = timer()
-    results = run_tests("./tests/passing/", sys.argv[1], True)
-    results += run_tests("./tests/failing/", sys.argv[1], False)
+    compiler_path = sys.argv[1] if len(sys.argv) > 1 else "./dist/compiler488.jar"
+    results = run_tests("./tests/passing/", compiler_path, True)
+    results += run_tests("./tests/failing/", compiler_path, False)
     run_time = int(1000 * (timer() - start))
 
     # Print results
