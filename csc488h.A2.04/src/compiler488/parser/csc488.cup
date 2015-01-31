@@ -167,10 +167,10 @@ statements ::= statements statement
         ;
 
 statement ::= variable LESS EQUAL expression
-            | IF expression THEN statement END
-            | IF expression THEN statement ELSE statement END
-            | WHILE expression DO statement END
-            | LOOP statement END
+            | IF expression THEN statements END
+            | IF expression THEN statements ELSE statements END
+            | WHILE expression DO statements END
+            | LOOP statements END
             | EXIT
             | EXIT WHEN expression
             | RETURN L_PAREN expression R_PAREN
