@@ -121,8 +121,9 @@ nonterminal   scope, statements, statement, outputs, output,
 				variable, variablename, bound, generalBound, 
                 arrayname, functionname, procedurename,
                 parametername, parameters, parameter, type, 
-                arguments, argument, numericExpr, multDivExpr,
-                plusMinusExpr, comparisonExpr; //Completed or in progress
+                arguments, argument, intExpr, multDivExpr,
+                numericExpr, comparisonExpr, 
+				booleanNotExpr, booleanAndExpr, booleanExpr; //Completed or in progress
 
 nonterminal   expression; //Not yet started
 
@@ -239,31 +240,54 @@ generalBound ::= INTCONST
 			
 variable ::= variablename
             | arrayname L_SQUARE expression R_SQUARE
-            | arrayname L_SQUARE expression COMMA R_SQUARE
+            | arrayname L_SQUARE expression COMMA expression R_SQUARE
             ;
 
-
-
-comparisonExpr ::= comparisonExpr EQUAL comparisonExpr
-            | comparisonExpr NOT EQUAL comparisonExpr
-            | comparisonExpr LESS comparisonExpr
-            | comparisonExpr LESS EQUAL comparisonExpr
-            | comparisonExpr GREATER comparisonExpr
-            | comparisonExpr GREATER EQUAL comparisonExpr
-            | plusMinusExpr
+expression ::= booleanExpr
+			| numericExpr
+			| IDENT
+			| IDENT L_SQUARE expression R_SQUARE
+			| IDENT L_SQUARE expression COMMA expression R_SQUARE
+			| IDENT L_PAREN arguments R_PAREN
+			;
+	
+// A Boolean expression returns a Boolean value.	
+booleanExpr ::= booleanExpr OR booleanAndExpr
+			| booleanAndExpr
+			;
+			
+booleanAndExpr ::= booleanAndExpr AND booleanNotExpr
+			| booleanNotExpr
+			;
+			
+booleanNotExpr ::= NOT comparisonExpr
+			| comparisonExpr
+			;
+			
+comparisonExpr ::= numericExpr EQUAL numericExpr
+            | numericExpr NOT EQUAL numericExpr
+            | numericExpr LESS numericExpr
+            | numericExpr LESS EQUAL numericExpr
+            | numericExpr GREATER numericExpr
+            | numericExpr GREATER EQUAL numericExpr
             ;
-            
-plusMinusExpr ::= plusMinusExpr PLUS plusMinusExpr
-            | plusMinusExpr MINUS plusMinusExpr
+
+// All numeric expressions (which return integer value) are combined
+// with the Boolean constants (true, false) because the comparison
+// operators apply to both numeric and Boolean values.		
+numericExpr ::= numericExpr PLUS multDivExpr
+            | numericExpr MINUS multDivExpr
             | multDivExpr
+			| TRUE
+			| FALSE
             ;
             
-multDivExpr ::= multDivExpr TIMES multDivExpr
-            | multDivExpr DIVIDE multDivExpr
-            | numericExpr
+multDivExpr ::= multDivExpr TIMES intExpr
+            | multDivExpr DIVIDE intExpr
+            | intExpr
             ;
             
-numericExpr ::= MINUS numericExpr
+intExpr ::= MINUS intExpr
             | INTCONST
             ;   
             
