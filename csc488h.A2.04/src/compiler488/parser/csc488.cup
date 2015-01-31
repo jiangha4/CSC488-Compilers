@@ -252,6 +252,8 @@ expression ::= booleanExpr
 			| IDENT L_SQUARE expression R_SQUARE
 			| IDENT L_SQUARE expression COMMA expression R_SQUARE
 			| IDENT L_PAREN arguments R_PAREN
+			| L_PAREN expression R_PAREN
+			| L_CURLEY statements YIELDS expression R_CURLEY
 			;
 	
 // A Boolean expression returns a Boolean value.	
