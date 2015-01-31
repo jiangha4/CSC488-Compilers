@@ -1,5 +1,0 @@
-begin
-    integer a
-    a <= 3
-    true then put a end
-end

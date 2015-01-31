@@ -1,4 +1,0 @@
-begin
-    integer a
-    if then a <= 3 end
-end
