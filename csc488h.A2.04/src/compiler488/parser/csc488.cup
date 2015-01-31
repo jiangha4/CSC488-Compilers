@@ -117,7 +117,8 @@ The nonterminals from your grammar go here
 ***********************************************************/
 
 nonterminal   scope, statements, statement, outputs, output, 
-                inputs, input, variable, variablename, 
+                inputs, input, variablenames, variable_decl, 
+				variable, variablename, bound, generalBound, 
                 arrayname, functionname, procedurename,
                 parametername, parameters, parameter, type, 
                 arguments, argument, numericExpr, multDivExpr,
@@ -169,8 +170,8 @@ statement ::= variable LESS EQUAL expression
             | IF expression THEN statement ELSE statement END
             | WHILE expression DO statement END
             | LOOP statement END
-            | LOOP statement EXIT
-            | LOOP statement EXIT WHEN expression
+            | EXIT
+            | EXIT WHEN expression
             | RETURN L_PAREN expression R_PAREN
             | RETURN
             | PUT outputs
@@ -178,6 +179,7 @@ statement ::= variable LESS EQUAL expression
             | procedurename
             | procedurename L_PAREN arguments R_PAREN
             | scope
+		    | type variablenames
             | type FUNCTION functionname scope
             | type FUNCTION functionname L_PAREN parameters R_PAREN scope
             | PROCEDURE procedurename scope
@@ -217,7 +219,24 @@ parameters ::= parameters COMMA parameter
 
 parameter ::= type parametername
             ;
-            
+
+variablenames ::= variablenames COMMA variable_decl
+		    | variable_decl
+			;
+			
+variable_decl ::= variablename
+			| variablename L_SQUARE bound R_SQUARE
+			| variablename L_SQUARE bound COMMA bound R_SQUARE
+			;
+
+bound ::= INTCONST	
+			| generalBound DOT DOT generalBound
+			;
+
+generalBound ::= INTCONST
+			| MINUS INTCONST
+			;
+			
 variable ::= variablename
             | arrayname L_SQUARE expression R_SQUARE
             | arrayname L_SQUARE expression COMMA R_SQUARE
