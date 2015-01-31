@@ -58,6 +58,7 @@ def print_test_result(result):
         print("\033[92m.\033[0m", end="")
     else:
         print("\033[91mF\033[0m", end="")
+    sys.stdout.flush()
 
 
 '''
@@ -86,9 +87,14 @@ def run_tests(test_dir_path, compiler_path, should_pass):
     # Print detailed error messages
     errors = [r for r in results if r.type == ResultType.failed]
     for err_result in errors:
-        print ("  \033[91m" + err_result.test_name + "\033[0m:")
-        indented = "    " + str.join("\n    ", err_result.details.split(sep='\n')[1:-2])
-        print(indented + "\n")
+        if should_pass:
+            print ("  \033[91m" + err_result.test_name + "\033[0m:")
+            indented = "    " + str.join("\n    ", err_result.details.split(sep='\n')[1:-2])
+            print(indented + "\n")
+        else:
+            print ("  \033[91m" + err_result.test_name + "\033[0m")
+    if len(errors) and not should_pass:
+        print()
 
     # Recursively run tests in subdirectories
     for subdir in subdirs:
@@ -126,8 +132,9 @@ Main.
 if __name__ == '__main__':
     # Run tests, measure performance
     start = timer()
-    results = run_tests("./tests/passing/", sys.argv[1], True)
-    results += run_tests("./tests/failing/", sys.argv[1], False)
+    compiler_path = sys.argv[1] if len(sys.argv) > 1 else "./dist/compiler488.jar"
+    results = run_tests("./tests/passing/", compiler_path, True)
+    results += run_tests("./tests/failing/", compiler_path, False)
     run_time = int(1000 * (timer() - start))
 
     # Print results
