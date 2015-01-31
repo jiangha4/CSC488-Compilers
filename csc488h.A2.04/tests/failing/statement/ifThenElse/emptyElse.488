@@ -1,0 +1,6 @@
+begin
+    if true then
+        a <= 1
+    else
+    end
+end

@@ -1,0 +1,6 @@
+begin
+    loop
+        a <= 1
+        b <= 1
+    end
+end

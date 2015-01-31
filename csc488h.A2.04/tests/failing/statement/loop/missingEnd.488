@@ -1,0 +1,4 @@
+begin
+    loop
+        a <= 1
+end
