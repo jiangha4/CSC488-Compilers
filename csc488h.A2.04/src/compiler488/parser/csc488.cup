@@ -123,9 +123,8 @@ nonterminal   scope, statements, statement, outputs, output,
                 parametername, parameters, parameter, type, 
                 arguments, argument, intExpr, multDivExpr,
                 numericExpr, comparisonExpr, 
-				booleanNotExpr, booleanAndExpr, booleanExpr; //Completed or in progress
-
-nonterminal   expression; //Not yet started
+				booleanNotExpr, booleanAndExpr, booleanExpr, 
+				expression; //Completed or in progress
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -243,6 +242,10 @@ variable ::= variablename
             | arrayname L_SQUARE expression COMMA expression R_SQUARE
             ;
 
+			
+// NB: In an expression, IDENT could stand for: variablename, functionname, 
+// arrayname or parametername, but at this point the parser cannot resolve 
+// which one (this is left for the semantic processing after the syntax parser).
 expression ::= booleanExpr
 			| numericExpr
 			| IDENT
