@@ -1,8 +1,0 @@
-begin
-    integer a
-    a <= 1
-    while a <= 10 do
-        put a, " "
-        a <= a + 1
-    end
-end
