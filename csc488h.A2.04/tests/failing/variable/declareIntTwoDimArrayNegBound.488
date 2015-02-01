@@ -1,0 +1,3 @@
+begin
+    integer a[-1, -2]
+end
