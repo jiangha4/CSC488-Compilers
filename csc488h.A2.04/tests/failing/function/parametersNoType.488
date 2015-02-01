@@ -1,0 +1,4 @@
+begin
+    integer function a(b) begin
+    end
+end
