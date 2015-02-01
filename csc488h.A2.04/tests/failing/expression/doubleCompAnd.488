@@ -1,0 +1,6 @@
+begin
+    boolean a, b
+    a <= true
+    b <= false
+    if a && b then a<= false end
+end
