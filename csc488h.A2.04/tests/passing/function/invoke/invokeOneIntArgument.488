@@ -1,0 +1,9 @@
+begin
+	integer retval
+	integer function one_arg_int(integer a) begin
+		return (a + 1)
+	end
+
+	retval <= one_arg_int(2)
+	
+end

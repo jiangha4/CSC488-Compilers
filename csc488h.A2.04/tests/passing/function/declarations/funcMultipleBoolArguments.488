@@ -1,0 +1,5 @@
+begin
+	boolean function mult_args_bool(boolean a, boolean b, boolean c) begin
+		return (a | b & c)
+	end
+end
