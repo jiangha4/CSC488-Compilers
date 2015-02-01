@@ -1,9 +1,0 @@
-begin
-    integer two_single[3, 5]
-    integer two_double[1..3, 7..9]
-    integer two_negbounds[-5..-1, -3..-2]
-    integer two_mixedbounds[-1..6, -3..7]
-    integer two_mixed_single_double[3, 6..10]
-    boolean two_single_boolean[3,5]
-    boolean two_double_boolean[1..3, 7..9]
-end

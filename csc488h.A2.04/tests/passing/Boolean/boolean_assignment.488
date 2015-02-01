@@ -1,4 +1,0 @@
-begin
-    boolean a
-    a <= true
-end
