@@ -1,5 +1,0 @@
-begin    
-    if !false then
-        put "Not false"
-    end
-end

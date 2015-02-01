@@ -1,5 +1,0 @@
-begin
-    if true then
-        put "true"
-    end
-end

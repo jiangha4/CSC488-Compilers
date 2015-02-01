@@ -1,9 +1,0 @@
-begin
-
-    integer a, b
-    a <= 1
-    b <= 2
-    if a != b then
-        put "Not equal", skip
-    end
-end

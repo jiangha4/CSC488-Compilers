@@ -1,8 +1,0 @@
-begin
-    integer a, b
-    a <= 3
-    b <= 5
-    if a <= b then
-        put "Less than or equal", skip
-    end
-end
