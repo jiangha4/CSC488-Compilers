@@ -1,6 +1,0 @@
-begin
-    
-    integer a
-    get a
-
-end

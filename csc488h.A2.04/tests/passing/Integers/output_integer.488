@@ -1,7 +1,0 @@
-begin
-
-    integer a
-    a <= 3
-    put a
-
-end
