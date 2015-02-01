@@ -297,56 +297,56 @@ variable ::= variablename:v
 // NB: In an expression, IDENT could stand for: variablename, functionname,
 // arrayname or parametername, but at this point the parser cannot resolve
 // which one (this is left for the semantic processing after the syntax parser).
-expression ::= exprLvl1:e
+expression ::= exprLvl6:e
                 {: RESULT = e; :}
              ;
 
-exprLvl1 ::= exprLvl1:e1 TIMES exprLvl2:e2
-                {: RESULT = "(" + e1 + " * " + e2 + ")"; :}
-           | exprLvl1:e1 DIVIDE exprLvl2:e2
-                {: RESULT = "(" + e1 + " / " + e2 + ")"; :}
-           | exprLvl2:e
-                {: RESULT = e; :}
-           ;
+exprLvl6 ::= exprLvl6:e1 OR exprLvl5:e2
+                 {: RESULT = "(" + e1 + " | " + e2 + ")"; :}
+            | exprLvl5:e
+                 {: RESULT = e; :}
+            ;
 
-exprLvl2 ::= exprLvl2:e1 PLUS exprLvl3:e2
-                {: RESULT = "(" + e1 + " + " + e2 + ")"; :}
-           | exprLvl2:e1 MINUS exprLvl3:e2
-                {: RESULT = "(" + e1 + " - " + e2 + ")"; :}
-           | exprLvl3:e
-                {: RESULT = e; :}
-           ;
-
-exprLvl3 ::= exprLvl4:e1 EQUAL exprLvl4:e2
-                {: RESULT = "(" + e1 + " = " + e2 + ")"; :}
-           | exprLvl4:e1 NOT EQUAL exprLvl4:e2
-                {: RESULT = "(" + e1 + " != " + e2 + ")"; :}
-           | exprLvl4:e1 LESS exprLvl4:e2
-                {: RESULT = "(" + e1 + " < " + e2 + ")"; :}
-           | exprLvl4:e1 LESS EQUAL exprLvl4:e2
-                {: RESULT = "(" + e1 + " <= " + e2 + ")"; :}
-           | exprLvl4:e1 GREATER exprLvl4:e2
-                {: RESULT = "(" + e1 + " > " + e2 + ")"; :}
-           | exprLvl4:e1 GREATER EQUAL exprLvl4:e2
-                {: RESULT = "(" + e1 + " >= " + e2 + ")"; :}
+exprLvl5 ::= exprLvl5:e1 AND exprLvl4:e2
+                {: RESULT = "(" + e1 + " & " + e2 + ")"; :}
            | exprLvl4:e
                 {: RESULT = e; :}
            ;
 
 exprLvl4 ::= NOT exprLvl4:e
                 {: RESULT = "(!" + e + ")"; :}
-           | exprLvl5:e
+           | exprLvl3:e
                 {: RESULT = e; :}
            ;
 
-exprLvl5 ::= exprLvl5:e1 AND exprLvl6:e2
-                {: RESULT = "(" + e1 + " & " + e2 + ")"; :}
-           | exprLvl6:e
+exprLvl3 ::= exprLvl2:e1 EQUAL exprLvl2:e2
+                {: RESULT = "(" + e1 + " = " + e2 + ")"; :}
+           | exprLvl2:e1 NOT EQUAL exprLvl2:e2
+                {: RESULT = "(" + e1 + " != " + e2 + ")"; :}
+           | exprLvl2:e1 LESS exprLvl2:e2
+                {: RESULT = "(" + e1 + " < " + e2 + ")"; :}
+           | exprLvl2:e1 LESS EQUAL exprLvl2:e2
+                {: RESULT = "(" + e1 + " <= " + e2 + ")"; :}
+           | exprLvl2:e1 GREATER exprLvl2:e2
+                {: RESULT = "(" + e1 + " > " + e2 + ")"; :}
+           | exprLvl2:e1 GREATER EQUAL exprLvl2:e2
+                {: RESULT = "(" + e1 + " >= " + e2 + ")"; :}
+           | exprLvl2:e
                 {: RESULT = e; :}
            ;
 
-exprLvl6 ::= exprLvl6:e1 OR negatable:e2
-                {: RESULT = "(" + e1 + " | " + e2 + ")"; :}
+exprLvl2 ::= exprLvl2:e1 PLUS exprLvl1:e2
+                {: RESULT = "(" + e1 + " + " + e2 + ")"; :}
+           | exprLvl2:e1 MINUS exprLvl1:e2
+                {: RESULT = "(" + e1 + " - " + e2 + ")"; :}
+           | exprLvl1:e
+                {: RESULT = e; :}
+           ;
+
+exprLvl1 ::= exprLvl1:e1 TIMES negatable:e2
+                {: RESULT = "(" + e1 + " * " + e2 + ")"; :}
+           | exprLvl1:e1 DIVIDE negatable:e2
+                {: RESULT = "(" + e1 + " / " + e2 + ")"; :}
            | negatable:e
                 {: RESULT = e; :}
            ;
