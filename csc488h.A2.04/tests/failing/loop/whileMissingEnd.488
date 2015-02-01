@@ -1,4 +1,4 @@
 begin
-    while do
+    while true do
         a <= 1
 end
