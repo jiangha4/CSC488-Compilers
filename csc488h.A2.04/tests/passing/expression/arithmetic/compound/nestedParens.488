@@ -1,3 +1,3 @@
 begin
-    a <= b + (d + e)
+    a <= (b + ((c + d) + e))
 end
