@@ -268,7 +268,7 @@ exprLvl3 ::= exprLvl4 EQUAL exprLvl4
            | exprLvl4
            ;
 
-exprLvl4 ::= NOT exprLvl5
+exprLvl4 ::= NOT exprLvl4
            | exprLvl5
            ;
 
