@@ -246,16 +246,8 @@ variable ::= variablename
 // NB: In an expression, IDENT could stand for: variablename, functionname,
 // arrayname or parametername, but at this point the parser cannot resolve
 // which one (this is left for the semantic processing after the syntax parser).
-expression ::= MINUS expression
-             | L_CURLEY statements YIELDS expression R_CURLEY
-             | L_PAREN expression R_PAREN
-             | exprLvl1
+expression ::= exprLvl1
              ;
-
-negatable ::= MINUS negatable
-            | L_PAREN expression R_PAREN
-            | exprAtom
-            ;
 
 exprLvl1 ::= exprLvl1 TIMES exprLvl2
            | exprLvl1 DIVIDE exprLvl2
@@ -284,17 +276,23 @@ exprLvl5 ::= exprLvl5 AND exprLvl6
            | exprLvl6
            ;
 
-exprLvl6 ::= exprLvl6 OR exprAtom
-           | exprAtom
+exprLvl6 ::= exprLvl6 OR negatable
+           | negatable
            ;
+
+negatable ::= MINUS negatable
+            | exprAtom
+            ;
 
 exprAtom ::= INTCONST
            | TRUE
            | FALSE
            | IDENT
+           | L_PAREN expression R_PAREN
            | arrayname L_SQUARE expression R_SQUARE
            | arrayname L_SQUARE expression COMMA expression R_SQUARE
            | functionname L_PAREN arguments R_PAREN
+           | L_CURLEY statements YIELDS expression R_CURLEY
            ;
 
 variablename ::= IDENT
