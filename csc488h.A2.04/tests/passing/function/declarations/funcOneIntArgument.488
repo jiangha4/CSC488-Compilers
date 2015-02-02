@@ -1,0 +1,5 @@
+begin
+	integer function one_arg_int(integer a) begin
+		return (a + 1)
+	end
+end

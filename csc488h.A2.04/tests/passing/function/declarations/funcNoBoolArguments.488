@@ -1,0 +1,5 @@
+begin
+	boolean function no_args_bool begin
+		return (false)
+	end
+end
