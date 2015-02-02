@@ -4,6 +4,6 @@ begin
 		return (a + b | true)
 	end
 
-	retval = mult_args_mixed(3, 4, false)
+	retval <= mult_args_mixed(3, 4, false)
 
 end
