@@ -1,0 +1,10 @@
+begin
+	a <= ! ( d + {  begin 
+						integer c 
+						if a > b then
+							c <= a
+						else
+							c <= b
+						end
+				    end yields c } ) / 2 >= -e | foo(d) = true
+end
