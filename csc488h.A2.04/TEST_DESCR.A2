@@ -1,0 +1,281 @@
+failing:
+	conditional:
+		else missing end
+		empty else
+		empty if
+		empty if with else
+		if missing end
+		if missing then
+		missing expression
+		missing if
+
+	expression:
+		arithmetic:
+			add double
+			add no left operand
+			add no right operand
+			division double
+			division no left operand
+			division no right operand
+			multiply double
+			multiply no left operand
+			multiply no right operand
+			subtract no right operand
+
+		comparison:
+			equals double
+			equals multiple
+			equals no left operand
+			equals no right operand
+			greater equal double
+			greater equal multiple
+			greater equal no left operand
+			greater equal no right operand
+			greater than double
+			greater than multiple
+			greater than no left operand
+			greater than no right operand
+			less equal double
+			less equal multiple
+			less equal no left operand
+			less equal no right operand
+			less than double
+			less than multiple
+			less than no left operand
+			less than no right operand
+			mixed multiple
+
+		logical:
+			and missing left operand
+			and missing right operand
+			not missing operand
+			or missing left operand
+			or missing right operand
+
+		mixed:
+			logical not with comparison
+
+
+	function:
+		missing function
+		missing left paren
+		missing parens
+		missing right paren
+		missing type
+		no parameters no scope
+		parameters no scope
+		parameters no type
+
+	io:
+		get nothing
+		get text
+		put nothing
+
+	loop:
+		exit when missing exit
+		exit when missing expression
+		exit when missing when
+		loop missing end
+		missing loop
+		missing while
+		while missing do
+		while missing end
+		while missing expression
+
+	procedure:
+		missing procedure
+		no parameters no scope
+		parameters no scope
+		parameters no type
+
+	scope:
+		empty file
+		missing begin
+		missing end
+		nested missing begin
+		nested missing end
+
+	variable:
+		array assignment missing left bracket
+		array assignment missing right bracket
+		declare bool one dim array neg bound
+		declare bool two dim array neg bound
+		declare int one dim array neg bound
+		declare int two dim array neg bound
+		declare multiple diff types
+		variable assignment two values
+		variable assignment two values with comma
+		variable assignment two variables
+
+
+passing:
+	complex:
+		while with exit when
+
+	conditional:
+		basic_if
+		basic_ifelse
+		basic if
+		basic if else
+		else multiple statements
+		multiple statements
+
+	expression:
+		arithmetic:
+			compound:
+				add and multiply
+				all arithmetic ops
+				all arithmetic ops reverse
+				double negate parens
+				multiply and add
+				nested parens
+				subtract and negate
+
+			simple:
+				add
+				add multiple
+				division
+				division multiple
+				multiply
+				multiply multiple
+				negate
+				negate multiple
+				subtract
+				subtract multiple
+
+
+		comparison:
+			equals
+			greater equal
+			greater than
+			less equal
+			less than
+			not equal
+
+		logical:
+			compound:
+				all logical ops
+				all logical ops reverse
+
+			simple:
+				and
+				and multiple
+				not
+				not multiple
+				or
+				or multiple
+
+
+		mixed:
+			all arithmetic with comparison
+			all expression types
+			all logical with comparison
+			all operators
+			arithmetic divide with comparison
+			arithmetic minus with comparison
+			arithmetic mult with comparison
+			arithmetic plus with comparison
+			arithmetic with comparisons
+			arithmetic with parenthesis
+			logical and with comparison
+			logical not with comparison
+			logical or with comparison
+			logical with parenthesis
+			yields simple
+
+		arithmetic expr array index
+
+	function:
+		declarations:
+			func multiple bool arguments
+			func multiple int arguments
+			func multiple mixed arguments
+			func no bool arguments
+			func no int arguments
+			func one bool argument
+			func one int argument
+			nested functions
+
+		invoke:
+			invoke mult bool arguments
+			invoke mult int arguments
+			invoke multiple mixed arguments
+			invoke no bool arguments
+			invoke no int arguments
+			invoke one bool argument
+			invoke one int argument
+
+		return:
+			return bool
+			return expression
+			return function result
+			return variable
+
+
+	io:
+		get multiple
+		get single
+		put multiple
+		put skip
+		put text
+		put variable
+
+	loops:
+		basic loop
+		basic while
+		exit from loop
+		exit when from loop
+		exit when without loop
+		exit without loop
+		loop multiple statements
+		while multiple statements
+
+	procedure:
+		call arguments
+		call multiple arguments
+		call one argument
+		nested procedures
+		proc multiple arguments
+		proc no arguments
+		proc one argument
+
+	scope:
+		empty scope
+		nested scope
+		return nothing
+
+	variable:
+		assignment one dim array
+		assignment two dim array
+		declare bool one dim array
+		declare bool one dim array size zero
+		declare bool one dim gen bound array
+		declare bool two dim array
+		declare bool two dim array size zero
+		declare bool two dim gen bound array
+		declare bool two dim gen bound array improper bounds
+		declare bool two dim gen bound array same bounds
+		declare bool two dim mixed bound array
+		declare int one dim array
+		declare int one dim array size zero
+		declare int one dim gen bound array
+		declare int one dim gen bound array improper bounds
+		declare int one dim gen bound array same bounds
+		declare int two dim array
+		declare int two dim array size zero
+		declare int two dim gen bound array
+		declare int two dim gen bound array improper bounds
+		declare int two dim gen bound array same bounds
+		declare int two dim mixed bound array
+		declare multiple bool
+		declare multiple int
+		declare one dim mixed bounds array
+		declare one dim negative bounds array
+		declare single bool
+		declare single int
+		variable assignment
+		variable assignment expressions arithmetic
+		variable assignment expressions boolean
+		variable assignment expressions comparison
+		variable assignment multiple
+		variable assignment multiple diff types
