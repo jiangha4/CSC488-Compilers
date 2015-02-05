@@ -133,5 +133,17 @@ Haohan Jiang - Added grammar for statements.
 Chris Arnold - Wrote function tests.
             Wrote some of the readme.
 
-Chandeep Singh - Tests & documenation
+Chandeep Singh - Tests & documentation
 
+Maria Yancheva  - Grammar: added most production rules to grammar; worked on 
+				  removing recursion ambiguities and implementing precedence rules
+				- Testing: added tests for mixed expressions (containing operators, yield 
+				  statement, expression recursion), variables, scope
+				- Documentation: wrote the grammar design section
+
+Timo Vink		- Grammar: implemented operator precedence rules; refactored code for 
+				  style; added JCup callbacks to grammar for debugging purposes (to check operator precedence)
+				- Testing: wrote the batch test running script; added tests for statements, 
+				  loops, scope, variables, IO, expressions
+				- Documentation: wrote the test listing script
+				
