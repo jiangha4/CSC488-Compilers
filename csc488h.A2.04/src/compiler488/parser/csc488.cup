@@ -121,7 +121,7 @@ nonterminal String scope, statements, statement, outputs, output,
                 variable, variablename, bound, generalBound,
                 arrayname, functionname, procedurename,
                 parametername, parameters, parameter, type,
-                arguments, argument, expression, negatable,
+                arguments, argument, expression, exprLvl0,
                 exprLvl1, exprLvl2, exprLvl3, exprLvl4,
                 exprLvl5, exprLvl6, exprAtom;
 
@@ -343,15 +343,15 @@ exprLvl2 ::= exprLvl2:e1 PLUS exprLvl1:e2
                 {: RESULT = e; :}
            ;
 
-exprLvl1 ::= exprLvl1:e1 TIMES negatable:e2
+exprLvl1 ::= exprLvl1:e1 TIMES exprLvl0:e2
                 {: RESULT = "(" + e1 + " * " + e2 + ")"; :}
-           | exprLvl1:e1 DIVIDE negatable:e2
+           | exprLvl1:e1 DIVIDE exprLvl0:e2
                 {: RESULT = "(" + e1 + " / " + e2 + ")"; :}
-           | negatable:e
+           | exprLvl0:e
                 {: RESULT = e; :}
            ;
 
-negatable ::= MINUS negatable:e
+exprLvl0 ::= MINUS exprLvl0:e
                 {: RESULT = "(-" + e + ")"; :}
             | exprAtom:e
                 {: RESULT = e; :}
