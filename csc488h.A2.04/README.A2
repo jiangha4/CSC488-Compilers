@@ -98,8 +98,29 @@ For testing, the general idea was to go through each grammar rule for the differ
 
 For testing precedence, we simply output the parsed statements with brackets put in place, and manually checked to make sure precedence was correct.
 
-
-[<more about 'failing' tests here]
+tests/failing
+    condition
+        - tests malformed conditional statements with various keywords (if, else, then, end) and expressions missing 
+    expression
+        arithmetic
+            - tests malformed arithmetic expressions (add, subtract, divide, multiply) that are missing operands or consecutive operators 
+        comparison
+            - tests malformed comparison expressions (>, <, >=, <=, =) that are missing operands, contain consecutive operators or chained together expressions inappropriately
+        logical
+            - tests malformed logical expressions (and, not, or) that are missing operands
+        mixed
+    function
+        - tests malformed functions with various keywords (function, begin, end, the type) and parentheses missing 
+    io
+        - tests malformed io statements (get and put with missing inputs/outputs)
+    loop
+        - tests malformed loops with various keywords (exit, when, do, end) and expressions missing 
+    procedure
+        - tests malformed procedures with the procedure keyword, scope or type missing
+    scope
+        - tests malformed scopes that are missing keywords (begin, end) in different scope nestings or simply not there at all
+    variable
+        - tests malformed variable declarations, including missing parentheses, arrays with negative bounds and assigning too many values to the same variable
 
 	
 Who Did What
@@ -108,3 +129,7 @@ Who Did What
 Haohan Jiang - Added grammar for statements.
 	       Wrote the complex tests and turned A1 into complex tests.
 	       Wrote other simple passing and failing tests. 
+
+Chris Arnold - Wrote function tests.
+            Wrote some of the readme.
+
