@@ -49,54 +49,54 @@ Operators of level 3 which do not associate are implemented without recursion in
 
 Testing
 -------
-Tests folder structure:
-All tests can be found under the tests/passing and tests/failing folders. In each of those, there are folders for the types of statements the tests cover (i.e. functions, conditional statements, expressions). Finally in the folders for each statement type, there are relevant tests, each named so that the filename gives a description of the test.
+Tests' folder structure:
+All tests can be found under the tests/passing and tests/failing folders. In each of those, there are folders for the different production rules the tests cover (e.g. functions, conditional statements, expressions, etc). Finally, in the folders for each test type, there are relevant tests, each named so that the filename gives a description of the test (e.g. "declareIntOneDimArray.488"). For a full listing of the tests, see TEST_DESCR.A2
 
-Below is a summary of the tests from each folder (the filenames give a description of each individual tests):
+The general idea was to go through each grammar rule in the reference grammar and write at least one test case for each. For example, each rule for expressions is covered in the expressions folder, and there are multiple tests for arithmetic, comparison, logical, and mixed type expressions.
+
+For testing precedence, we used JCup callbacks in the grammar file to output the parsed sentences with parentheses put in place around each terminal symbol, and manually checked to make sure precedence was correct. These callbacks were removed from the submitted grammar to ensure nothing gets displayed when running the batch testing scripts.
+
+Below is a summary of the tests from each folder (as mentioned above, the filenames give a description of each individual test):
 
 tests/passing
     complex
-        -misc. complex tests combining various types of statements together.
-        -also includes 5 program written for Assignment 1
+        -misc. complex tests combining various types of production rules together
+        -also includes 5 programs written for Assignment 1
     conditional
-        -tests different conditional statements (basic if, if else, if elseif else, etc)
+        -tests different conditional statements (basic if, if else, etc)
     expression
         arithmetic
             simple
-                -tests simple arithmetic (add, subtract, divide, multiply)
+                -tests simple arithmetic operators (add, subtract, divide, multiply)
             compound
-                -tests combinations of the above arithmetic
+                -tests combinations of the above arithmetic operators
         comparison
-            -tests simple comparison statements (>, <, >=, <=, = operators) 
+            -tests simple comparison expressions (>, <, >=, <=, = operators) 
         logical
             simple
-                -tests simple logical statements (and or and not operators)
+                -tests simple logical expressions (&, | and ! operators)
             compound
                 -tests combinations of above operators
         mixed
-            -tests combinations of all the different expression types (arithmetic + comparison, arithmetic + logical)
+            -tests combinations of all the different expression types (arithmetic + comparison, arithmetic + logical, all types of operators + recursive expressions, including yield statement)
     function
         declarations
-            -test simple function declarations (with and without params, etc)
+            -tests simple function declarations (with and without params, etc)
         invoke
-            -test simple function invokations (with and without params)
+            -tests simple function invocations (with and without params)
         return
-            -test return statement parsing
+            -tests return statement parsing
     io
-        -test io statements (get, put, etc)
+        -tests io statements (get, put)
     loops
-        -test basic loops, while loops, exit conditions, etc.
+        -tests basic loops, while loops, exit conditions, etc.
     procedure
-        -test procedure declarations and calls (with and without params)
+        -tests procedure declarations and calls (with and without params)
     scope
-        -test scope parsing (empty, nest scopes)
+        -tests scope parsing (empty, nested scopes)
     variable
-        -test declarations of variables of various types, arrays of different types, multi-dimensional arrays, and mixed array bounds
-    
-
-For testing, the general idea was to go through each grammar rule for the different sets of statements, and write at least one test case for each. For example, each rule for expressions is covered in the expressions folder, and there are multiple tests for arithmetic, comparison, logical, and mixed type expressions.
-
-For testing precedence, we simply output the parsed statements with brackets put in place, and manually checked to make sure precedence was correct.
+        -tests declarations of variables of various types, arrays of different types, multi-dimensional arrays, and mixed array bounds; assignment of variables and arrays
+		
 
 tests/failing
     condition
@@ -126,24 +126,25 @@ tests/failing
 Who Did What
 ------------
 
-Haohan Jiang - Added grammar for statements.
-	       Wrote the complex tests and turned A1 into complex tests.
-	       Wrote other simple passing and failing tests. 
+Haohan Jiang (g3jiangh)
+- Added grammar for statements.
+- Wrote the complex tests and turned A1 into complex tests.
+- Wrote other simple passing and failing tests. 
 
-Chris Arnold - Wrote function tests.
-            Wrote some of the readme.
+Chris Arnold (g3arnold)
+- Wrote function tests.
+- Wrote some of the readme.
 
-Chandeep Singh - Tests & documentation
+Chandeep Singh (g2singh)
+- Tests & documentation
 
-Maria Yancheva  - Grammar: added most production rules to grammar; worked on 
-				  removing recursion ambiguities and implementing precedence rules
-				- Testing: added tests for mixed expressions (containing operators, yield 
-				  statement, expression recursion), variables, scope
-				- Documentation: wrote the grammar design section
+Maria Yancheva (c2yanche)
+- Grammar: added most production rules to grammar; worked on removing recursion ambiguities and implementing precedence rules
+- Testing: added tests for mixed expressions (containing operators, yield statement, expression recursion), variables, scope
+- Documentation: wrote the grammar design section
 
-Timo Vink		- Grammar: implemented operator precedence rules; refactored code for 
-				  style; added JCup callbacks to grammar for debugging purposes (to check operator precedence)
-				- Testing: wrote the batch test running script; added tests for statements, 
-				  loops, scope, variables, IO, expressions
-				- Documentation: wrote the test listing script
+Timo Vink (c4vinkti)	
+- Grammar: implemented operator precedence rules; refactored code for style; added JCup callbacks to grammar for debugging purposes (to check operator precedence)
+- Testing: wrote the batch test running script; added tests for statements, loops, scope, variables, IO, expressions
+- Documentation: wrote the test listing script
 				
