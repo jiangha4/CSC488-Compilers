@@ -63,7 +63,7 @@ tests/passing
     expression
         arithmetic
             simple
-                -tests simple arithmetic (add, subtract, divide, multiply
+                -tests simple arithmetic (add, subtract, divide, multiply)
             compound
                 -tests combinations of the above arithmetic
         comparison
@@ -104,3 +104,7 @@ For testing precedence, we simply output the parsed statements with brackets put
 	
 Who Did What
 ------------
+
+Haohan Jiang - Added grammar for statements.
+	       Wrote the complex tests and turned A1 into complex tests.
+	       Wrote other simple passing and failing tests. 
