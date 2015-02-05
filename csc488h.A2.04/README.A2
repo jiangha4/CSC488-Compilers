@@ -49,6 +49,57 @@ Operators of level 3 which do not associate are implemented without recursion in
 
 Testing
 -------
+Tests folder structure:
+All tests can be found under the tests/passing and tests/failing folders. In each of those, there are folders for the types of statements the tests cover (i.e. functions, conditional statements, expressions). Finally in the folders for each statement type, there are relevant tests, each named so that the filename gives a description of the test.
+
+Below is a summary of the tests from each folder (the filenames give a description of each individual tests):
+
+tests/passing
+    complex
+        -misc. complex tests combining various types of statements together.
+        -also includes 5 program written for Assignment 1
+    conditional
+        -tests different conditional statements (basic if, if else, if elseif else, etc)
+    expression
+        arithmetic
+            simple
+                -tests simple arithmetic (add, subtract, divide, multiply
+            compound
+                -tests combinations of the above arithmetic
+        comparison
+            -tests simple comparison statements (>, <, >=, <=, = operators) 
+        logical
+            simple
+                -tests simple logical statements (and or and not operators)
+            compound
+                -tests combinations of above operators
+        mixed
+            -tests combinations of all the different expression types (arithmetic + comparison, arithmetic + logical)
+    function
+        declarations
+            -test simple function declarations (with and without params, etc)
+        invoke
+            -test simple function invokations (with and without params)
+        return
+            -test return statement parsing
+    io
+        -test io statements (get, put, etc)
+    loops
+        -test basic loops, while loops, exit conditions, etc.
+    procedure
+        -test procedure declarations and calls (with and without params)
+    scope
+        -test scope parsing (empty, nest scopes)
+    variable
+        -test declarations of variables of various types, arrays of different types, multi-dimensional arrays, and mixed array bounds
+    
+
+For testing, the general idea was to go through each grammar rule for the different sets of statements, and write at least one test case for each. For example, each rule for expressions is covered in the expressions folder, and there are multiple tests for arithmetic, comparison, logical, and mixed type expressions.
+
+For testing precedence, we simply output the parsed statements with brackets put in place, and manually checked to make sure precedence was correct.
+
+
+[<more about 'failing' tests here]
 
 	
 Who Did What
