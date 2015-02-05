@@ -1,0 +1,48 @@
+CSC488
+Assignment 2
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chris Arnold (g3arnold)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+
+	
+Grammar Design
+--------------
+
+1. Recursive production rules
+
+All recursive rules were implemented using left recursion, for example a rule in the reference grammar of the form:
+
+X:	X X, 
+	base_case
+
+was transformed to the following in the cup file:
+
+X_multiple 	::= X_multiple X_base
+X_base 		::= base_case
+
+
+2. Expressions and precedence of operators
+
+A separate production rule was specified for each level of operators (as defined on page 3 of the reference grammar). The highest precedence operator (unary -) is specified in the lowest level, and the lowest precedence operator (Boolean | ) is specified in the highest level. Each subsequent level is defined in terms of the previous level. 
+
+Here is an overview of the expression production rules in our grammar:
+
+expression 	// Highest level expression production rule, consists of level 6 productions
+exprLvl6	// Level 6 - corresponds to | operator
+exprLvl5	// Level 5 - corresponds to & operator
+exprLvl4	// Level 4 - corresponds to ! operator
+exprLvl3	// Level 3 - corresponds to comparison operators
+exprLvl2	// Level 2 - corresponds to + and binary - operators
+exprLvl1	// Level 1 - corresponds to * and / operators
+exprLvl0	// Level 0 - corresponds to unary - operator
+exprAtom	// Lowest level expression production rule, consists of base expressions
+
+The base expressions (i.e., the ones that do not contain operators in the RHS of the production rule) are defined in the exprAtom production rule in the cup grammar, of which all higher level expressions can be composed of. Note, the base expressions which contain 'expression' on their RHS are defined in terms of the highest level of 'expression' (which allows lower precedence operations to be nested within higher precedence operations, e.g. "a = (! b)" ).
+
+Operators of levels 1, 2, 5 and 6 which associate from left to right are implemented using left recursion in the production rule for the corresponding level.
+
+Operators of level 3 which do not associate are implemented without recursion in the production rule for that level.
