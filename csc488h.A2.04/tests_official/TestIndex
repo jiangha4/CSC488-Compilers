@@ -1,0 +1,19 @@
+
+Test			 Weight		Description
+empty.488		   0.5		Empty program
+expressions.488		   1.0		All expression
+funprocdeclarations.488	   1.0		function/procedure declarations
+harder.488		   2.0		more complicated constructs
+scopes.488		   1.0		all forms of scopes
+statements.488		   1.5		all forms of statements
+vardeclarations.488	   1.0		all forms of variable declarations
+error01.488		   0.25		missing operator in expression  line 6 col 14
+error02.488		   0.25		extra comma            line 4 col 15
+error03.488		   0.25		missing statement      line 4  col 12
+error04.488		   0.25		too many array dimensions  line 4  col 36
+error05.488		   0.25		extra commas           line 4  col 30
+error06.488		   0.25		ill formed expression  line 4  col 9
+error07.488		   0.25		too many subscripts    line 4  col 22
+error08.488		   0.25 	missing expression     line 4  col 26
+
+Total                     10.0
