@@ -121,7 +121,7 @@ nonterminal String scope, statements, statement, outputs, output,
                 variable, variablename, bound, generalBound,
                 arrayname, functionname, procedurename,
                 parametername, parameters, parameter, type,
-                arguments, argument, expression, negatable,
+                arguments, argument, expression, exprLvl0,
                 exprLvl1, exprLvl2, exprLvl3, exprLvl4,
                 exprLvl5, exprLvl6, exprAtom;
 
@@ -146,7 +146,7 @@ start with program;
  * reads one more token before it will act on the production.
  */
 
-program ::= scope:s {: RESULT = s; :};        // the main program
+program ::= scope;        // the main program
 
 
 /*****************************************************************************
@@ -157,242 +157,155 @@ program ::= scope:s {: RESULT = s; :};        // the main program
 
 ****************************************************************************/
 
-statements ::= statements:s1 statement:s2
-                {: RESULT = s1 + s2 + "\n"; :}
-             | statement:s
-                {: RESULT = s + "\n"; :}
+statements ::= statements statement
+             | statement
              ;
 
-statement ::= variable:v LESS EQUAL expression:e
-                {: RESULT = v + " <= " + e; :}
-            | IF expression:e THEN statements:s END
-                {: RESULT = "IF " + e + " THEN\n" + s + "\nEND"; :}
-            | IF expression:e THEN statements:s1 ELSE statements:s2 END
-                {: RESULT = "IF " + e + " THEN\n" + s1 + "ELSE\n" + s2 + "END"; :}
-            | WHILE expression:e DO statements:s END
-                {: RESULT = "WHILE " + e + " DO\n" + s + "END"; :}
-            | LOOP statements:s END
-                {: RESULT = "LOOP\n" + s + "END"; :}
+statement ::= variable LESS EQUAL expression
+            | IF expression THEN statements END
+            | IF expression THEN statements ELSE statements END
+            | WHILE expression DO statements END
+            | LOOP statements END
             | EXIT
-                {: RESULT = "EXIT"; :}
-            | EXIT WHEN expression:e
-                {: RESULT = "EXIT WHEN " + e; :}
-            | RETURN L_PAREN expression:e R_PAREN
-                {: RESULT = "RETURN (" + e + ")"; :}
+            | EXIT WHEN expression
+            | RETURN L_PAREN expression R_PAREN
             | RETURN
-                {: RESULT = "RETURN"; :}
-            | PUT outputs:o
-                {: RESULT = "PUT " + o; :}
-            | GET inputs:i
-                {: RESULT = "GET " + i; :}
-            | procedurename:n
-                {: RESULT = n; :}
-            | procedurename:n L_PAREN arguments:a R_PAREN
-                {: RESULT = n + "(" + a + ")"; :}
-            | scope:s
-                {: RESULT = s; :}
-            | type:t variablenames:n
-                {: RESULT = t + " " + n; :}
-            | type:t FUNCTION functionname:n scope:s
-                {: RESULT = t + " FUNCTION " + n + " " + s; :}
-            | type:t FUNCTION functionname:n L_PAREN parameters:p R_PAREN scope:s
-                {: RESULT = t + " FUNCTION" + n + "(" + p + ") " + s; :}
-            | PROCEDURE procedurename:n scope:s
-                {: RESULT = "PROCEDURE" + n + " " + s; :}
-            | PROCEDURE procedurename:n L_PAREN parameters:p R_PAREN scope:s
-                {: RESULT = "PROCEDURE" + n + "(" + p + ") " + s; :}
+            | PUT outputs
+            | GET inputs
+            | procedurename
+            | procedurename L_PAREN arguments R_PAREN
+            | scope
+            | type variablenames
+            | type FUNCTION functionname scope
+            | type FUNCTION functionname L_PAREN parameters R_PAREN scope
+            | PROCEDURE procedurename scope
+            | PROCEDURE procedurename L_PAREN parameters R_PAREN scope
             ;
 
-variablenames ::= variablenames:n COMMA variableDecl:d
-                    {: RESULT = n + ", " + d; :}
-                | variableDecl:d
-                    {: RESULT = d; :}
+variablenames ::= variablenames COMMA variableDecl
+                | variableDecl
                 ;
 
-variableDecl ::= variablename:n
-                    {: RESULT = n; :}
-               | variablename:n L_SQUARE bound:b R_SQUARE
-                    {: RESULT = n + "[" + b + "]"; :}
-               | variablename:n L_SQUARE bound:b1 COMMA bound:b2 R_SQUARE
-                    {: RESULT = n + "[" + b1 + ", " + b2 + "]"; :}
+variableDecl ::= variablename
+               | variablename L_SQUARE bound R_SQUARE
+               | variablename L_SQUARE bound COMMA bound R_SQUARE
                ;
 
-bound ::= INTCONST:i
-            {: RESULT = i.toString(); :}
-        | generalBound:b1 DOT DOT generalBound:b2
-            {: RESULT = b1 + ".." + b2; :}
+bound ::= INTCONST
+        | generalBound DOT DOT generalBound
         ;
 
-generalBound ::= INTCONST:i
-                    {: RESULT = i.toString(); :}
-               | MINUS INTCONST:i
-                    {: RESULT = "-" + i.toString(); :}
+generalBound ::= INTCONST
+               | MINUS INTCONST
                ;
 
 scope ::= BEGIN END
-            {: RESULT = "BEGIN\nEND"; :}
-        | BEGIN statements:s END
-            {: RESULT = "BEGIN\n" + s + "END"; :}
+        | BEGIN statements END
         ;
 
-outputs ::= outputs:o1 COMMA output:o2
-            {: RESULT = o1 + ", " + o2; :}
-          | output:o
-            {: RESULT = o; :}
+outputs ::= outputs COMMA output
+          | output
           ;
 
-output ::= expression:e
-            {: RESULT = e; :}
-         | TEXTCONST:t
-            {: RESULT = "\"" + t + "\""; :}
+output ::= expression
+         | TEXTCONST
          | SKIP
-            {: RESULT = "SKIP"; :}
          ;
 
-inputs ::= inputs:i1 COMMA input:i2
-            {: RESULT = i1 + ", " + i2; :}
-         | input:i
-            {: RESULT = i; :}
+inputs ::= inputs COMMA input
+         | input
          ;
 
-input ::= variable:v
-            {: RESULT = v; :}
+input ::= variable
         ;
 
 type ::= INTEGER
-            {: RESULT = "INTEGER"; :}
        | BOOLEAN
-            {: RESULT = "BOOLEAN"; :}
        ;
 
-arguments ::= arguments:a1 COMMA argument:a2
-                {: RESULT = a1 + ", " + a2; :}
-            | argument:a
-                {: RESULT = a; :}
+arguments ::= arguments COMMA argument
+            | argument
             ;
 
-argument ::= expression:e
-                {: RESULT = e; :}
-           ;
-
-parameters ::= parameters:p1 COMMA parameter:p2
-                {: RESULT = p1 + ", " + p2; :}
-            | parameter:p
-                {: RESULT = p; :}
+argument ::= expression
             ;
 
-parameter ::= type parametername:n
-                {: RESULT = n; :}
+parameters ::= parameters COMMA parameter
+            | parameter
             ;
 
-variable ::= variablename:v
-                {: RESULT = v; :}
-           | arrayname:n L_SQUARE expression:e R_SQUARE
-                {: RESULT = n + "[" + e + "]"; :}
-           | arrayname:n L_SQUARE expression:e1 COMMA expression:e2 R_SQUARE
-                {: RESULT = n + "[" + e1 + ", " + e2 + "]"; :}
+parameter ::= type parametername
+            ;
+
+variable ::= variablename
+           | arrayname L_SQUARE expression R_SQUARE
+           | arrayname L_SQUARE expression COMMA expression R_SQUARE
            ;
 
 
 // NB: In an expression, IDENT could stand for: variablename, functionname,
 // arrayname or parametername, but at this point the parser cannot resolve
 // which one (this is left for the semantic processing after the syntax parser).
-expression ::= exprLvl6:e
-                {: RESULT = e; :}
+expression ::= exprLvl6
              ;
 
-exprLvl6 ::= exprLvl6:e1 OR exprLvl5:e2
-                 {: RESULT = "(" + e1 + " | " + e2 + ")"; :}
-            | exprLvl5:e
-                 {: RESULT = e; :}
+exprLvl6 ::= exprLvl6 OR exprLvl5
+            | exprLvl5
             ;
 
-exprLvl5 ::= exprLvl5:e1 AND exprLvl4:e2
-                {: RESULT = "(" + e1 + " & " + e2 + ")"; :}
-           | exprLvl4:e
-                {: RESULT = e; :}
+exprLvl5 ::= exprLvl5 AND exprLvl4
+           | exprLvl4
            ;
 
-exprLvl4 ::= NOT exprLvl4:e
-                {: RESULT = "(!" + e + ")"; :}
-           | exprLvl3:e
-                {: RESULT = e; :}
+exprLvl4 ::= NOT exprLvl4
+           | exprLvl3
            ;
 
-exprLvl3 ::= exprLvl2:e1 EQUAL exprLvl2:e2
-                {: RESULT = "(" + e1 + " = " + e2 + ")"; :}
-           | exprLvl2:e1 NOT EQUAL exprLvl2:e2
-                {: RESULT = "(" + e1 + " != " + e2 + ")"; :}
-           | exprLvl2:e1 LESS exprLvl2:e2
-                {: RESULT = "(" + e1 + " < " + e2 + ")"; :}
-           | exprLvl2:e1 LESS EQUAL exprLvl2:e2
-                {: RESULT = "(" + e1 + " <= " + e2 + ")"; :}
-           | exprLvl2:e1 GREATER exprLvl2:e2
-                {: RESULT = "(" + e1 + " > " + e2 + ")"; :}
-           | exprLvl2:e1 GREATER EQUAL exprLvl2:e2
-                {: RESULT = "(" + e1 + " >= " + e2 + ")"; :}
-           | exprLvl2:e
-                {: RESULT = e; :}
+exprLvl3 ::= exprLvl2 EQUAL exprLvl2
+           | exprLvl2 NOT EQUAL exprLvl2
+           | exprLvl2 LESS exprLvl2
+           | exprLvl2 LESS EQUAL exprLvl2
+           | exprLvl2 GREATER exprLvl2
+           | exprLvl2 GREATER EQUAL exprLvl2
+           | exprLvl2
            ;
 
-exprLvl2 ::= exprLvl2:e1 PLUS exprLvl1:e2
-                {: RESULT = "(" + e1 + " + " + e2 + ")"; :}
-           | exprLvl2:e1 MINUS exprLvl1:e2
-                {: RESULT = "(" + e1 + " - " + e2 + ")"; :}
-           | exprLvl1:e
-                {: RESULT = e; :}
+exprLvl2 ::= exprLvl2 PLUS exprLvl1
+           | exprLvl2 MINUS exprLvl1
+           | exprLvl1
            ;
 
-exprLvl1 ::= exprLvl1:e1 TIMES negatable:e2
-                {: RESULT = "(" + e1 + " * " + e2 + ")"; :}
-           | exprLvl1:e1 DIVIDE negatable:e2
-                {: RESULT = "(" + e1 + " / " + e2 + ")"; :}
-           | negatable:e
-                {: RESULT = e; :}
+exprLvl1 ::= exprLvl1 TIMES exprLvl0
+           | exprLvl1 DIVIDE exprLvl0
+           | exprLvl0
            ;
 
-negatable ::= MINUS negatable:e
-                {: RESULT = "(-" + e + ")"; :}
-            | exprAtom:e
-                {: RESULT = e; :}
+exprLvl0 ::= MINUS exprLvl0
+            | exprAtom
             ;
 
-exprAtom ::= INTCONST:n
-                {: RESULT = n.toString(); :}
+exprAtom ::= INTCONST
            | TRUE
-                {: RESULT = "TRUE"; :}
            | FALSE
-                {: RESULT = "FALSE"; :}
-           | IDENT:i
-                {: RESULT = i; :}
-           | L_PAREN expression:e R_PAREN
-                {: RESULT = "(" + e + ")"; :}
-           | arrayname:n L_SQUARE expression:e R_SQUARE
-                {: RESULT = n + "[" + e + "]"; :}
-           | arrayname:n L_SQUARE expression:e1 COMMA expression:e2 R_SQUARE
-                {: RESULT = n + "[" + e1 +"," + e2 + "]"; :}
-           | functionname:n L_PAREN arguments:a R_PAREN
-                {: RESULT = n + "(" + a + ")"; :}
-           | L_CURLEY statements:s YIELDS expression:e R_CURLEY
-                {: RESULT = "{\n" + s + " YIELDS " + e + "\n}"; :}
+           | IDENT
+           | L_PAREN expression R_PAREN
+           | arrayname L_SQUARE expression R_SQUARE
+           | arrayname L_SQUARE expression COMMA expression R_SQUARE
+           | functionname L_PAREN arguments R_PAREN
+           | L_CURLEY statements YIELDS expression R_CURLEY
            ;
 
-variablename ::= IDENT:i
-                    {: RESULT = i; :}
-               ;
+variablename ::= IDENT
+				;
 
-arrayname ::= IDENT:i
-                {: RESULT = i; :}
-            ;
+arrayname ::= IDENT
+				;
 
-functionname ::= IDENT:i
-                    {: RESULT = i; :}
-               ;
-
-parametername ::= IDENT:i
-                    {: RESULT = i; :}
+functionname ::= IDENT
                 ;
 
-procedurename ::= IDENT:i
-                    {: RESULT = i; :}
+parametername ::= IDENT
+                ;
+
+procedurename ::= IDENT
                 ;

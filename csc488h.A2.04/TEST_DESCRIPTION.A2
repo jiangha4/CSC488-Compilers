@@ -1,0 +1,87 @@
+CSC488
+Assignment 2
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chris Arnold (g3arnold)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+
+
+Testing
+-------
+How to run all tests: run "RUNALLTESTS.sh" (make sure "testrunner.py" is in the same directory).
+
+Tests' folder structure:
+All tests can be found under the tests/passing and tests/failing folders. In each of those, there are folders for the different production rules the tests cover (e.g. functions, conditional statements, expressions, etc). Finally, in the folders for each test type, there are relevant tests, each named so that the filename gives a description of the test (e.g. "declareIntOneDimArray.488"). For a full index listing of the tests with a one-line description, see TEST_LIST.A2
+
+Our strategy was to go through each grammar rule in the reference grammar and write at least one test case for each. For example, each rule for expressions is covered in the expressions folder, and there are multiple tests for arithmetic, comparison, logical, and mixed type expressions.
+
+For testing precedence, we used JCup callbacks in the grammar file to output the parsed sentences with parentheses put in place around each terminal symbol, and manually checked to make sure precedence was correct. These callbacks were removed from the submitted grammar to ensure nothing gets displayed when running the batch testing scripts.
+
+Below is an overview of the tests from each folder:
+
+tests/passing
+    complex
+        -misc. complex tests combining various types of production rules together
+        -also includes 5 programs written for Assignment 1
+    conditional
+        -tests different conditional statements (basic if, if else, etc)
+    expression
+        arithmetic
+            simple
+                -tests simple arithmetic operators (add, subtract, divide, multiply)
+            compound
+                -tests combinations of the above arithmetic operators
+        comparison
+            -tests simple comparison expressions (>, <, >=, <=, = operators) 
+        logical
+            simple
+                -tests simple logical expressions (&, | and ! operators)
+            compound
+                -tests combinations of above operators
+        mixed
+            -tests combinations of all the different expression types (arithmetic + comparison, arithmetic + logical, all types of operators + recursive expressions, including yield statement)
+    function
+        declarations
+            -tests simple function declarations (with and without params, etc)
+        invoke
+            -tests simple function invocations (with and without params)
+        return
+            -tests return statement parsing
+    io
+        -tests io statements (get, put)
+    loops
+        -tests basic loops, while loops, exit conditions, etc.
+    procedure
+        -tests procedure declarations and calls (with and without params)
+    scope
+        -tests scope parsing (empty, nested scopes)
+    variable
+        -tests declarations of variables of various types, arrays of different types, multi-dimensional arrays, and mixed array bounds; assignment of variables and arrays
+		
+
+tests/failing
+    condition
+        - tests malformed conditional statements with various keywords (if, else, then, end) and expressions missing 
+    expression
+        arithmetic
+            - tests malformed arithmetic expressions (add, subtract, divide, multiply) that are missing operands or consecutive operators 
+        comparison
+            - tests malformed comparison expressions (>, <, >=, <=, =) that are missing operands, contain consecutive operators or chained together expressions inappropriately
+        logical
+            - tests malformed logical expressions (and, not, or) that are missing operands
+        mixed
+    function
+        - tests malformed functions with various keywords (function, begin, end, the type) and parentheses missing 
+    io
+        - tests malformed io statements (get and put with missing inputs/outputs)
+    loop
+        - tests malformed loops with various keywords (exit, when, do, end) and expressions missing 
+    procedure
+        - tests malformed procedures with the procedure keyword, scope or type missing
+    scope
+        - tests malformed scopes that are missing keywords (begin, end) in different scope nestings or simply not there at all
+    variable
+        - tests malformed variable declarations, including missing parentheses, arrays with negative bounds and assigning too many values to the same variable
