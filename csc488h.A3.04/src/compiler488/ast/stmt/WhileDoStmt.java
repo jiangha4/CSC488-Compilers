@@ -20,7 +20,7 @@ public class WhileDoStmt extends LoopingStmt {
 
         body.prettyPrintBlock(p);
 
-        p.println("end");
+        p.print("end");
     }
 
 }

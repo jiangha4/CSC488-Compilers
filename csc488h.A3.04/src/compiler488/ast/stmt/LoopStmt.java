@@ -17,8 +17,8 @@ public class LoopStmt extends LoopingStmt {
     @Override
     public void prettyPrint(PrettyPrinter p) {
         p.println("loop");
-        body.prettyPrintNewlines(p);
-        p.println("end");
+        body.prettyPrintBlock(p);
+        p.print("end");
     }
 
 }
