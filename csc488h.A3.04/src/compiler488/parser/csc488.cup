@@ -134,11 +134,12 @@ nonterminal Integer[] bound;
 nonterminal Integer generalBound;
 nonterminal Type type;
 nonterminal ASTList<ScalarDecl> parameters;
+nonterminal ScalarDecl parameter;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
-nonterminal	parameter, conjunction, negation, compareExpn ;
+nonterminal	conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
 // Non-terminals that have a value.
@@ -283,13 +284,15 @@ inputs ::= variable:v
 
 arguments ::= expression:e
 			{: RESULT = new ASTList<Expn>(e); :}
-		|	arguments:a COMMA expression:e
+	|	arguments:a COMMA expression:e
 			{: RESULT = a.append(e); :}
-		;
+	;
 
-parameters	::=	parameter			// list of function/procedure formal parameters
-		|	parameters COMMA parameter
-		;
+parameters ::= parameter:p
+			{: RESULT = new ASTList<ScalarDecl>(p); :}
+	|	parameters:p1 COMMA parameter:p2
+			{: RESULT = p1.append(p2); :}
+	;
 
 parameter	::=	type IDENT ;			// declare one parameter
 
