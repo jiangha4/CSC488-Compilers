@@ -136,8 +136,8 @@ nonterminal Type type;
 nonterminal ASTList<ScalarDecl> parameters;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
+nonterminal Printable output;
 
-nonterminal	output			;
 nonterminal	parameter, conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
@@ -261,9 +261,11 @@ type ::= INTEGER
 			{: RESULT = new BooleanType(); :}
 	;
 
-outputs		::=	output			// list of output expressions
-		|	outputs COMMA output
-		;
+outputs	::= output:o
+			{: RESULT = new ASTList<Printable>(o); :}
+	|	outputs:o1 COMMA output:o2
+			{: RESULT = o1.append(o2); :}
+	;
 
 output		::=	expression		// integer expression
 		|	TEXTCONST		// text constant
