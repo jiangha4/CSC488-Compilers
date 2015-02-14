@@ -5,6 +5,7 @@ package compiler488.parser;
 import java_cup.runtime.*;		// Must always import this.
 import compiler488.ast.*;
 import compiler488.ast.decl.*;
+import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 
 
@@ -120,13 +121,20 @@ nonterminal Scope scope;
 nonterminal ASTList<Stmt> declarationsAndStatements;
 nonterminal Stmt statement;
 nonterminal Declaration declaration;
+nonterminal ProcedureCallStmt procedureCall;
+
+nonterminal Expn expression;
+
+nonterminal Assignable variable;
+nonterminal ASTList<Assignable> inputs;
+nonterminal ASTList<Printable> outputs;
 
 nonterminal	variablenames,		output			;
-nonterminal	type,  	arguments,	parameters,	variable	;
-nonterminal 	expression,	variablename 			;
+nonterminal	type,  	arguments,	parameters	;
+nonterminal variablename 			;
 
-nonterminal	inputs, outputs, bound , generalBound ;
-nonterminal	procedureCall, parameter, conjunction, negation, compareExpn ;
+nonterminal	bound , generalBound ;
+nonterminal	parameter, conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
 // Non-terminals that have a value.
@@ -151,40 +159,53 @@ start with program;
  */
 
 program ::= scope:s
-		{: RESULT = new Program(s); :}
+			{: RESULT = new Program(s); :}
 	;
 
 scope ::= BEGIN declarationsAndStatements:d END
-		{: RESULT = new Scope(d); :}
-	| BEGIN END
-		{: RESULT = new Scope(); :}
+			{: RESULT = new Scope(d); :}
+	|	BEGIN END
+			{: RESULT = new Scope(); :}
 	;
 
 //  sequence of arbitrarily intermixed declarations and statements
 declarationsAndStatements ::= statement:s
-		{: RESULT = new ASTList(s); :}
+			{: RESULT = new ASTList(s); :}
 	|	declaration:d
-		{: RESULT = new ASTList(d); :}
+			{: RESULT = new ASTList(d); :}
 	|	declarationsAndStatements:l statement:s
-		{: RESULT = l.append(s); :}
+			{: RESULT = l.append(s); :}
 	|	declarationsAndStatements:l declaration:d
-		{: RESULT = l.append(d); :}
+			{: RESULT = l.append(d); :}
 	;
 
-statement	::=	variable LESS EQUAL expression				// assignment statement
-		|	IF expression THEN declarationsAndStatements END 	// if statements
-		|	IF expression THEN declarationsAndStatements ELSE declarationsAndStatements END
-		|	WHILE expression DO declarationsAndStatements END	// while statement
-		|	LOOP declarationsAndStatements END			// loop statement
-		|	EXIT							// exit statements
-		|	EXIT WHEN expression
-		|	RETURN 							// return statements
-		|	RETURN L_PAREN expression R_PAREN
-		|	PUT outputs						// input/output statments
-		|	GET  inputs
-		|	procedureCall						// procedure call
-		|	scope							// embedded scope
-		;
+statement ::= variable:v LESS EQUAL expression:e
+			{: RESULT = new AssignStmt(v, e); :}
+	|	IF expression:e THEN declarationsAndStatements:d END
+			{: RESULT = new IfStmt(e, d); :}
+	|	IF expression:e THEN declarationsAndStatements:d1 ELSE declarationsAndStatements:d2 END
+			{: RESULT = new IfStmt(e, d1, d2); :}
+	|	WHILE expression:e DO declarationsAndStatements:d END
+			{: RESULT = new WhileDoStmt(e, d); :}
+	|	LOOP declarationsAndStatements:d END
+			{: RESULT = new LoopStmt(d); :}
+	|	EXIT
+			{: RESULT = new ExitStmt(); :}
+	|	EXIT WHEN expression:e
+			{: RESULT = new ExitStmt(e); :}
+	|	RETURN
+			{: RESULT = new ReturnStmt(); :}
+	|	RETURN L_PAREN expression:e R_PAREN
+			{: RESULT = new ReturnStmt(e); :}
+	|	PUT outputs:o
+			{: RESULT = new PutStmt(o); :}
+	|	GET inputs:i
+			{: RESULT = new GetStmt(i); :}
+	|	procedureCall:c
+			{: RESULT = c; :}
+	|	scope:s
+			{: RESULT = s; :}
+	;
 
 procedureCall	::=	IDENT 					// call procedure with no parameters
 		|	IDENT L_PAREN arguments R_PAREN  	// call procedure with parameters
