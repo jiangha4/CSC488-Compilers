@@ -127,6 +127,7 @@ nonterminal ProcedureCallStmt procedureCall;
 nonterminal Expn expression;
 nonterminal Expn conjunction;
 nonterminal Expn negation;
+nonterminal	Expn compareExpn ;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
@@ -141,7 +142,6 @@ nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
-nonterminal	compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
 // Non-terminals that have a value.
@@ -312,9 +312,11 @@ conjunction	::=	negation:n
 			{: RESULT = new BoolExpn(BoolExpn.OP_AND, c, n); :}
 	;
 
-negation	::=	compareExpn 			// negations
-		|	NOT negation
-		;
+negation ::= compareExpn:c
+			{: RESULT = c; :}
+	|	NOT negation:n
+			{: RESULT = new UnaryMinusExpn(n); :}
+	;
 
 compareExpn	::=	arithExpn			// comparisons, do not associate
 		|	arithExpn EQUAL arithExpn
