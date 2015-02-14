@@ -294,7 +294,9 @@ parameters ::= parameter:p
 			{: RESULT = p1.append(p2); :}
 	;
 
-parameter	::=	type IDENT ;			// declare one parameter
+parameter ::= type:t IDENT:i
+		{: RESULT = new ScalarDecl(i, t); :}
+	;
 
 expression	::=	conjunction			// disjunctions, associate left-to-right
 		|	expression OR conjunction
