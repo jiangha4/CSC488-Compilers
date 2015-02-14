@@ -275,9 +275,11 @@ output ::= expression:e
 			{: RESULT = new SkipConstExpn(); :}
 	;
 
-inputs		::=	variable		// list of variables being read into
-		|	inputs COMMA variable
-		;
+inputs ::= variable:v
+			{: RESULT = new ASTList<Assignable>(v); :}
+	|	inputs:i COMMA variable:v
+			{: RESULT = i.append(v); :}
+	;
 
 arguments	::=	expression			// list of function/procedure arguments
 		|	arguments COMMA expression
