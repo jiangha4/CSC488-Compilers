@@ -249,9 +249,11 @@ bound ::= INTCONST:i
 			{: RESULT = new Integer[] { b1, b2 }; :}
 	;
 
-generalBound	::=	INTCONST		// positive array bound
-		|	MINUS INTCONST		// negative array bound
-		;
+generalBound ::= INTCONST:i
+			{: RESULT = i; :}
+	|	MINUS INTCONST:i
+			{: RESULT = -i; :}
+	;
 
 type		::=	INTEGER			// integer type
 		|	BOOLEAN			// boolean type
