@@ -130,13 +130,14 @@ nonterminal ASTList<Expn> arguments;
 nonterminal Assignable variable;
 nonterminal ASTList<DeclarationPart> variablenames;
 nonterminal DeclarationPart variablename;
+nonterminal Integer[] bound;
 nonterminal Type type;
 nonterminal ASTList<ScalarDecl> parameters;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 
 nonterminal	output			;
-nonterminal	bound , generalBound ;
+nonterminal	generalBound ;
 nonterminal	parameter, conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
@@ -234,10 +235,13 @@ variablenames ::= variablename:v
 			{: RESULT = v1.append(v2); :}
 	;
 
-variablename	::=	IDENT 						// scalar variable
-		|	IDENT L_SQUARE bound R_SQUARE			// one dimensional array variable
-		|	IDENT L_SQUARE bound COMMA bound  R_SQUARE	// two dimensional array variable
-		;
+variablename ::= IDENT:i
+			{: RESULT = new ScalarDeclPart(i); :}
+	|	IDENT:i L_SQUARE bound:b R_SQUARE
+			{: RESULT = new ArrayDeclPart(i, b); :}
+	|	IDENT:i L_SQUARE bound:b1 COMMA bound:b2  R_SQUARE
+			{: RESULT = new ArrayDeclPart(i, b1, b2); :}
+	;
 
 bound		::=	INTCONST					// positive array bound
 		|	generalBound DOT DOT generalBound		// positive or negative array bounds
