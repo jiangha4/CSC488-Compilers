@@ -255,9 +255,11 @@ generalBound ::= INTCONST:i
 			{: RESULT = -i; :}
 	;
 
-type		::=	INTEGER			// integer type
-		|	BOOLEAN			// boolean type
-		;
+type ::= INTEGER
+			{: RESULT = new IntegerType(); :}
+	|	BOOLEAN
+			{: RESULT = new BooleanType(); :}
+	;
 
 outputs		::=	output			// list of output expressions
 		|	outputs COMMA output
