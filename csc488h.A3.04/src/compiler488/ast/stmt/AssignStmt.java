@@ -1,6 +1,5 @@
 package compiler488.ast.stmt;
 
-import compiler488.ast.Assignable;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.expn.Expn;
 
@@ -9,19 +8,19 @@ import compiler488.ast.expn.Expn;
  */
 public class AssignStmt extends Stmt {
     /** The location being assigned to. */
-    private Assignable lval;
+    private Expn lval;
 
     /** The value being assigned. */
     private Expn rval;
 
-    public AssignStmt(Assignable lval, Expn rval) {
+    public AssignStmt(Expn lval, Expn rval) {
         super();
 
         this.lval = lval;
         this.rval = rval;
     }
 
-    public Assignable getLval() {
+    public Expn getLval() {
         return lval;
     }
 

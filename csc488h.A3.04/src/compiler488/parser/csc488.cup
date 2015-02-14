@@ -133,7 +133,7 @@ nonterminal Expn term;
 nonterminal Expn factor;
 nonterminal Expn primary;
 nonterminal ConstExpn constant;
-nonterminal IdentExpn variable;
+nonterminal Expn variable;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal ASTList<DeclarationPart> variablenames;
@@ -143,7 +143,7 @@ nonterminal Integer generalBound;
 nonterminal Type type;
 nonterminal ASTList<ScalarDecl> parameters;
 nonterminal ScalarDecl parameter;
-nonterminal ASTList<Assignable> inputs;
+nonterminal ASTList<Expn> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
@@ -236,7 +236,7 @@ declaration ::= type:t variablenames:v
 	;
 
 variablenames ::= variablename:v
-			{: RESULT = new ASTList<DeclarationPart>(v); :}
+			{: RESULT = new ASTList(v); :}
 	|	variablenames:v1 COMMA variablename:v2
 			{: RESULT = v1.append(v2); :}
 	;
@@ -268,7 +268,7 @@ type ::= INTEGER
 	;
 
 outputs	::= output:o
-			{: RESULT = new ASTList<Printable>(o); :}
+			{: RESULT = new ASTList(o); :}
 	|	outputs:o1 COMMA output:o2
 			{: RESULT = o1.append(o2); :}
 	;
@@ -282,19 +282,19 @@ output ::= expression:e
 	;
 
 inputs ::= variable:v
-			{: RESULT = new ASTList<Assignable>(v); :}
+			{: RESULT = new ASTList(v); :}
 	|	inputs:i COMMA variable:v
 			{: RESULT = i.append(v); :}
 	;
 
 arguments ::= expression:e
-			{: RESULT = new ASTList<Expn>(e); :}
+			{: RESULT = new ASTList(e); :}
 	|	arguments:a COMMA expression:e
 			{: RESULT = a.append(e); :}
 	;
 
 parameters ::= parameter:p
-			{: RESULT = new ASTList<ScalarDecl>(p); :}
+			{: RESULT = new ASTList(p); :}
 	|	parameters:p1 COMMA parameter:p2
 			{: RESULT = p1.append(p2); :}
 	;
@@ -379,7 +379,10 @@ constant ::= INTCONST:i
 			{: RESULT = new BoolConstExpn(false); :}
 	;
 
-variable	::=	IDENT					// scalar variable or function call
-		|	IDENT L_SQUARE expression R_SQUARE	// element of a 1-D  array
-		|	IDENT L_SQUARE expression COMMA expression R_SQUARE	// element of a 2-D array
-		;
+variable ::= IDENT:i
+			{: RESULT = new IdentExpn(i); :}
+	|	IDENT:i L_SQUARE expression:e R_SQUARE
+			{: RESULT = new SubsExpn(i, e); :}
+	|	IDENT:i L_SQUARE expression:e1 COMMA expression:e2 R_SQUARE
+			{: RESULT = new SubsExpn(i, e1, e2); :}
+	;
