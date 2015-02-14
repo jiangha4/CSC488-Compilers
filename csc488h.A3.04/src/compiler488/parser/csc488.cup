@@ -371,10 +371,13 @@ primary ::= constant:c
 			{: RESULT = new AnonFuncExpn(d, e); :}
 	;
 
-constant	::=	INTCONST	// integer constant
-		|	TRUE		// constant true
-		|	FALSE		// constant false
-		;
+constant ::= INTCONST:i
+			{: RESULT = new IntConstExpn(i); :}
+	|	TRUE
+			{: RESULT = new BoolConstExpn(true); :}
+	|	FALSE
+			{: RESULT = new BoolConstExpn(false); :}
+	;
 
 variable	::=	IDENT					// scalar variable or function call
 		|	IDENT L_SQUARE expression R_SQUARE	// element of a 1-D  array
