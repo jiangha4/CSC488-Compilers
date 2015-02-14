@@ -281,8 +281,10 @@ inputs ::= variable:v
 			{: RESULT = i.append(v); :}
 	;
 
-arguments	::=	expression			// list of function/procedure arguments
-		|	arguments COMMA expression
+arguments ::= expression:e
+			{: RESULT = new ASTList<Expn>(e); :}
+		|	arguments:a COMMA expression:e
+			{: RESULT = a.append(e); :}
 		;
 
 parameters	::=	parameter			// list of function/procedure formal parameters
