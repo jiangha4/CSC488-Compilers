@@ -267,10 +267,13 @@ outputs	::= output:o
 			{: RESULT = o1.append(o2); :}
 	;
 
-output		::=	expression		// integer expression
-		|	TEXTCONST		// text constant
-		|	SKIP			// skip pseudo constant
-		;
+output ::= expression:e
+			{: RESULT = e; :}
+	|	TEXTCONST:t
+			{: RESULT = new TextConstExpn(t); :}
+	|	SKIP
+			{: RESULT = new SkipConstExpn(); :}
+	;
 
 inputs		::=	variable		// list of variables being read into
 		|	inputs COMMA variable
