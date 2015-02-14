@@ -131,13 +131,13 @@ nonterminal Assignable variable;
 nonterminal ASTList<DeclarationPart> variablenames;
 nonterminal DeclarationPart variablename;
 nonterminal Integer[] bound;
+nonterminal Integer generalBound;
 nonterminal Type type;
 nonterminal ASTList<ScalarDecl> parameters;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 
 nonterminal	output			;
-nonterminal	generalBound ;
 nonterminal	parameter, conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
@@ -243,9 +243,11 @@ variablename ::= IDENT:i
 			{: RESULT = new ArrayDeclPart(i, b1, b2); :}
 	;
 
-bound		::=	INTCONST					// positive array bound
-		|	generalBound DOT DOT generalBound		// positive or negative array bounds
-		;
+bound ::= INTCONST:i
+			{: RESULT = new Integer[] { 0, i }; :}
+	|	generalBound:b1 DOT DOT generalBound:b2
+			{: RESULT = new Integer[] { b1, b2 }; :}
+	;
 
 generalBound	::=	INTCONST		// positive array bound
 		|	MINUS INTCONST		// negative array bound
