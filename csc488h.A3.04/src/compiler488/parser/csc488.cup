@@ -3,6 +3,8 @@
 package compiler488.parser;
 
 import java_cup.runtime.*;		// Must always import this.
+import compiler488.ast.stmt.*;
+
 
 /* User code components 1: action code components.
  * Code to be used inside the actions triggered when productions are matched.
@@ -110,7 +112,10 @@ terminal String  TEXTCONST	;
 // Non-terminals that have no value.
 // nonterminal xxx
 
-nonterminal	program,statement,	declaration,	scope	;
+nonterminal Program program;
+nonterminal Scope scope;
+
+nonterminal	statement,	declaration	;
 nonterminal	variablenames,		output			;
 nonterminal	type,  	arguments,	parameters,	variable	;
 nonterminal 	expression,	variablename 			;
@@ -140,11 +145,15 @@ start with program;
  * reads one more token before it will act on the production.
  */
 
-program		::=	scope	;				// the main program
+program ::= scope:s
+		{: RESULT = new Program(s); :}
+	;
 
-scope		::=	BEGIN declarationsAndStatements END  	// non empty scope
-		|	BEGIN END				// empty scope
-		;
+scope ::= BEGIN declarationsAndStatements:d END
+		{: RESULT = new Scope(d); :}
+	| BEGIN END
+		{: RESULT = new Scope(); :}
+	;
 
 //  sequence of arbitrarily intermixed declarations and statements
 declarationsAndStatements	::=	statement
