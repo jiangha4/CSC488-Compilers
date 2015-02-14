@@ -125,6 +125,7 @@ nonterminal Declaration declaration;
 nonterminal ProcedureCallStmt procedureCall;
 
 nonterminal Expn expression;
+nonterminal Expn conjunction;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
@@ -139,7 +140,7 @@ nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
-nonterminal	conjunction, negation, compareExpn ;
+nonterminal	negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
 // Non-terminals that have a value.
@@ -298,9 +299,11 @@ parameter ::= type:t IDENT:i
 		{: RESULT = new ScalarDecl(i, t); :}
 	;
 
-expression	::=	conjunction			// disjunctions, associate left-to-right
-		|	expression OR conjunction
-		;
+expression ::= conjunction:c
+		{: RESULT = c; :}
+	|	expression:e OR conjunction:c
+		{: RESULT = new BoolExpn(BoolExpn.OP_OR, e, c); :}
+	;
 
 conjunction	::=	negation			// conjunctions, associate left-to-right
 		|	conjunction AND negation
