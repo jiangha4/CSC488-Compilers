@@ -3,6 +3,8 @@
 package compiler488.parser;
 
 import java_cup.runtime.*;		// Must always import this.
+import compiler488.ast.*;
+import compiler488.ast.decl.*;
 import compiler488.ast.stmt.*;
 
 
@@ -115,12 +117,15 @@ terminal String  TEXTCONST	;
 nonterminal Program program;
 nonterminal Scope scope;
 
-nonterminal	statement,	declaration	;
+nonterminal ASTList<Stmt> declarationsAndStatements;
+nonterminal Stmt statement;
+nonterminal Declaration declaration;
+
 nonterminal	variablenames,		output			;
 nonterminal	type,  	arguments,	parameters,	variable	;
 nonterminal 	expression,	variablename 			;
 
-nonterminal	declarationsAndStatements , inputs, outputs, bound , generalBound ;
+nonterminal	inputs, outputs, bound , generalBound ;
 nonterminal	procedureCall, parameter, conjunction, negation, compareExpn ;
 nonterminal	arithExpn, term, factor, primary, constant ;
 
@@ -156,11 +161,15 @@ scope ::= BEGIN declarationsAndStatements:d END
 	;
 
 //  sequence of arbitrarily intermixed declarations and statements
-declarationsAndStatements	::=	statement
-				|	declaration
-				|	declarationsAndStatements statement
-				|	declarationsAndStatements declaration
-				;
+declarationsAndStatements ::= statement:s
+		{: RESULT = new ASTList(s); :}
+	|	declaration:d
+		{: RESULT = new ASTList(d); :}
+	|	declarationsAndStatements:l statement:s
+		{: RESULT = l.append(s); :}
+	|	declarationsAndStatements:l declaration:d
+		{: RESULT = l.append(d); :}
+	;
 
 statement	::=	variable LESS EQUAL expression				// assignment statement
 		|	IF expression THEN declarationsAndStatements END 	// if statements
