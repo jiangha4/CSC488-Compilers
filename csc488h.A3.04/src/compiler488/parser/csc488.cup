@@ -250,7 +250,7 @@ variablename ::= IDENT:i
 	;
 
 bound ::= INTCONST:i
-			{: RESULT = new Integer[] { 0, i }; :}
+			{: RESULT = new Integer[] { 1, i }; :}
 	|	generalBound:b1 DOT DOT generalBound:b2
 			{: RESULT = new Integer[] { b1, b2 }; :}
 	;
