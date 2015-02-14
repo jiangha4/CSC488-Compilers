@@ -130,6 +130,7 @@ nonterminal Expn negation;
 nonterminal Expn compareExpn;
 nonterminal Expn arithExpn;
 nonterminal Expn term;
+nonterminal Expn factor;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
@@ -144,7 +145,7 @@ nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
-nonterminal	factor, primary, constant ;
+nonterminal	primary, constant ;
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -344,10 +345,13 @@ arithExpn ::= term:t
 			{: RESULT = new ArithExpn(ArithExpn.OP_MINUS, a, t); :}
 	;
 
-term		::=	factor				// terms, associate * , /   left-to-right
-		|	term TIMES factor
-		|	term DIVIDE factor
-		;
+term ::= factor:f
+			{: RESULT = f; :}
+	|	term:t TIMES factor:f
+			{: RESULT = new ArithExpn(ArithExpn.OP_TIMES, t, f); :}
+	|	term:t DIVIDE factor:f
+			{: RESULT = new ArithExpn(ArithExpn.OP_DIVIDE, t, f); :}
+	;
 
 factor		::=	primary				// unary minus
 		|	MINUS factor
