@@ -131,6 +131,7 @@ nonterminal Expn compareExpn;
 nonterminal Expn arithExpn;
 nonterminal Expn term;
 nonterminal Expn factor;
+nonterminal Expn primary;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
@@ -145,7 +146,7 @@ nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
 
-nonterminal	primary, constant ;
+nonterminal	constant ;
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -353,9 +354,11 @@ term ::= factor:f
 			{: RESULT = new ArithExpn(ArithExpn.OP_DIVIDE, t, f); :}
 	;
 
-factor		::=	primary				// unary minus
-		|	MINUS factor
-		;
+factor ::= primary:p
+			{: RESULT = p; :}
+	|	MINUS factor:f
+			{: RESULT = new UnaryMinusExpn(f); :}
+	;
 
 primary		::=	constant				// integer or boolean constant
 		|	variable				// scalar, array variable or function call
