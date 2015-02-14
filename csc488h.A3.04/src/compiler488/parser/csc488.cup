@@ -7,6 +7,7 @@ import compiler488.ast.*;
 import compiler488.ast.decl.*;
 import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
+import compiler488.ast.type.*;
 
 
 /* User code components 1: action code components.
@@ -127,11 +128,13 @@ nonterminal Expn expression;
 nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
+nonterminal ASTList<DeclarationPart> variablenames;
+nonterminal Type type;
+nonterminal ASTList<ScalarDecl> parameters;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 
-nonterminal	variablenames,		output			;
-nonterminal	type,	parameters	;
+nonterminal	output			;
 nonterminal variablename 			;
 
 nonterminal	bound , generalBound ;
@@ -214,12 +217,17 @@ procedureCall ::= IDENT:i
 			{: RESULT = new ProcedureCallStmt(i, a); :}
 	;
 
-declaration	::=	type variablenames 			// declare scalar/array variables
-		|	type FUNCTION IDENT scope		// declare function
-		|	type FUNCTION  IDENT L_PAREN parameters R_PAREN scope
-		|	PROCEDURE IDENT scope			//  declare procedure
-		|	PROCEDURE IDENT L_PAREN parameters R_PAREN scope
-		;
+declaration ::= type:t variablenames:v
+			{: RESULT = new MultiDeclarations(t, v); :}
+	|	type:t FUNCTION IDENT:i scope:s
+			{: RESULT = new RoutineDecl(i, t, s); :}
+	|	type:t FUNCTION IDENT:i L_PAREN parameters:p R_PAREN scope:s
+			{: RESULT = new RoutineDecl(i, t, p, s); :}
+	|	PROCEDURE IDENT:i scope:s
+			{: RESULT = new RoutineDecl(i, s); :}
+	|	PROCEDURE IDENT:i L_PAREN parameters:p R_PAREN scope:s
+			{: RESULT = new RoutineDecl(i, p, s); :}
+	;
 
 variablenames	::=	variablename  				// list of variables being declared
 		|	variablenames COMMA variablename
