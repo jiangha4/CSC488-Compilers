@@ -124,13 +124,14 @@ nonterminal Declaration declaration;
 nonterminal ProcedureCallStmt procedureCall;
 
 nonterminal Expn expression;
+nonterminal ASTList<Expn> arguments;
 
 nonterminal Assignable variable;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 
 nonterminal	variablenames,		output			;
-nonterminal	type,  	arguments,	parameters	;
+nonterminal	type,	parameters	;
 nonterminal variablename 			;
 
 nonterminal	bound , generalBound ;
@@ -207,9 +208,11 @@ statement ::= variable:v LESS EQUAL expression:e
 			{: RESULT = s; :}
 	;
 
-procedureCall	::=	IDENT 					// call procedure with no parameters
-		|	IDENT L_PAREN arguments R_PAREN  	// call procedure with parameters
-		;
+procedureCall ::= IDENT:i
+			{: RESULT = new ProcedureCallStmt(i); :}
+	|	IDENT:i L_PAREN arguments:a R_PAREN
+			{: RESULT = new ProcedureCallStmt(i, a); :}
+	;
 
 declaration	::=	type variablenames 			// declare scalar/array variables
 		|	type FUNCTION IDENT scope		// declare function
