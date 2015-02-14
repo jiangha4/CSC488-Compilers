@@ -319,7 +319,7 @@ conjunction	::=	negation:n
 negation ::= compareExpn:c
 			{: RESULT = c; :}
 	|	NOT negation:n
-			{: RESULT = new UnaryMinusExpn(n); :}
+			{: RESULT = new NotExpn(n); :}
 	;
 
 compareExpn ::= arithExpn:a
