@@ -132,9 +132,10 @@ nonterminal Expn arithExpn;
 nonterminal Expn term;
 nonterminal Expn factor;
 nonterminal Expn primary;
+nonterminal ConstExpn constant;
+nonterminal IdentExpn variable;
 nonterminal ASTList<Expn> arguments;
 
-nonterminal Assignable variable;
 nonterminal ASTList<DeclarationPart> variablenames;
 nonterminal DeclarationPart variablename;
 nonterminal Integer[] bound;
@@ -145,8 +146,6 @@ nonterminal ScalarDecl parameter;
 nonterminal ASTList<Assignable> inputs;
 nonterminal ASTList<Printable> outputs;
 nonterminal Printable output;
-
-nonterminal	constant ;
 
 // Non-terminals that have a value.
 // nonterminal type  nameList ;
@@ -360,12 +359,17 @@ factor ::= primary:p
 			{: RESULT = new UnaryMinusExpn(f); :}
 	;
 
-primary		::=	constant				// integer or boolean constant
-		|	variable				// scalar, array variable or function call
-		|	IDENT L_PAREN arguments R_PAREN 	// function call
-		| 	L_PAREN  expression  R_PAREN		// parenthesized expression
-		|	L_CURLEY declarationsAndStatements YIELDS expression R_CURLEY	// anon function
-		;
+primary ::= constant:c
+			{: RESULT = c; :}
+	|	variable:v
+			{: RESULT = v; :}
+	|	IDENT:i L_PAREN arguments:a R_PAREN
+			{: RESULT = new FunctionCallExpn(i, a); :}
+	| 	L_PAREN  expression:e  R_PAREN
+			{: RESULT = e; :}
+	|	L_CURLEY declarationsAndStatements:d YIELDS expression:e R_CURLEY
+			{: RESULT = new AnonFuncExpn(d, e); :}
+	;
 
 constant	::=	INTCONST	// integer constant
 		|	TRUE		// constant true
