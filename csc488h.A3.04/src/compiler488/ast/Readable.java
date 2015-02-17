@@ -6,5 +6,5 @@ package compiler488.ast;
  *
  * <p>Don't confuse with concept with the printing of the AST itself.</p>
  */
-public interface Assignable extends AST {
+public interface Readable extends AST {
 }
