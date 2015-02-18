@@ -41,6 +41,11 @@ import java.io.*;
  *      - Hashing function
  *          - hash based on identifier name, makes it easy to detect previously declared identifiers
  *      - How to deal with chaining? 
+ *      - What should each entry include?
+ *          - I'm thinking we should subclass the table entries
+ *          - It should include pointers to the previous and next extries
+ *          - Should include identifier name
+ *          - Probably should include scope level - I think this will make deleting really easy
  *   - However, I'm (David) not sure on how to dynamically increase hash table size or 
  *     if it needs to be done dynamically or can we just allocate a chunk of memory and hope
  *     its enough?
