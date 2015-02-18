@@ -17,8 +17,40 @@ import java.io.*;
  *           </B>
  */
 
+/** First thoughts
+ *  Needs to maintain mappings from AST nodes to identifiers
+ *  - Need to have methods 
+ *      - insert(string id, node) 
+ *          - mappings the id to the AST node and needs to insert it into the hash table
+ *      - search(string id) -> node
+ *          - searches table for the identifier and returns the node if it exists
+ *          - Thinking: This will be used to find global identifiers
+ *      - searchScope(string id) -> node
+ *          - searches the scope for the identifier and returns the node if it exists
+ *          - Thinking: This will be used to find local identifiers
+ *  - Need to support scope
+ *      - I'm thinking of having an identifier that tracks scope level
+ *          - Two methods that will increase and decrease scope level
+ *              - increaseScope()
+ *                  - Increment scope one more level
+ *              - decreaseScope()
+ *                  - I think this can just delete all identifers that were mapped to the current
+ *                    scope level
+ * - Need to create a hash table
+ *   - Methods
+ *      - Hashing function
+ *          - hash based on identifier name, makes it easy to detect previously declared identifiers
+ *      - How to deal with chaining? 
+ *   - However, I'm (David) not sure on how to dynamically increase hash table size or 
+ *     if it needs to be done dynamically or can we just allocate a chunk of memory and hope
+ *     its enough?
+ *
+ *  - Need to create a print function to allow for debugging!  
+ *      - Will want to print out the identifier, current scope level, the whole symbol table...  
+ *
+ */
+
 public class SymbolTable {
-	
 	/** Symbol Table  constructor
          *  Create and initialize a symbol table 
 	 */
