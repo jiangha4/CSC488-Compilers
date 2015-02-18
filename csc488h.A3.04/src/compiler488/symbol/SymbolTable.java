@@ -9,7 +9,12 @@ import java.io.*;
  *  Each implementation can change/modify/delete this class
  *  as they see fit.
  *
- *  @author  <B> PUT YOUR NAMES HERE </B>
+ *  @author  <B> Haohan Jiang
+ *               Maria Yancheva
+ *               Timo Vink
+ *               Chandeep Signh
+ *               Chris Arnold
+ *           </B>
  */
 
 public class SymbolTable {
