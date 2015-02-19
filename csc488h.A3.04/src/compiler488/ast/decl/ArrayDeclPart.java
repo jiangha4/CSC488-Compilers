@@ -1,11 +1,13 @@
 package compiler488.ast.decl;
 
+import compiler488.ast.ASTVisitable;
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
  * Holds the declaration part of an array.
  */
-public class ArrayDeclPart extends DeclarationPart {
+public class ArrayDeclPart extends DeclarationPart implements ASTVisitable {
     /** The lower bound of dimension 1. */
     private Integer lb1;
 
@@ -102,5 +104,10 @@ public class ArrayDeclPart extends DeclarationPart {
 
         p.print("]");
     }
+
+	@Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 
 }
