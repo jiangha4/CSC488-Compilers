@@ -615,7 +615,9 @@ public class Main {
               // Execute the compiled program
 	      // Machine will handle supressExecution AFTER optional 
               // dump of compiled code.
-	      executeProgram() ;
+        	  if (!supressExecution) {
+        		  executeProgram() ;
+        	  }
           }
           else
              System.err.println("Execution supressed due to errors during compilation");
