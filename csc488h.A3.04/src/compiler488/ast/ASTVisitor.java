@@ -5,6 +5,14 @@ import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 
+/** Visitor pattern for AST traversal: semantic checker is a visitor who can visit every node in the AST. 
+ *  @author  <B> Haohan Jiang (g3jiangh)
+ *               Maria Yancheva (c2yanche)
+ *               Timo Vink (c4vinkti)
+ *               Chandeep Singh (g2singh)
+ *           </B>
+ */
+
 public interface ASTVisitor {
 	/* Declarations */
 	public void visit(ArrayDeclPart arrayDeclPart);

@@ -10,20 +10,26 @@ import compiler488.ast.type.*;
 import compiler488.symbol.SymbolTable;
 
 /** Implement semantic analysis for compiler 488 
- *  @author  <B> Put your names here </B>
+ *  @author  <B> Haohan Jiang (g3jiangh)
+ *               Maria Yancheva (c2yanche)
+ *               Timo Vink (c4vinkti)
+ *               Chandeep Singh (g2singh)
+ *           </B>
  */
 public class Semantics implements ASTVisitor {
 	
-        /** flag for tracing semantic analysis */
+	/** flag for tracing semantic analysis */
 	private boolean traceSemantics = false;
+	
 	/** file sink for semantic analysis trace */
 	private String traceFile = new String();
 	public FileWriter Tracer;
 	public File f;
-
-     
-     
-     /** SemanticAnalyzer constructor */
+	
+	/** Construct symbol table concurrently with semantic checking */
+	private SymbolTable Symbol = new SymbolTable(); 
+    
+    /** SemanticAnalyzer constructor */
 	public Semantics (){
 	
 	}
@@ -34,7 +40,7 @@ public class Semantics implements ASTVisitor {
 	
 	   /*   Initialize the symbol table             */
 	
-	   // Symbol.Initialize();
+	   //Symbol.Initialize();
 	   
 	   /*********************************************/
 	   /*  Additional initialization code for the   */
@@ -71,8 +77,7 @@ public class Semantics implements ASTVisitor {
 	 		//output trace to the file represented by traceFile
 	 		try{
 	 			//open the file for writing and append to it
-	 			File f = new File(traceFile);
-	 		    Tracer = new FileWriter(traceFile, true);
+	 			Tracer = new FileWriter(traceFile, true);
 	 				          
 	 		    Tracer.write("Sematics: S" + actionNumber + "\n");
 	 		    //always be sure to close the file

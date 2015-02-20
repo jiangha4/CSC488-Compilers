@@ -9,11 +9,10 @@ import java.io.*;
  *  Each implementation can change/modify/delete this class
  *  as they see fit.
  *
- *  @author  <B> Haohan Jiang
- *               Maria Yancheva
- *               Timo Vink
- *               Chandeep Signh
- *               Chris Arnold
+ *  @author  <B> Haohan Jiang (g3jiangh)
+ *               Maria Yancheva (c2yanche)
+ *               Timo Vink (c4vinkti)
+ *               Chandeep Singh (g2singh)
  *           </B>
  */
 
