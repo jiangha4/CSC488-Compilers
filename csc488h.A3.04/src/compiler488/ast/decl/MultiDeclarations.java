@@ -31,6 +31,7 @@ public class MultiDeclarations extends Declaration {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		type.accept(visitor);
 		for (ASTVisitable node : elements) {
 			node.accept(visitor);
 		}
