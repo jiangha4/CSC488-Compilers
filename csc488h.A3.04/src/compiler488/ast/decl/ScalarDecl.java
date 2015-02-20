@@ -20,5 +20,6 @@ public class ScalarDecl extends Declaration {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		type.accept(visitor);
 	}
 }
