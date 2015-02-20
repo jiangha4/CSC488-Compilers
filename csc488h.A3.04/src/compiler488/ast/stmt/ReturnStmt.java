@@ -45,6 +45,10 @@ public class ReturnStmt extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		
+		if (value != null) {
+			value.accept(visitor);
+		}
 	}
 
 }

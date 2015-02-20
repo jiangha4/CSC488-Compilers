@@ -39,5 +39,7 @@ public class AssignStmt extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		lval.accept(visitor);
+		rval.accept(visitor);
 	}
 }

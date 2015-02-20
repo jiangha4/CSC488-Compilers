@@ -1,6 +1,7 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
+import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.expn.Expn;
@@ -64,5 +65,15 @@ public class IfStmt extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		condition.accept(visitor);
+		for (ASTVisitable node : whenTrue) {
+			node.accept(visitor);
+		}
+		
+		if (whenFalse != null) {
+			for (ASTVisitable node : whenFalse) {
+				node.accept(visitor);
+			}
+		}
 	}
 }
