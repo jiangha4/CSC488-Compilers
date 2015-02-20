@@ -1,6 +1,8 @@
 package compiler488.symbol;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import compiler488.ast.BaseAST;
 
@@ -85,40 +87,19 @@ public class SymbolTable {
 	/** Symbol Table  constructor
          *  Create and initialize a symbol table 
 	 */
-	public SymbolTable  (){
-	
-	}
 
-	/**  Initialize - called once by semantic analysis  
-	 *                at the start of  compilation     
-	 *                May be unnecessary if constructor
- 	 *                does all required initialization	
-	 */
-	public void Initialize() {
-	
-	   /**   Initialize the symbol table             
-	    *	Any additional symbol table initialization
-	    *  GOES HERE                                	
-	    */
-	   
-	}
-
-	/**  Finalize - called once by Semantics at the end of compilation
-	 *              May be unnecessary 		
-	 */
-	public void Finalize(){
-	
-	  /**  Additional finalization code for the 
-	   *  symbol table  class GOES HERE.
-	   *  
-	   */
-	}
-	
 	private class SymbolTableEntry {
 		String id; //Name of the symbol
 		String type; //Type of the symbol(Integer or Boolean)
 		String kind; //Kind of the symbol(function, procedure...)
 		BaseAST node; //AST node
+		
+		public SymbolTableEntry(String id, String type, String kind, BaseAST node) {
+			this.id = id;
+			this.type = type;
+			this.kind = kind;
+			this.node = node;
+		}
 		
 		public String getId() {
 			return id;
@@ -145,11 +126,85 @@ public class SymbolTable {
 			this.node = node;
 		}
 	}
+	
+	LinkedList<HashMap<String,SymbolTableEntry>> scopeList;
+	
+	public SymbolTable  (){
+
+		// NOTE: putting everything in here for now
+		//       do we need to split stuff to Initialize/Finalize?
+
+		// Instantiate
+		this.scopeList = new LinkedList<HashMap<String,SymbolTableEntry>>();
+
+		// Add HashMap for global scope
+		scopeList.addFirst(new HashMap<String,SymbolTableEntry>());
+
+	}
+
+	/**  Initialize - called once by semantic analysis  
+	 *                at the start of  compilation     
+	 *                May be unnecessary if constructor
+ 	 *                does all required initialization	
+	 */
+	public void Initialize() {
+	
+	   /**   Initialize the symbol table             
+	    *	Any additional symbol table initialization
+	    *  GOES HERE                                	
+	    */
+	   
+	}
+
+	/**  Finalize - called once by Semantics at the end of compilation
+	 *              May be unnecessary 		
+	 */
+	public void Finalize(){
+	
+	  /**  Additional finalization code for the 
+	   *  symbol table  class GOES HERE.
+	   *  
+	   */
+	}
 
 	/** The rest of Symbol Table
 	 *  Data structures, public and private functions
  	 *  to implement the Symbol Table
 	 *  GO HERE.				
 	 */
+	
+	// TODO: enums for type/kind
+	
+	/**
+	 * 
+	 * @param id : identifier (name of variable)
+	 * @param type : 'integer' or 'boolean'
+	 * @param kind : 'variable', 'procedure', or 'function'
+	 * @param node : link to AST node
+	 */
+	public void insert(String id, String type, String kind, BaseAST node) {
+		
+		// Get current scope's hashmap
+		HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
+	
+		// Check if identifier exists in current scope
+		// TODO: unfinished
+		
+		// Create new SymbolTableEntry
+		SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
+		
+		// Put entry into current scope
+		currentScope.put(id, entry);
 
+		return;
+	}
+
+	public static void main(String argv[]) {
+		
+		System.out.println("Hai.");
+		
+		return;
+		
+	}
+	
 }
