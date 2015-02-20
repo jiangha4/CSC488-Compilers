@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
 
@@ -195,18 +197,15 @@ public class SymbolTable {
 		// Get current scope's hashmap
 		HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
 	
-		// Check if identifier exists in current scope
-		// TODO: unfinished
+		// TODO: do we need to check before reassigning identifier?
 		
-		// Create new SymbolTableEntry
+		// add to symbol table
 		SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
-		
-		// Put entry into current scope
 		currentScope.put(id, entry);
 
 		return;
 	}
-	
+
 	/**
 	 * 
 	 * @param id : The symbol to search the symbol table for
@@ -226,9 +225,58 @@ public class SymbolTable {
 		return null;
 	}
 
+	public void enterScope() {
+		// Add new HashMap to beginning of scopeList
+		HashMap<String,SymbolTableEntry> newScope = new HashMap<String,SymbolTableEntry>();
+		this.scopeList.addFirst(newScope);
+	}
+	
+	public void exitScope() {
+		// TODO: do we need checks for making sure there is at least one scope?
+		this.scopeList.removeFirst();
+	}
+	
+	public String toString() {
+		String s = "";
+		
+		Iterator<HashMap<String, SymbolTableEntry>> scopeIter = scopeList.iterator();
+		
+		while (scopeIter.hasNext()) {
+			s += "=======================================================\n";
+
+			// get scope
+			HashMap<String,SymbolTableEntry> scope = scopeIter.next();
+		
+			// Get all keys in scope
+			for(Entry<String, SymbolTableEntry> id : scope.entrySet()) {
+				s += id.getKey() + " = " + id.getValue() + "\n";
+	        }
+			
+		}
+		
+		
+		return s;
+	}
+
 	public static void main(String argv[]) {
 		
 		System.out.println("Hai.");
+		
+		SymbolTable st = new SymbolTable();
+		
+		st.insert("abc", "Integer", "Variable", null);
+		st.insert("othervar", "Boolean", "Variable", null);
+		st.enterScope();
+		st.insert("newscope", "Integer", "Variable", null);
+//		st.exitScope();
+		
+		System.out.println(st.toString());
+		
+		st.exitScope();
+		
+		System.out.println("\n\nAfter exiting scope\n\n");
+		
+		System.out.println(st.toString());
 		
 		return;
 		
