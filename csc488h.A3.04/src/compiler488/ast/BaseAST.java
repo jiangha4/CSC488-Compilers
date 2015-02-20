@@ -7,7 +7,7 @@ package compiler488.ast;
  *
  * @author Dave Wortman, Marsha Chechik, Danny House, Peter McCormick
  */
-public abstract class BaseAST implements AST {
+public abstract class BaseAST implements AST, ASTVisitable {
     /**
      * Default constructor.
      *
@@ -26,4 +26,9 @@ public abstract class BaseAST implements AST {
         p.print(toString());
     }
 
+    /**
+     * All AST nodes are ASTVisitable, and must provide implementations of this method.
+     */
+    @Override
+    public abstract void accept(ASTVisitor visitor);
 }
