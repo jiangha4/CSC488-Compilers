@@ -1,14 +1,12 @@
 package compiler488.ast.decl;
 
-import compiler488.ast.ASTVisitable;
-import compiler488.ast.ASTVisitor;
 import compiler488.ast.stmt.Stmt;
 import compiler488.ast.type.Type;
 
 /**
  * The common features of declarations.
  */
-public abstract class Declaration extends Stmt implements ASTVisitable {
+public abstract class Declaration extends Stmt {
     /** The name of the thing being declared. */
     protected String name;
 
@@ -29,9 +27,4 @@ public abstract class Declaration extends Stmt implements ASTVisitable {
     public Type getType() {
         return type;
     }
-    
-    @Override
-	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
-	}
 }
