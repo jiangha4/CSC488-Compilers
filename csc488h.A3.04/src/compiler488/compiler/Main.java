@@ -4,6 +4,7 @@ import java.io.*;
 
 import compiler488.parser.*;
 import compiler488.ast.AST ;
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.BasePrettyPrinter;
 import compiler488.ast.stmt.Program;
 import compiler488.semantics.Semantics;
@@ -383,8 +384,8 @@ public class Main {
 	   // INSERT CODE HERE TO DO SEMANTIC ANALYSIS
            // e.g.
            //
-           // ASTVisitor visitor = new Semantics();
-           // programAST.accept(visitor);
+           ASTVisitor visitor = new Semantics();
+           programAST.accept(visitor);
            //
            // or
            //
