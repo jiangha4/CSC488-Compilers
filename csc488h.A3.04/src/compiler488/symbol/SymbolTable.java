@@ -53,6 +53,37 @@ import java.io.*;
  *  - Need to create a print function to allow for debugging!  
  *      - Will want to print out the identifier, current scope level, the whole symbol table...  
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *  Other idea: Stack of Hash Tables
+ *
+ *  Another idea for implementing the symbol table can be to have a hash table represent each scope
+ *  and then a stack of hash tables.
+ *
+ *  The top of the stack represents the current scope. When entering a new scope, add a hash table
+ *  to the top of stack. When exiting scope, pop off the top of the stack.
+ * 
+ *  To search for an identifier, start search in the top stack, and if nothing found then continue
+ *  downwards in the stack until either identifier is found, or error.
+ *
+ *  Methods will work as follows:
+ *
+ *  insert(id, node) : insert into table at top of stack
+ *  search(id) : as explained above
+ *  searchScope: no longer needed
+ *  increaseScope/decreaseScope will be add/pop tables from the stack
+ *  
+ *  Hash tables methods
+ *
+ *  Hash key, same as above (use identifier)
+ *  Chaining: Shouldn't have chaining in this implementation
+ *  
+ *  Increasing/decreasing hash size: I believe Java's hash-table implementation should already be
+ *  able to handle this efficiently enough, so let's not worry about it
  */
 
 public class SymbolTable {
