@@ -21,5 +21,6 @@ public class Program extends Scope {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		super.accept(visitor);
 	}
 }
