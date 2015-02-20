@@ -131,4 +131,11 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
         return buf.toString();
     }
 
+	@Override
+	public void accept(ASTVisitor visitor) {
+		for (ASTVisitable node : this) {
+			node.accept(visitor);
+		}
+	}
+
 }

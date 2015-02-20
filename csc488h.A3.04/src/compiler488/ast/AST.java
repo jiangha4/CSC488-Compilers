@@ -11,6 +11,7 @@ package compiler488.ast;
  * @author Peter McCormick
  * @see compiler488.ast.BaseAST
  */
-public interface AST extends PrettyPrintable {
+public interface AST extends PrettyPrintable, ASTVisitable {
     public void prettyPrint(PrettyPrinter p);
+    public void accept(ASTVisitor visitor);
 }

@@ -7,7 +7,7 @@ package compiler488.ast;
  *
  * @author Dave Wortman, Marsha Chechik, Danny House, Peter McCormick
  */
-public abstract class BaseAST implements AST, ASTVisitable {
+public abstract class BaseAST implements AST {
     /**
      * Default constructor.
      *
