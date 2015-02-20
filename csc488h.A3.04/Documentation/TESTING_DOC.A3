@@ -1,0 +1,26 @@
+CSC488
+Assignment 3
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+
+
+Testing
+-------
+How to run all tests: 
+
+Tests' folder structure:
+All tests can be found under the tests/passing and tests/failing folders. 
+
+Our strategy was 
+
+Below is an overview of the tests from each folder:
+
+tests/passing
+    
+
+tests/failing
+    
