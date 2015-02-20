@@ -1,0 +1,21 @@
+CSC488
+Assignment 3
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+
+	
+List of code we added:
+----------------------
+
+src/compiler488/ast/* - Updated all AST node classes to implement ASTVisitable interface
+src/compiler488/ast/ASTVisitable.java - Added interface for Visitable node (for AST traversal)
+src/compiler488/ast/ASTVisitor.java - Added interface for Visitor (for AST traversal)
+
+src/compiler488/parser/csc488.cup - Added AST construction during parsing of grammar rules
+
+src/compiler488/semantics/SemanticErrorException.java - Added class for throwing semantic errors
+src/compiler488/semantics/Semantics.java - Added semantic rule analysis
