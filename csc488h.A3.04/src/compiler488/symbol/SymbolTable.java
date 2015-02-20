@@ -2,6 +2,8 @@ package compiler488.symbol;
 
 import java.io.*;
 
+import compiler488.ast.BaseAST;
+
 /** Symbol Table
  *  This almost empty class is a framework for implementing
  *  a Symbol Table class for the CSC488S compiler
@@ -51,12 +53,6 @@ import java.io.*;
  *
  *  - Need to create a print function to allow for debugging!  
  *      - Will want to print out the identifier, current scope level, the whole symbol table...  
- *
- *
- *
- *
- *
- *
  *
  *  Other idea: Stack of Hash Tables
  *
@@ -118,6 +114,37 @@ public class SymbolTable {
 	   */
 	}
 	
+	private class SymbolTableEntry {
+		String id; //Name of the symbol
+		String type; //Type of the symbol(Integer or Boolean)
+		String kind; //Kind of the symbol(function, procedure...)
+		BaseAST node; //AST node
+		
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
+		public String getType() {
+			return type;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		public String getKind() {
+			return kind;
+		}
+		public void setKind(String kind) {
+			this.kind = kind;
+		}
+		public BaseAST getNode() {
+			return node;
+		}
+		public void setNode(BaseAST node) {
+			this.node = node;
+		}
+	}
 
 	/** The rest of Symbol Table
 	 *  Data structures, public and private functions
