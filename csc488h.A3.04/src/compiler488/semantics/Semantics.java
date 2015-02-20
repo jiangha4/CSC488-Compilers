@@ -144,247 +144,247 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ArrayDeclPart");
 	}
 
 	@Override
 	public void visit(Declaration declaration) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Declaration");
 	}
 
 	@Override
 	public void visit(DeclarationPart declarationPart) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting DeclarationPart");
 	}
 
 	@Override
 	public void visit(MultiDeclarations multiDeclarations) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting MultiDeclarations");
 	}
 
 	@Override
 	public void visit(RoutineDecl routineDecl) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting RoutineDecl");
 	}
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ScalarDecl");
 	}
 
 	@Override
 	public void visit(ScalarDeclPart scalarDeclPart) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ScalarDeclPart");
 	}
 
 	@Override
 	public void visit(AnonFuncExpn anonFuncExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting AnonFuncExpn");
 	}
 
 	@Override
 	public void visit(ArithExpn arithExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ArithExpn");
 	}
 
 	@Override
 	public void visit(BinaryExpn binaryExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting BinaryExpn");
 	}
 
 	@Override
 	public void visit(BoolConstExpn boolConstExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting BoolConstExpn");
 	}
 
 	@Override
 	public void visit(BoolExpn boolExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting BoolExpn");
 	}
 
 	@Override
 	public void visit(CompareExpn compareExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting CompareExpn");
 	}
 
 	@Override
 	public void visit(ConstExpn constExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ConstExpn");
 	}
 
 	@Override
 	public void visit(EqualsExpn equalsExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting EqualsExpn");
 	}
 
 	@Override
 	public void visit(Expn expn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Expn");
 	}
 
 	@Override
 	public void visit(FunctionCallExpn functionCallExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting FunctionCallExpn");
 	}
 
 	@Override
 	public void visit(IdentExpn identExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting IdentExpn");
 	}
 
 	@Override
 	public void visit(IntConstExpn intConstExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting IntConstExpn");
 	}
 
 	@Override
 	public void visit(NotExpn notExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting NotExpn");
 	}
 
 	@Override
 	public void visit(SkipConstExpn skipConstExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting SkipConstExpn");
 	}
 
 	@Override
 	public void visit(SubsExpn subsExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting SubsExpn");
 	}
 
 	@Override
 	public void visit(TextConstExpn textConstExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting TextConstExpn");
 	}
 
 	@Override
 	public void visit(UnaryExpn unaryExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting UnaryExpn");
 	}
 
 	@Override
 	public void visit(UnaryMinusExpn unaryMinusExpn) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting UnaryMinusExpn");
 	}
 
 	@Override
 	public void visit(AssignStmt assignStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting AssignStmt");
 	}
 
 	@Override
 	public void visit(ExitStmt exitStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ExitStmt");
 	}
 
 	@Override
 	public void visit(GetStmt getStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting GetStmt");
 	}
 
 	@Override
 	public void visit(IfStmt ifStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting IfStmt");
 	}
 
 	@Override
 	public void visit(LoopingStmt loopingStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting LoopingStmt");
 	}
 
 	@Override
 	public void visit(LoopStmt loopStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting LoopStmt");
 	}
 
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ProcedureCallStmt");
 	}
 
 	@Override
 	public void visit(Program program) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Program");
 	}
 
 	@Override
 	public void visit(PutStmt putStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting PutStmt");
 	}
 
 	@Override
 	public void visit(ReturnStmt returnStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting ReturnStmt");
 	}
 
 	@Override
 	public void visit(Scope scope) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Scope");
 	}
 
 	@Override
 	public void visit(Stmt stmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Stmt");
 	}
 
 	@Override
 	public void visit(WhileDoStmt whileDoStmt) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting WhileDoStmt");
 	}
 
 	@Override
 	public void visit(BooleanType booleanType) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting BooleanType");
 	}
 
 	@Override
 	public void visit(IntegerType integerType) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting IntegerType");
 	}
 
 	@Override
 	public void visit(Type type) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Visiting Type");
 	}
 
 }
