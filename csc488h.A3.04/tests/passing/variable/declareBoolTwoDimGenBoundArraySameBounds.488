@@ -1,0 +1,3 @@
+begin
+    boolean a[5..5, 1..1]
+end

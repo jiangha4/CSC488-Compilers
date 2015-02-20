@@ -1,0 +1,15 @@
+begin
+    a <= true | b = c
+	a <= d | b = c
+
+    a <= b = c | b = d
+	a <= b != c | b != d
+	a <= b < c | b < d
+	a <= b <= c | b <= d
+	a <= b > c | b > d
+	a <= b >= c | b >= d
+	
+	a <= b = c | b != d
+	a <= b < c | b <= d
+	a <= b > c | b >= d
+end

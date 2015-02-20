@@ -1,0 +1,9 @@
+begin
+	boolean retval
+	boolean function mult_args_mixed(integer a, integer b, boolean c) begin
+		return (a + b | true)
+	end
+
+	retval <= mult_args_mixed(3, 4, false)
+
+end

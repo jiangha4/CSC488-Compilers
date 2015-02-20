@@ -1,0 +1,4 @@
+begin
+    boolean a(integer b, boolean c) begin
+    end
+end

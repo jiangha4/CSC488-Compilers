@@ -1,0 +1,10 @@
+begin
+    return (
+        {
+            integer a
+            a <= 10
+            yields
+            a
+        }
+    )
+end

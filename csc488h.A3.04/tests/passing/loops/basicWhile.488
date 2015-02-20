@@ -1,0 +1,5 @@
+begin
+    while true do
+        a <= 1
+    end
+end
