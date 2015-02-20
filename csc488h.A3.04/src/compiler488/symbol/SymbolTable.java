@@ -2,9 +2,11 @@ package compiler488.symbol;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import compiler488.ast.BaseAST;
+
 
 /** Symbol Table
  *  This almost empty class is a framework for implementing
@@ -125,6 +127,12 @@ public class SymbolTable {
 		public void setNode(BaseAST node) {
 			this.node = node;
 		}
+
+		@Override
+		public String toString() {
+			return "SymbolTableEntry [id=" + id + ", type=" + type + ", kind="
+					+ kind + "]";
+		}
 	}
 	
 	LinkedList<HashMap<String,SymbolTableEntry>> scopeList;
@@ -197,6 +205,25 @@ public class SymbolTable {
 		currentScope.put(id, entry);
 
 		return;
+	}
+	
+	/**
+	 * 
+	 * @param id : The symbol to search the symbol table for
+	 * @return SymbolTableEntry if found, or null if not found
+	 */
+	public SymbolTableEntry search(String id){
+		Iterator<HashMap<String, SymbolTableEntry>> scope = scopeList.iterator();
+		while(scope.hasNext())
+		{
+			HashMap<String, SymbolTableEntry> currScope = scope.next();
+			if (currScope.containsKey(id))
+			{
+				return currScope.get(id);
+			}
+		}
+		
+		return null;
 	}
 
 	public static void main(String argv[]) {
