@@ -1,6 +1,5 @@
 package compiler488.ast.expn;
 
-import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
@@ -11,7 +10,7 @@ public abstract class UnaryExpn extends Expn {
     public final static String OP_MINUS	= "-";
 
     /** Operand of the unary operator. */
-    private Expn operand;
+    protected Expn operand;
 
     /**
      * The symbol of the operator.
@@ -19,7 +18,7 @@ public abstract class UnaryExpn extends Expn {
      * <p>Must be one of <code>UnaryExpn.OP_NOT</code> or
      * <code>UnaryExpn.OP_MINUS</code>.</p>
      */
-    private String opSymbol;
+    protected String opSymbol;
 
     public UnaryExpn(String opSymbol, Expn operand) {
         super();
@@ -46,9 +45,4 @@ public abstract class UnaryExpn extends Expn {
         p.print(")");
 
     }
-
-    @Override
-	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
-	}
 }

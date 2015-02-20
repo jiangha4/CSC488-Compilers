@@ -61,5 +61,9 @@ public class SubsExpn extends Expn implements Readable {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		subscript1.accept(visitor);
+		if (subscript2 != null) {
+			subscript2.accept(visitor);
+		}
 	}
 }

@@ -21,5 +21,7 @@ public class BoolExpn extends BinaryExpn {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		left.accept(visitor);
+		right.accept(visitor);
 	}
 }

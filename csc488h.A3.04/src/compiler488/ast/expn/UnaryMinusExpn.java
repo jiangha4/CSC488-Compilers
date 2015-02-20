@@ -13,5 +13,6 @@ public class UnaryMinusExpn extends UnaryExpn {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		operand.accept(visitor);
 	}
 }

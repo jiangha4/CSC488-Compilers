@@ -1,6 +1,5 @@
 package compiler488.ast.expn;
 
-import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
@@ -48,10 +47,4 @@ public abstract class BinaryExpn extends Expn {
         right.prettyPrint(p);
         p.print(")");
     }
-    
-    @Override
-	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
-	}
-
 }

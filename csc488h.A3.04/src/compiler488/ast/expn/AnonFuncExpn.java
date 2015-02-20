@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTList;
+import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.stmt.Stmt;
@@ -48,6 +49,10 @@ public class AnonFuncExpn extends Expn {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		for (ASTVisitable node : body) {
+			node.accept(visitor);
+		}
+		expn.accept(visitor);
 	}
 
 }
