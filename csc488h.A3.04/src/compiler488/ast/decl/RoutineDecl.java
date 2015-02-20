@@ -1,7 +1,6 @@
 package compiler488.ast.decl;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.stmt.Scope;
@@ -105,9 +104,7 @@ public class RoutineDecl extends Declaration {
 			type.accept(visitor);
 		}
 		if (parameters.size() > 0) {
-			for (ASTVisitable node : parameters) {
-				node.accept(visitor);
-			}
+			parameters.accept(visitor);
 		}
 		if (body != null) {
 			body.accept(visitor);

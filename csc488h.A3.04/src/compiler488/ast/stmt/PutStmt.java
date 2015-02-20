@@ -1,7 +1,6 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Printable;
@@ -32,9 +31,7 @@ public class PutStmt extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
-		for (ASTVisitable node : outputs) {
-			node.accept(visitor);
-		}
+		outputs.accept(visitor);
 	}
 
 }

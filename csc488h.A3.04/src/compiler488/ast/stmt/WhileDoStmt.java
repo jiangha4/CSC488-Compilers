@@ -1,7 +1,6 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.expn.Expn;
@@ -29,8 +28,6 @@ public class WhileDoStmt extends LoopingStmt {
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
 		expn.accept(visitor);
-		for (ASTVisitable node : body) {
-			node.accept(visitor);
-		}
+		body.accept(visitor);
 	}
 }

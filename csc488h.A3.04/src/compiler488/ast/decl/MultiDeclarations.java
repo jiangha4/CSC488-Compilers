@@ -1,7 +1,6 @@
 package compiler488.ast.decl;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.type.Type;
@@ -32,8 +31,6 @@ public class MultiDeclarations extends Declaration {
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
 		type.accept(visitor);
-		for (ASTVisitable node : elements) {
-			node.accept(visitor);
-		}
+		elements.accept(visitor);
 	}
 }

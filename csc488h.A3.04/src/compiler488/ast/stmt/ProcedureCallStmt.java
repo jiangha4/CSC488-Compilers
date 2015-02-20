@@ -1,7 +1,6 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.expn.Expn;
@@ -55,9 +54,7 @@ public class ProcedureCallStmt extends Stmt {
 		visitor.visit(this);
 		
 		if ((arguments != null) && (arguments.size() > 0)) {
-			for (ASTVisitable node : arguments) {
-				node.accept(visitor);
-			}
+			arguments.accept(visitor);
 		}
 	}
 }

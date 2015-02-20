@@ -1,7 +1,6 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitable;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
@@ -41,9 +40,7 @@ public class Scope extends Stmt {
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
 		if (body != null && body.size() > 0) {
-			for (ASTVisitable node : body) {
-				node.accept(visitor);
-			}
+			body.accept(visitor);
 		}
 	}
 }
