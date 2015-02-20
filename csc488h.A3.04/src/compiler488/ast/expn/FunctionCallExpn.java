@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTList;
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
@@ -37,5 +38,10 @@ public class FunctionCallExpn extends Expn {
             p.print(")");
         }
     }
+    
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 
 }

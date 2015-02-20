@@ -1,6 +1,7 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTList;
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
@@ -16,4 +17,9 @@ public class Program extends Scope {
         super.prettyPrint(p);
         p.println("");
     }
+    
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 }

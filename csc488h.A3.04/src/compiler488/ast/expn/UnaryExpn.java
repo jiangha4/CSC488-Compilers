@@ -1,5 +1,6 @@
 package compiler488.ast.expn;
 
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 
 /**
@@ -46,4 +47,8 @@ public abstract class UnaryExpn extends Expn {
 
     }
 
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 }

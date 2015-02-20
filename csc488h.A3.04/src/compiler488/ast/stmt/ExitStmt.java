@@ -1,5 +1,6 @@
 package compiler488.ast.stmt;
 
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.expn.*;
 
@@ -33,5 +34,10 @@ public class ExitStmt extends Stmt {
             expn.prettyPrint(p);
         }
     }
+    
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 
 }

@@ -1,5 +1,6 @@
 package compiler488.ast.expn;
 
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.Printable;
 
 /**
@@ -16,4 +17,8 @@ public class SkipConstExpn extends ConstExpn implements Printable {
         return "skip";
     }
 
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 }

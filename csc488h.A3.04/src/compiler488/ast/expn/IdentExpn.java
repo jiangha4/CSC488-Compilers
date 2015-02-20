@@ -1,5 +1,6 @@
 package compiler488.ast.expn;
 
+import compiler488.ast.ASTVisitor;
 import compiler488.ast.Readable;
 
 /**
@@ -27,4 +28,8 @@ public class IdentExpn extends Expn implements Readable {
         return ident;
     }
 
+    @Override
+	public void accept(ASTVisitor visitor) {
+		visitor.visit(this);
+	}
 }
