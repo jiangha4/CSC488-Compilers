@@ -205,6 +205,36 @@ public class SymbolTable {
 	}
 
 	/**
+	 * getValue - return the value of an identifier that exists in current scope
+	 * 
+	 * @param id : identifier (name of variable)
+	 * @return String : if identifier exists in current scope return its value; return null otherwise
+	 */
+	public String getValue(String id) {
+		SymbolTableEntry entry = searchGlobal(id);
+		if (entry != null) {
+			return entry.getValue();
+		}
+		return null;
+	}
+	
+	/**
+	 * setValue - set the value of an identifier that exists in current scope
+	 * 
+	 * @param id : identifier (name of variable)
+	 * @param newValue : the new value to be assigned to the identifier
+	 * @return boolean : true if successful, false otherwise
+	 */
+	public boolean setValue(String id, String newValue) {
+		SymbolTableEntry entry = searchGlobal(id);
+		if (entry != null) {
+			entry.setValue(newValue);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * search - look up symbol table entry in current scope 
 	 * (e.g., use to check for re-declaration of identifier in same scope)
 	 * 
