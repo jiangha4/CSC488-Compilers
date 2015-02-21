@@ -19,3 +19,5 @@ src/compiler488/parser/csc488.cup - Added AST construction during parsing of gra
 
 src/compiler488/semantics/SemanticErrorException.java - Added class for throwing semantic errors
 src/compiler488/semantics/Semantics.java - Added semantic rule analysis
+
+src/compiler488/symbol/SymbolTable.java - Added implementation based on linked list of hashmaps

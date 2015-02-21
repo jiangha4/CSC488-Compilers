@@ -12,13 +12,14 @@ Who Did What
 ------------
 
 Haohan Jiang (g3jiangh)
-
+- SymbolTable implementation
 
 Chandeep Singh (g2singh)
-
+- SymbolTable implementation
 
 Maria Yancheva (c2yanche)
 - AST traversal using visitor pattern
+- SymbolTable implementation
 
 Timo Vink (c4vinkti)	
 - AST construction in cup (grammar) file
