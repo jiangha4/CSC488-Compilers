@@ -325,6 +325,10 @@ public class SymbolTable {
 	        }
 
 		}
+		
+		s += "=======================================================\n";
+		s += "END OF LIST\n";
+		
 		return s;
 	}
 

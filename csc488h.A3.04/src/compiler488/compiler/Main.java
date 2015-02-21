@@ -374,18 +374,42 @@ public class Main {
 	       System.exit(100);
 	       }
    }
+  
+  private static void dumpSymbolTable( String st, String whichDump ) {
+	  try {
+		  if (compilerDumpFileName.length() > 0) {
+			  dumpFile = new File( compilerDumpFileName ) ;
+			  dumpStream = new PrintStream( new FileOutputStream( dumpFile )) ;
+			  dumpStream.print(st);
+			  dumpStream.close();
+		  }
+		  else {
+			  saveSysOut.print(st);
+		  }
+	  }
+	  catch (Exception e) {
+		  System.err.println(whichDump);
+		  System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		  e.printStackTrace();
+		  System.exit(100);
+	  }
+  }
+  
 
   /**  function to perform semantic analysis on the scanned and parsed program
    *   @param  programAST    the Abstract Syntax Tree produced during parsing
    */
 
   private static void semanticAnalysis( Program  programAST ) {
-	try{
+	
+	  ASTVisitor visitor = new Semantics();
+	  try {
 	   // INSERT CODE HERE TO DO SEMANTIC ANALYSIS
            // e.g.
            //
-           ASTVisitor visitor = new Semantics();
-           programAST.accept(visitor);
+           
+		  programAST.accept(visitor);
+           
            //
            // or
            //
@@ -394,15 +418,21 @@ public class Main {
 	   // or
            //
 	   // Semantics.doIt( programAST );
-	}
-        catch( Exception e) 
-	    {
+	  }
+	  catch( Exception e) {
 	    System.err.println("Exception during Semantic Analysis");
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	    e.printStackTrace ();
 	    errorOccurred = true ;
-	    }
+	  }
+	
+	  if (dumpSymbolTable) {
+		  String stDump = ((Semantics)visitor).getSymbolTable().toString();
+		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );  
+	  }
    }
+  
+   
 	
    /**  function to do code generation
     *   @param  programAST   the Abstract Syntax Tree to generate code for

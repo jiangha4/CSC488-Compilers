@@ -27,11 +27,11 @@ public class Semantics implements ASTVisitor {
 	public File f;
 	
 	/** Construct symbol table concurrently with semantic checking */
-	private SymbolTable Symbol = new SymbolTable(); 
+	private SymbolTable Symbol; 
     
     /** SemanticAnalyzer constructor */
 	public Semantics (){
-	
+		Symbol = new SymbolTable();
 	}
 
 	/**  semanticsInitialize - called once by the parser at the      */
@@ -109,6 +109,10 @@ public class Semantics implements ASTVisitor {
 	
 	// ADDITIONAL FUNCTIONS TO IMPLEMENT SEMANTIC ANALYSIS GO HERE
 
+	public SymbolTable getSymbolTable() {
+		return Symbol;
+	}
+	
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
 		// TODO Auto-generated method stub
@@ -305,6 +309,9 @@ public class Semantics implements ASTVisitor {
 	public void visit(Program program) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Program");
+		
+		// Begin first major (global) scope
+		Symbol.enterScope();
 	}
 
 	@Override
