@@ -292,7 +292,25 @@ public class SymbolTable {
 //		st.exitScope();
 
 		System.out.println(st.toString());
-
+		
+		// Should be able to find "abc" (should be visible in current scope)
+		System.out.print("\nSearch for abc declaration (global): ");
+		if (st.searchGlobal("abc") != null) {
+			System.out.println("Found");
+		}
+		else {
+			System.out.println("Not found");
+		}
+		
+		// Should NOT be able to find "abc" in the current scope
+		System.out.print("Search for abc declaration (current scope): ");
+		if (st.search("abc") != null) {
+			System.out.println("Found");
+		}
+		else {
+			System.out.println("Not found");
+		}
+		
 		st.exitScope();
 
 		System.out.println("\n\nAfter exiting scope\n\n");
