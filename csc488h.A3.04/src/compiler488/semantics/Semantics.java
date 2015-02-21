@@ -309,9 +309,6 @@ public class Semantics implements ASTVisitor {
 	public void visit(Program program) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Program");
-		
-		// Begin first major (global) scope
-		Symbol.enterScope();
 	}
 
 	@Override
@@ -330,6 +327,9 @@ public class Semantics implements ASTVisitor {
 	public void visit(Scope scope) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Scope");
+		
+		// Begin new scope
+		Symbol.enterScope();
 	}
 
 	@Override
