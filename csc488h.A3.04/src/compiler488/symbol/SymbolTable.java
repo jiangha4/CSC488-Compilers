@@ -129,7 +129,15 @@ public class SymbolTable {
 	 *  GO HERE.
 	 */
 
-	// TODO: enums for type/kind
+	// Allowed values for 'type'
+	public enum SymbolType {
+		INTEGER, BOOLEAN
+	}
+	
+	// Allowed values for 'kind'
+	public enum SymbolKind {
+		VARIABLE, ARRAY, FUNCTION, PROCEDURE, PARAMETER
+	}
 
 	/**
 	 * insert - enter a new symbol table entry in current scope
