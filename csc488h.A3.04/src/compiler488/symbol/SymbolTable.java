@@ -28,12 +28,18 @@ public class SymbolTable {
 		String id;    //Name of the symbol
 		String type;  //Type of the symbol(integer, boolean, array, bound)
 		String kind;  //Kind of the symbol(variable, constant, function, procedure...)
+		String value; //Value of the symbol (e.g. the actual value that an integer variable takes on in a given scope)
 		BaseAST node; //AST node which this symbol represents
 
 		public SymbolTableEntry(String id, String type, String kind, BaseAST node) {
+			this(id, type, kind, "", node);
+		}
+		
+		public SymbolTableEntry(String id, String type, String kind, String value, BaseAST node) {
 			this.id = id;
 			this.type = type;
 			this.kind = kind;
+			this.value = value;
 			this.node = node;
 		}
 
@@ -55,6 +61,12 @@ public class SymbolTable {
 		public void setKind(String kind) {
 			this.kind = kind;
 		}
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
 		public BaseAST getNode() {
 			return node;
 		}
@@ -65,7 +77,7 @@ public class SymbolTable {
 		@Override
 		public String toString() {
 			return "SymbolTableEntry [id=" + id + ", type=" + type + ", kind="
-					+ kind + "]";
+					+ kind + ", value=" + value + "]";
 		}
 	}
 
