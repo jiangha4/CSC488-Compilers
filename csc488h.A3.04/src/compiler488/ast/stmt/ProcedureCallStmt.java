@@ -51,10 +51,14 @@ public class ProcedureCallStmt extends Stmt {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	// S08: start procedure scope
 		visitor.visit(this);
 		
 		if ((arguments != null) && (arguments.size() > 0)) {
 			arguments.accept(visitor);
 		}
+		
+		// S09: end procedure scope
+		visitor.visit(this);
 	}
 }

@@ -38,9 +38,15 @@ public class Scope extends Stmt {
 
     @Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		// S00/S06: begin scope
+    	visitor.visit(this);
+    	
+    	// Process contained statements
 		if (body != null && body.size() > 0) {
 			body.accept(visitor);
 		}
+		
+		// S01/S07: end scope
+		visitor.visit(this);
 	}
 }

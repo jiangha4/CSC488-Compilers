@@ -303,6 +303,16 @@ public class Semantics implements ASTVisitor {
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ProcedureCallStmt");
+		
+		if (!procedureCallStmt.isVisited()) {
+			// Begin new procedure scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			procedureCallStmt.setVisited(true);
+		} else {
+			Symbol.exitScope();
+		}
 	}
 
 	@Override
@@ -325,11 +335,17 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Scope scope) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting Scope");
 		
-		// Begin new scope
-		Symbol.enterScope();
+		if (!scope.isVisited()) {
+			// Begin new scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			scope.setVisited(true);
+		} else {
+			Symbol.exitScope();
+		}
 	}
 
 	@Override
