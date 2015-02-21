@@ -1,10 +1,8 @@
 package compiler488.symbol;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
@@ -25,15 +23,12 @@ import compiler488.ast.BaseAST;
  */
 
 public class SymbolTable {
-	/** Symbol Table  constructor
-         *  Create and initialize a symbol table
-	 */
-
+	
 	private class SymbolTableEntry {
-		String id; //Name of the symbol
-		String type; //Type of the symbol(Integer or Boolean)
-		String kind; //Kind of the symbol(function, procedure...)
-		BaseAST node; //AST node
+		String id;    //Name of the symbol
+		String type;  //Type of the symbol(integer, boolean, array, bound)
+		String kind;  //Kind of the symbol(variable, constant, function, procedure...)
+		BaseAST node; //AST node which this symbol represents
 
 		public SymbolTableEntry(String id, String type, String kind, BaseAST node) {
 			this.id = id;
@@ -74,8 +69,13 @@ public class SymbolTable {
 		}
 	}
 
+	/* Most recent scope at the beginning of the linked list (first), and oldest scope at the end of the list (last) */
 	LinkedList<HashMap<String,SymbolTableEntry>> scopeList;
 
+	
+	/** Symbol Table  constructor
+	 *  Create and initialize a symbol table
+	 */
 	public SymbolTable  (){
 
 		// NOTE: putting everything in here for now
@@ -83,14 +83,11 @@ public class SymbolTable {
 
 		// Instantiate
 		this.scopeList = new LinkedList<HashMap<String,SymbolTableEntry>>();
-
-		// Add HashMap for global scope
-		scopeList.addFirst(new HashMap<String,SymbolTableEntry>());
-
+		
 	}
 
 	/**  Initialize - called once by semantic analysis
-	 *                at the start of  compilation
+	 *                at the start of compilation
 	 *                May be unnecessary if constructor
  	 *                does all required initialization
 	 */
@@ -123,59 +120,147 @@ public class SymbolTable {
 	// TODO: enums for type/kind
 
 	/**
+	 * insert - enter a new symbol table entry in current scope
 	 *
 	 * @param id : identifier (name of variable)
-	 * @param type : 'integer' or 'boolean'
-	 * @param kind : 'variable', 'procedure', or 'function'
+	 * @param type : 'integer', 'boolean', etc
+	 * @param kind : 'variable', 'procedure', 'function', etc
 	 * @param node : link to AST node
+	 * @return boolean: true if successful, false otherwise
 	 */
-	public void insert(String id, String type, String kind, BaseAST node) {
+	public boolean insert(String id, String type, String kind, BaseAST node) {
 
 		// Get current scope's hashmap
-		HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
+		if (!scopeList.isEmpty()) {
+			HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
+			return insert(currentScope, id, type, kind, node);
+		}
+		return false;
+	}
+	
+	/**
+	 * insert - enter a new symbol table entry in designated scope
+	 *
+	 * @param scope : a hashmap representing the desired scope in the hierarchy of scopes
+	 * @param id : identifier (name of variable)
+	 * @param type : 'integer', 'boolean', etc
+	 * @param kind : 'variable', 'procedure', 'function', etc
+	 * @param node : link to AST node
+	 * @return boolean: true if successful, false otherwise
+	 */
+	public boolean insert(HashMap<String,SymbolTableEntry> scope, String id, String type, String kind, BaseAST node) {
+		
+		// Create a new entry and add to designated scope
+		if (scopeList.contains(scope) && !scope.containsKey(id)) {
+			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
+			scope.put(id, entry);
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * delete - delete an existing symbol table entry from current scope
+	 *
+	 * @param id : identifier (name of variable)
+	 * @return boolean: true if successful, false otherwise
+	 */
+	public boolean delete(String id) {
 
-		// TODO: do we need to check before reassigning identifier?
+		// Get current scope's hashmap
+		if (!scopeList.isEmpty()) {
+			HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
+			return delete(currentScope, id);
+		}
+		return false;
+	}
+	
+	/**
+	 * delete - delete an existing symbol table entry from designated scope
+	 *
+	 * @param scope : a hashmap representing the desired scope in the hierarchy of scopes
+	 * @param id : identifier (name of variable)
+	 * @return boolean: true if successful, false otherwise
+	 */
+	public boolean delete(HashMap<String,SymbolTableEntry> scope, String id) {
 
-		// add to symbol table
-		SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
-		currentScope.put(id, entry);
-
-		return;
+		// Delete existing entry from designated scope
+		if (scopeList.contains(scope) && scope.containsKey(id)) {
+			scope.remove(id);
+			return true;
+		}
+		return false;
 	}
 
 	/**
-	 *
-	 * @param id : The symbol to search the symbol table for
+	 * search - look up symbol table entry in current scope 
+	 * (e.g., use to check for re-declaration of identifier in same scope)
+	 * 
+	 * @param id : the symbol (identifier) to search the symbol table for
 	 * @return SymbolTableEntry if found, or null if not found
 	 */
-	public SymbolTableEntry search(String id){
+	public SymbolTableEntry search(String id) {
+		if (!scopeList.isEmpty()) {
+			HashMap<String, SymbolTableEntry> currentScope = scopeList.getFirst();
+			if (currentScope.containsKey(id)) {
+				return currentScope.get(id);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * searchGlobal - look up if symbol table entry is visible in current scope (i.e. defined in any scope so far)
+	 * (e.g., use to check whether an identifier has been declared or not)
+	 * 
+	 * @param id : the symbol (identifier) to search the symbol table for
+	 * @return SymbolTableEntry if found, or null if not found
+	 */
+	public SymbolTableEntry searchGlobal(String id) {
 		Iterator<HashMap<String, SymbolTableEntry>> scope = scopeList.iterator();
-		while(scope.hasNext())
-		{
-			HashMap<String, SymbolTableEntry> currScope = scope.next();
-			if (currScope.containsKey(id))
-			{
-				return currScope.get(id);
+		while(scope.hasNext()) {
+			HashMap<String, SymbolTableEntry> nextScope = scope.next();
+			if (nextScope.containsKey(id)) {
+				return nextScope.get(id);
 			}
 		}
 
 		return null;
 	}
 
-	public void enterScope() {
+	/**
+	 * enterScope - enter a new scope
+	 * 
+	 * @return HashMap<String,SymbolTableEntry> (a reference to the newly created current scope)
+	 */
+	public HashMap<String,SymbolTableEntry> enterScope() {
+		
 		// Add new HashMap to beginning of scopeList
 		HashMap<String,SymbolTableEntry> newScope = new HashMap<String,SymbolTableEntry>();
-		this.scopeList.addFirst(newScope);
+		scopeList.addFirst(newScope);
+		return newScope;
 	}
 
+	/**
+	 * exitScope - exit current scope
+	 * 
+	 */
 	public void exitScope() {
-		// TODO: do we need checks for making sure there is at least one scope?
-		this.scopeList.removeFirst();
+		
+		// Remove the most recent scope
+		if (!scopeList.isEmpty()) {
+			scopeList.removeFirst();
+		}
 	}
 
+	/**
+	 * toString - construct a text representation of the scope stack (most recent/current on top)
+	 * 
+	 * @return String : a text representation of the scope stack
+	 */
 	public String toString() {
-		String s = "";
-
+		String s = "TOP OF LIST (CURRENT SCOPE)\n";
+		
 		Iterator<HashMap<String, SymbolTableEntry>> scopeIter = scopeList.iterator();
 
 		while (scopeIter.hasNext()) {
@@ -190,8 +275,6 @@ public class SymbolTable {
 	        }
 
 		}
-
-
 		return s;
 	}
 
@@ -201,6 +284,7 @@ public class SymbolTable {
 
 		SymbolTable st = new SymbolTable();
 
+		st.enterScope();
 		st.insert("abc", "Integer", "Variable", null);
 		st.insert("othervar", "Boolean", "Variable", null);
 		st.enterScope();
