@@ -26,16 +26,16 @@ public class SymbolTable {
 	
 	private class SymbolTableEntry {
 		String id;    //Name of the symbol
-		String type;  //Type of the symbol(integer, boolean, array, bound)
-		String kind;  //Kind of the symbol(variable, constant, function, procedure...)
+		SymbolType type;  //Type of the symbol(integer, boolean)
+		SymbolKind kind;  //Kind of the symbol(variable, function, procedure, parameter)
 		String value; //Value of the symbol (e.g. the actual value that an integer variable takes on in a given scope)
 		BaseAST node; //AST node which this symbol represents
 
-		public SymbolTableEntry(String id, String type, String kind, BaseAST node) {
+		public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, BaseAST node) {
 			this(id, type, kind, "", node);
 		}
 		
-		public SymbolTableEntry(String id, String type, String kind, String value, BaseAST node) {
+		public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
 			this.id = id;
 			this.type = type;
 			this.kind = kind;
@@ -49,16 +49,16 @@ public class SymbolTable {
 		public void setId(String id) {
 			this.id = id;
 		}
-		public String getType() {
+		public SymbolType getType() {
 			return type;
 		}
-		public void setType(String type) {
+		public void setType(SymbolType type) {
 			this.type = type;
 		}
-		public String getKind() {
+		public SymbolKind getKind() {
 			return kind;
 		}
-		public void setKind(String kind) {
+		public void setKind(SymbolKind kind) {
 			this.kind = kind;
 		}
 		public String getValue() {
@@ -148,7 +148,7 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(String id, String type, String kind, BaseAST node) {
+	public boolean insert(String id, SymbolType type, SymbolKind kind, BaseAST node) {
 
 		// Get current scope's hashmap
 		if (!scopeList.isEmpty()) {
@@ -168,7 +168,7 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(HashMap<String,SymbolTableEntry> scope, String id, String type, String kind, BaseAST node) {
+	public boolean insert(HashMap<String,SymbolTableEntry> scope, String id, SymbolType type, SymbolKind kind, BaseAST node) {
 		
 		// Create a new entry and add to designated scope
 		if (scopeList.contains(scope) && !scope.containsKey(id)) {
@@ -335,10 +335,10 @@ public class SymbolTable {
 		SymbolTable st = new SymbolTable();
 
 		st.enterScope();
-		st.insert("abc", "Integer", "Variable", null);
-		st.insert("othervar", "Boolean", "Variable", null);
+		st.insert("abc", SymbolType.INTEGER, SymbolKind.VARIABLE, null);
+		st.insert("othervar", SymbolType.BOOLEAN, SymbolKind.VARIABLE, null);
 		st.enterScope();
-		st.insert("newscope", "Integer", "Variable", null);
+		st.insert("newscope", SymbolType.INTEGER, SymbolKind.VARIABLE, null);
 //		st.exitScope();
 
 		System.out.println(st.toString());
