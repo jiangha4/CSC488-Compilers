@@ -24,9 +24,38 @@ import compiler488.ast.BaseAST;
 
 public class SymbolTable {
 
-	/* Most recent scope is at the beginning of the linked list (first), and oldest scope at the end of the list (last) */
-	LinkedList<HashMap<String,SymbolTableEntry>> scopeList;
+	STNode currentScope;
 
+	public class STNode {
+		private STNode parent;
+		private HashMap<String,SymbolTableEntry> symbols;
+		public STNode () {
+			this.parent = null;
+			this.symbols = new HashMap<String,SymbolTableEntry>();
+		}
+		public STNode getParent() {
+			return parent;
+		}
+		public void setParent(STNode parent) {
+			this.parent = parent;
+		}
+		public HashMap<String, SymbolTableEntry> getSymbols() {
+			return symbols;
+		}
+		public void setSymbols(HashMap<String, SymbolTableEntry> symbols) {
+			this.symbols = symbols;
+		}
+		@Override
+		public String toString() {
+			String s = "";
+			// Get all keys in symbols
+			for(Entry<String, SymbolTableEntry> id : this.symbols.entrySet()) {
+				s += id.getKey() + " = " + id.getValue() + "\n";
+	        }
+			return s;
+		}
+		
+	}
 	
 	/** Symbol Table  constructor
 	 *  Create and initialize a symbol table
@@ -37,7 +66,7 @@ public class SymbolTable {
 		//       do we need to split stuff to Initialize/Finalize?
 
 		// Instantiate
-		this.scopeList = new LinkedList<HashMap<String,SymbolTableEntry>>();
+		this.currentScope = null;
 		
 	}
 
@@ -91,12 +120,11 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(String id, SymbolType type, SymbolKind kind, BaseAST node) {
+	public boolean insert(String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
 
-		// Get current scope's hashmap
-		if (!scopeList.isEmpty()) {
-			HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
-			return insert(currentScope, id, type, kind, node);
+		// Make sure we have a current scope
+		if (this.currentScope != null) {
+			return insert(currentScope, id, type, kind, value, node);
 		}
 		return false;
 	}
@@ -111,12 +139,13 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(HashMap<String,SymbolTableEntry> scope, String id, SymbolType type, SymbolKind kind, BaseAST node) {
+	public boolean insert(STNode scope, String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
 		
 		// Create a new entry and add to designated scope
-		if (scopeList.contains(scope) && !scope.containsKey(id)) {
-			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
-			scope.put(id, entry);
+		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
+		if (!symbols.containsKey(id)) {
+			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, value, node);
+			symbols.put(id, entry);
 			return true;
 		}
 		return false;
@@ -130,9 +159,8 @@ public class SymbolTable {
 	 */
 	public boolean delete(String id) {
 
-		// Get current scope's hashmap
-		if (!scopeList.isEmpty()) {
-			HashMap<String,SymbolTableEntry> currentScope = scopeList.getFirst();
+		// Make sure we have a current scope
+		if (this.currentScope != null) {
 			return delete(currentScope, id);
 		}
 		return false;
@@ -145,11 +173,12 @@ public class SymbolTable {
 	 * @param id : identifier (name of variable)
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean delete(HashMap<String,SymbolTableEntry> scope, String id) {
+	public boolean delete(STNode scope, String id) {
 
 		// Delete existing entry from designated scope
-		if (scopeList.contains(scope) && scope.containsKey(id)) {
-			scope.remove(id);
+		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
+		if (symbols.containsKey(id)) {
+			symbols.remove(id);
 			return true;
 		}
 		return false;
@@ -193,10 +222,10 @@ public class SymbolTable {
 	 * @return SymbolTableEntry if found, or null if not found
 	 */
 	public SymbolTableEntry search(String id) {
-		if (!scopeList.isEmpty()) {
-			HashMap<String, SymbolTableEntry> currentScope = scopeList.getFirst();
-			if (currentScope.containsKey(id)) {
-				return currentScope.get(id);
+		if (this.currentScope != null) {
+			HashMap<String, SymbolTableEntry> symbols = currentScope.getSymbols();
+			if (symbols.containsKey(id)) {
+				return symbols.get(id);
 			}
 		}
 		return null;
@@ -210,12 +239,13 @@ public class SymbolTable {
 	 * @return SymbolTableEntry if found, or null if not found
 	 */
 	public SymbolTableEntry searchGlobal(String id) {
-		Iterator<HashMap<String, SymbolTableEntry>> scope = scopeList.iterator();
-		while(scope.hasNext()) {
-			HashMap<String, SymbolTableEntry> nextScope = scope.next();
-			if (nextScope.containsKey(id)) {
-				return nextScope.get(id);
+		STNode scope = currentScope;
+		while(scope != null) {
+			HashMap<String, SymbolTableEntry> symbols = scope.getSymbols();
+			if (symbols.containsKey(id)) {
+				return symbols.get(id);
 			}
+			scope = scope.getParent();
 		}
 
 		return null;
@@ -228,10 +258,12 @@ public class SymbolTable {
 	 */
 	public HashMap<String,SymbolTableEntry> enterScope() {
 		
-		// Add new HashMap to beginning of scopeList
-		HashMap<String,SymbolTableEntry> newScope = new HashMap<String,SymbolTableEntry>();
-		scopeList.addFirst(newScope);
-		return newScope;
+		// Add new scope as child of current scope
+		STNode newScope = new STNode();
+		newScope.setParent(this.currentScope);
+		this.currentScope = newScope;
+		
+		return this.currentScope.getSymbols();
 	}
 
 	/**
@@ -240,9 +272,9 @@ public class SymbolTable {
 	 */
 	public void exitScope() {
 		
-		// Remove the most recent scope
-		if (!scopeList.isEmpty()) {
-			scopeList.removeFirst();
+		// Exit to parent scope
+		if (this.currentScope != null) {
+			this.currentScope = this.currentScope.getParent();
 		}
 	}
 
@@ -251,22 +283,16 @@ public class SymbolTable {
 	 * 
 	 * @return String : a text representation of the scope stack
 	 */
+	@Override
 	public String toString() {
-		String s = "TOP OF LIST (CURRENT SCOPE)\n";
+		String s = "TRAVERSAL FROM CURRENT SCOPE -> GLOBAL SCOPE\n";
 		
-		Iterator<HashMap<String, SymbolTableEntry>> scopeIter = scopeList.iterator();
+		STNode scope = this.currentScope;
 
-		while (scopeIter.hasNext()) {
+		while (scope != null) {
 			s += "=======================================================\n";
-
-			// get scope
-			HashMap<String,SymbolTableEntry> scope = scopeIter.next();
-
-			// Get all keys in scope
-			for(Entry<String, SymbolTableEntry> id : scope.entrySet()) {
-				s += id.getKey() + " = " + id.getValue() + "\n";
-	        }
-
+			s += scope.toString();
+			scope = scope.getParent();
 		}
 		
 		s += "=======================================================\n";
@@ -280,39 +306,53 @@ public class SymbolTable {
 		System.out.println("Hai.");
 
 		SymbolTable st = new SymbolTable();
+		
+		System.out.println(st);
 
 		st.enterScope();
-		st.insert("abc", SymbolType.INTEGER, SymbolKind.VARIABLE, null);
-		st.insert("othervar", SymbolType.BOOLEAN, SymbolKind.VARIABLE, null);
+		st.insert("i", SymbolType.INTEGER, SymbolKind.VARIABLE, "1", null);
+		st.insert("b", SymbolType.BOOLEAN, SymbolKind.VARIABLE, "Troooooo", null);
+		
+		System.out.println("After adding one scope with vars:\n" + st);
+		System.out.println("Value of i: " + st.getValue("i"));
+		System.out.println("Value of b: " + st.getValue("b"));
+		System.out.println();
+		
 		st.enterScope();
-		st.insert("newscope", SymbolType.INTEGER, SymbolKind.VARIABLE, null);
-//		st.exitScope();
+		st.insert("i", SymbolType.INTEGER, SymbolKind.VARIABLE, "1 gajillion", null);
 
-		System.out.println(st.toString());
+		System.out.println("Enter new scope and add var:\n" + st);
+		System.out.println("Value of i: " + st.getValue("i"));
+		System.out.println("Value of b: " + st.getValue("b"));
+		System.out.println();
 		
-		// Should be able to find "abc" (should be visible in current scope)
-		System.out.print("\nSearch for abc declaration (global): ");
-		if (st.searchGlobal("abc") != null) {
-			System.out.println("Found");
-		}
-		else {
-			System.out.println("Not found");
-		}
+		st.delete("i");
 		
-		// Should NOT be able to find "abc" in the current scope
-		System.out.print("Search for abc declaration (current scope): ");
-		if (st.search("abc") != null) {
-			System.out.println("Found");
-		}
-		else {
-			System.out.println("Not found");
-		}
+		System.out.println("After deleting i:\n" + st);
+		System.out.println("Value of i: " + st.getValue("i"));
+		System.out.println("Value of b: " + st.getValue("b"));
+		System.out.println();
 		
 		st.exitScope();
-
-		System.out.println("\n\nAfter exiting scope\n\n");
-
-		System.out.println(st.toString());
+		
+		System.out.println("After exiting scope:\n" + st);
+		System.out.println("Value of i: " + st.getValue("i"));
+		System.out.println("Value of b: " + st.getValue("b"));
+		System.out.println();
+		
+		st.enterScope();
+		st.insert("theNewGuy", SymbolType.INTEGER, SymbolKind.VARIABLE, "(H)", null);
+		
+		System.out.println("Enter new scope:\n" + st);
+		
+		st.exitScope();
+		st.delete("b");
+		System.out.println("Exit scope, delete b:\n" + st);
+		System.out.println("Value of i: " + st.getValue("i"));
+		System.out.println("Value of b: " + st.getValue("b"));
+		System.out.println();
+		
+		System.out.println("Bai.");
 
 		return;
 
