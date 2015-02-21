@@ -402,12 +402,12 @@ public class Main {
 
   private static void semanticAnalysis( Program  programAST ) {
 	
-	  ASTVisitor visitor = new Semantics();
+	  Semantics visitor = new Semantics();
 	  try {
 	   // INSERT CODE HERE TO DO SEMANTIC ANALYSIS
            // e.g.
            //
-           
+          
 		  programAST.accept(visitor);
            
            //
@@ -427,7 +427,7 @@ public class Main {
 	  }
 	
 	  if (dumpSymbolTable) {
-		  String stDump = ((Semantics)visitor).getSymbolTable().toString();
+		  String stDump = visitor.getSymbolTable().toString();
 		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );  
 	  }
    }
