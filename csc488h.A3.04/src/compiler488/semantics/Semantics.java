@@ -240,8 +240,25 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting ScalarDecl");
+		
+		String declId = scalarDecl.getName();
+		SymbolType declType = scalarDecl.getType().toSymbolType();
+		
+		// Check if identifier already exists in current scope
+		if (Symbol.search(declId) != null) {
+			// Detected a re-declaration in same scope
+			errors.add("Re-declaration of identifier " + declId + " not allowed in same scope.");
+		}
+		else {
+			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
+			if (success) {
+				scalarDecl.setSTEntry(Symbol.search(declId));
+			} else {
+				errors.add("Unable to declare identifier " + declId);
+			}
+		}
+	
 	}
 
 	@Override

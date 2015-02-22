@@ -19,6 +19,8 @@ public class ScalarDecl extends Declaration {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S15: Declare parameter with specified type
 		visitor.visit(this);
 		type.accept(visitor);
 	}
