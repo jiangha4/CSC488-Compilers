@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
 
-
 /** Symbol Table
  *  This almost empty class is a framework for implementing
  *  a Symbol Table class for the CSC488S compiler
