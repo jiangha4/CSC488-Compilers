@@ -427,6 +427,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(Program program) {
 		System.out.println("Visiting Program");
 		
+		/*
 		if (!program.isVisited()) {
 			// Begin new scope
 			Symbol.enterScope();
@@ -439,6 +440,7 @@ public class Semantics implements ASTVisitor {
 			// Clear the flag
 			program.setVisited(false);
 		}
+		*/
 	}
 
 	@Override
