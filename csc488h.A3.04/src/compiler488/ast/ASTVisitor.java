@@ -4,6 +4,7 @@ import compiler488.ast.decl.*;
 import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
+import compiler488.semantics.SemanticErrorException;
 
 /** Visitor pattern for AST traversal: semantic checker is a visitor who can visit every node in the AST. 
  *  @author  <B> Haohan Jiang (g3jiangh)
@@ -45,7 +46,7 @@ public interface ASTVisitor {
 	
 	/* Statements */
 	public void visit(AssignStmt assignStmt);
-	public void visit(ExitStmt exitStmt);
+	public void visit(ExitStmt exitStmt) throws SemanticErrorException;
 	public void visit(GetStmt getStmt);
 	public void visit(IfStmt ifStmt);
 	public void visit(LoopingStmt loopingStmt);
