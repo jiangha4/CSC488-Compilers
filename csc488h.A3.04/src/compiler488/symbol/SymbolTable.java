@@ -24,19 +24,19 @@ import compiler488.ast.BaseAST;
 
 public class SymbolTable {
 
-	STNode currentScope;
+	STScope currentScope;
 
-	public class STNode {
-		private STNode parent;
+	public class STScope {
+		private STScope parent;
 		private HashMap<String,SymbolTableEntry> symbols;
-		public STNode () {
+		public STScope () {
 			this.parent = null;
 			this.symbols = new HashMap<String,SymbolTableEntry>();
 		}
-		public STNode getParent() {
+		public STScope getParent() {
 			return parent;
 		}
-		public void setParent(STNode parent) {
+		public void setParent(STScope parent) {
 			this.parent = parent;
 		}
 		public HashMap<String, SymbolTableEntry> getSymbols() {
@@ -139,7 +139,7 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(STNode scope, String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
+	public boolean insert(STScope scope, String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
 		
 		// Create a new entry and add to designated scope
 		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
@@ -173,7 +173,7 @@ public class SymbolTable {
 	 * @param id : identifier (name of variable)
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean delete(STNode scope, String id) {
+	public boolean delete(STScope scope, String id) {
 
 		// Delete existing entry from designated scope
 		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
@@ -239,7 +239,7 @@ public class SymbolTable {
 	 * @return SymbolTableEntry if found, or null if not found
 	 */
 	public SymbolTableEntry searchGlobal(String id) {
-		STNode scope = currentScope;
+		STScope scope = currentScope;
 		while(scope != null) {
 			HashMap<String, SymbolTableEntry> symbols = scope.getSymbols();
 			if (symbols.containsKey(id)) {
@@ -259,7 +259,7 @@ public class SymbolTable {
 	public HashMap<String,SymbolTableEntry> enterScope() {
 		
 		// Add new scope as child of current scope
-		STNode newScope = new STNode();
+		STScope newScope = new STScope();
 		newScope.setParent(this.currentScope);
 		this.currentScope = newScope;
 		
@@ -287,7 +287,7 @@ public class SymbolTable {
 	public String toString() {
 		String s = "TRAVERSAL FROM CURRENT SCOPE -> GLOBAL SCOPE\n";
 		
-		STNode scope = this.currentScope;
+		STScope scope = this.currentScope;
 
 		while (scope != null) {
 			s += "=======================================================\n";
@@ -325,6 +325,9 @@ public class SymbolTable {
 		System.out.println("Value of i: " + st.getValue("i"));
 		System.out.println("Value of b: " + st.getValue("b"));
 		System.out.println();
+		
+		
+		
 		
 		st.delete("i");
 		
