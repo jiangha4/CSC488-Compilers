@@ -36,6 +36,14 @@ public abstract class BaseAST implements AST {
 	
 	/**
 	 * 
+	 * @param stEntry - an entry in the symbol table
+	 */
+	public void setSTEntry(SymbolTableEntry stEntry) {
+		this.stEntry = stEntry;
+	}
+	
+	/**
+	 * 
 	 * @return boolean : true if visited, false otherwise
 	 */
 	public boolean isVisited() {
