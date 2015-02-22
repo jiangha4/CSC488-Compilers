@@ -12,6 +12,7 @@ public class IntegerType extends Type {
         return "integer";
     }
     
+    @Override
     public SymbolType toSymbolType() {
     	return SymbolType.INTEGER;
     }

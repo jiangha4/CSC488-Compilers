@@ -13,6 +13,7 @@ public class BooleanType extends Type {
         return "boolean";
     }
 
+    @Override
     public SymbolType toSymbolType() {
     	return SymbolType.BOOLEAN;
     }
