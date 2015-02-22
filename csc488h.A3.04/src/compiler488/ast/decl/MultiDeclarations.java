@@ -29,7 +29,10 @@ public class MultiDeclarations extends Declaration {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S10: Declare scalar variables
 		visitor.visit(this);
+		
 		type.accept(visitor);
 		elements.accept(visitor);
 	}
