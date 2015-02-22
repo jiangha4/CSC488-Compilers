@@ -10,6 +10,7 @@ import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolKind;
 import compiler488.symbol.SymbolTable.SymbolType;
 
 /** Implement semantic analysis for compiler 488 
@@ -186,12 +187,50 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting RoutineDecl");
 		
 		if (!routineDecl.isVisited()) {
-			// Begin new procedure scope
+			
+			/**
+			 * S11/S12: Declare function with/without parameters and with specified type
+			 * S17/S18: Declare procedure with/without parameters
+			 */
+			// Record routine declaration in symbol table
+			String routineName = routineDecl.getName();
+			SymbolType routineType = null;
+			SymbolKind routineKind = SymbolKind.PROCEDURE;
+			
+			// If the routine has a return value then it is a function; otherwise a procedure
+			if (routineDecl.getType() != null) {
+				routineType = routineDecl.getType().toSymbolType();
+				routineKind = SymbolKind.FUNCTION;
+			}
+			
+			// Check for existing declaration
+			if (Symbol.search(routineName) != null) {
+				// Detected a re-declaration in same scope
+				errors.add("Re-declaration of identifier " + routineName + " not allowed in same scope.");
+			}
+			else {
+				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
+				if (success) {
+					routineDecl.setSTEntry(Symbol.search(routineName));
+				} else {
+					errors.add("Unable to declare identifier " + routineName);
+				}
+			}
+			
+			/**
+			 * S04: Start function scope
+			 * S08: Start procedure scope
+			 */
+			// Begin new function/procedure scope
 			Symbol.enterScope();
 			
 			// Mark as visited
 			routineDecl.setVisited(true);
 		} else {
+			/**
+			 * S05: End function scope
+			 * S09: End procedure scope
+			 */
 			Symbol.exitScope();
 			
 			// Clear flag
