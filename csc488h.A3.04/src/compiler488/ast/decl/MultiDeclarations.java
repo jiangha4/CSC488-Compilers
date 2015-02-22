@@ -29,7 +29,14 @@ public class MultiDeclarations extends Declaration {
 
     @Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+    	
+    	// Handle the following rules:
+    	// S10: Declare scalar variables
+    	// S19: Declare array variables with specified lower and upper bounds
+    	// S48: Declare array variables with specified upper bound
+		// S47: Associate type with variables
+    	visitor.visit(this);
+		
 		type.accept(visitor);
 		elements.accept(visitor);
 	}

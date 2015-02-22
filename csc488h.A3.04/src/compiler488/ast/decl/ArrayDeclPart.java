@@ -2,6 +2,7 @@ package compiler488.ast.decl;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
  * Holds the declaration part of an array.
@@ -57,6 +58,11 @@ public class ArrayDeclPart extends DeclarationPart {
         return name + "[" + lb1 + ".." + ub1 +
                ( isTwoDimensional ?  ", " + lb2 + ".." + ub2 : "" )
                + "]";
+    }
+    
+    @Override
+    public SymbolKind getKind() {
+    	return SymbolKind.ARRAY;
     }
 
     /**

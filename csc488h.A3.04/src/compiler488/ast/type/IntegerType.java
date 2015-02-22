@@ -1,6 +1,7 @@
 package compiler488.ast.type;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 
 /**
@@ -9,6 +10,11 @@ import compiler488.ast.ASTVisitor;
 public class IntegerType extends Type {
     public String toString() {
         return "integer";
+    }
+    
+    @Override
+    public SymbolType toSymbolType() {
+    	return SymbolType.INTEGER;
     }
     
     @Override

@@ -1,6 +1,7 @@
 package compiler488.ast.type;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 
 /**
@@ -12,6 +13,11 @@ public class BooleanType extends Type {
         return "boolean";
     }
 
+    @Override
+    public SymbolType toSymbolType() {
+    	return SymbolType.BOOLEAN;
+    }
+    
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
