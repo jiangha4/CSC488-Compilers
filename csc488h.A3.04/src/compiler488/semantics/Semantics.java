@@ -141,6 +141,19 @@ public class Semantics implements ASTVisitor {
 	public void visit(RoutineDecl routineDecl) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting RoutineDecl");
+		
+		if (!routineDecl.isVisited()) {
+			// Begin new procedure scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			routineDecl.setVisited(true);
+		} else {
+			Symbol.exitScope();
+			
+			// Clear flag
+			routineDecl.setVisited(false);
+		}
 	}
 
 	@Override
@@ -303,22 +316,24 @@ public class Semantics implements ASTVisitor {
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ProcedureCallStmt");
-		
-		if (!procedureCallStmt.isVisited()) {
-			// Begin new procedure scope
-			Symbol.enterScope();
-			
-			// Mark as visited
-			procedureCallStmt.setVisited(true);
-		} else {
-			Symbol.exitScope();
-		}
 	}
 
 	@Override
 	public void visit(Program program) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting Program");
+		
+		if (!program.isVisited()) {
+			// Begin new scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			program.setVisited(true);
+		} else {
+			Symbol.exitScope();
+			
+			// Clear the flag
+			program.setVisited(false);
+		}
 	}
 
 	@Override
@@ -345,6 +360,9 @@ public class Semantics implements ASTVisitor {
 			scope.setVisited(true);
 		} else {
 			Symbol.exitScope();
+			
+			// Clear the flag
+			scope.setVisited(false);
 		}
 	}
 

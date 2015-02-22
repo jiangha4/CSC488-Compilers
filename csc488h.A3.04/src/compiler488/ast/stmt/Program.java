@@ -19,7 +19,13 @@ public class Program extends Scope {
     
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S00: start program scope
 		visitor.visit(this);
+		
 		super.accept(visitor);
+		
+		// S01: end program scope
+		visitor.visit(this);
 	}
 }

@@ -99,7 +99,10 @@ public class RoutineDecl extends Declaration {
     
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S04/S08: start function/procedure scope
 		visitor.visit(this);
+		
 		if (type != null) {
 			type.accept(visitor);
 		}
@@ -109,5 +112,8 @@ public class RoutineDecl extends Declaration {
 		if (body != null) {
 			body.accept(visitor);
 		}
+		
+		// S05/S09: end function/procedure scope
+		visitor.visit(this);
 	}
 }
