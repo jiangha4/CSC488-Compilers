@@ -98,6 +98,10 @@ public class ArrayDeclPart extends DeclarationPart {
 
         return ub2;
     }
+    
+    public boolean isTwoDimensional() {
+    	return isTwoDimensional;
+    }
 
     @Override
     public void prettyPrint(PrettyPrinter p) {
