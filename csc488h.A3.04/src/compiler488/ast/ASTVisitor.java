@@ -46,7 +46,7 @@ public interface ASTVisitor {
 	
 	/* Statements */
 	public void visit(AssignStmt assignStmt);
-	public void visit(ExitStmt exitStmt) throws SemanticErrorException;
+	public void visit(ExitStmt exitStmt);
 	public void visit(GetStmt getStmt);
 	public void visit(IfStmt ifStmt);
 	public void visit(LoopingStmt loopingStmt);
