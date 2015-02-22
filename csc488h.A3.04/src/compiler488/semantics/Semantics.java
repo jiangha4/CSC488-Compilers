@@ -283,9 +283,25 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void visit(ExitStmt exitStmt) {
+	public void visit(ExitStmt exitStmt) throws SemanticErrorException {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ExitStmt");
+		
+		//Check if this node has been visited already
+		if (!exitStmt.isVisited())
+		{	
+			/**S50 Check that exit statement is directly inside a loop
+			*  Checks if symbols "loop" or "while" have been declared in the scope
+			*  If not, throws an error
+			*/
+			if ((Symbol.search("loop") != null) || (Symbol.search("while") != null))
+			{
+				exitStmt.setVisited(true);
+				
+			}else{
+				throw new SemanticErrorException("Exit Statement not inside a loop");
+			}
+		}
 	}
 
 	@Override
