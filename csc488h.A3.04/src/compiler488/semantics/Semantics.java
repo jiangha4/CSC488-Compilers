@@ -176,6 +176,8 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting MultiDeclarations");
 		
 		// Add a symbol for every element in the declaration (into current scope)
+		// (The value for the newly inserted elements is blank: in the project
+		// language assignment cannot happen simultaneously with declaration)
 		SymbolType declType = multiDeclarations.getType().toSymbolType();
 		for (DeclarationPart nextElem : multiDeclarations.getParts()) {
 			Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
