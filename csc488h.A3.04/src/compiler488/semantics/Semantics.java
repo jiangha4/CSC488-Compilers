@@ -162,7 +162,21 @@ public class Semantics implements ASTVisitor {
 		// language assignment cannot happen simultaneously with declaration)
 		SymbolType declType = multiDeclarations.getType().toSymbolType();
 		for (DeclarationPart nextElem : multiDeclarations.getParts()) {
-			Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+			
+			// Check if identifier already exists in current scope
+			String elemId = nextElem.getName();
+			if (Symbol.search(elemId) != null) {
+				// Detected a re-declaration in same scope
+				errors.add("Re-declaration of identifier " + elemId + " not allowed in same scope.");
+			}
+			else {
+				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+				if (success) {
+					nextElem.setSTEntry(Symbol.search(elemId));
+				} else {
+					errors.add("Unable to declare identifier " + elemId);
+				}
+			}
 		}
 		
 	}
