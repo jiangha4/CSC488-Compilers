@@ -59,18 +59,20 @@ public class Semantics implements ASTVisitor {
 
 	/**  semanticsFinalize - called by the parser once at the        */
 	/*                      end of compilation                      */
-	void Finalize(){
+	public void Finalize() throws SemanticErrorException {
 	
-	  /*  Finalize the symbol table                 */
-	
-	  // Symbol.Finalize();
+		/*  Finalize the symbol table                 */
+		// Symbol.Finalize();
+  
+		/*********************************************/
+		/*  Additional finalization code for the      */
+		/*  semantics analysis module                 */
+		/*  GOES here.                                */
+		/**********************************************/
 	  
-	   /*********************************************/
-	  /*  Additional finalization code for the      */
-	  /*  semantics analysis module                 */
-	  /*  GOES here.                                */
-	  /**********************************************/
-	  
+		if (errors.getCount() > 0) {
+			errors.raiseException();
+		}
 	}
 	
 	/**
@@ -118,6 +120,10 @@ public class Semantics implements ASTVisitor {
 
 	public SymbolTable getSymbolTable() {
 		return Symbol;
+	}
+	
+	public SemanticErrorCollector getErrors() {
+		return errors;
 	}
 	
 	@Override
