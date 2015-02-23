@@ -64,10 +64,13 @@ public class IfStmt extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		condition.setControlStatement(controlStatement.IF);
 		condition.accept(visitor);
+		whenTrue.setListControlStatement(controlStatement.IF);
 		whenTrue.accept(visitor);
 		
 		if (whenFalse != null) {
+			whenFalse.setListControlStatement(controlStatement.IF);
 			whenFalse.accept(visitor);
 		}
 	}
