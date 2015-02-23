@@ -432,7 +432,8 @@ public class Main {
 		  visitor.Finalize();
 	  }
 	  catch (SemanticErrorException e) {
-		  // semantic analyzer has already printed an error message
+		  System.err.println("Exception during Semantic Analysis");
+		  e.printStackTrace ();
 		  errorOccurred = true;
 	  }
 	  
