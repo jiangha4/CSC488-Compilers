@@ -20,6 +20,12 @@ public class SemanticErrorCollector {
 	}
 	
 	public void raiseException() throws SemanticErrorException {
-		throw new SemanticErrorException(errors.toString());
+		StringBuilder sb = new StringBuilder();
+		String sep = "\n";
+		for (String s : errors) {
+			sb.append(sep).append(s);
+		}
+		
+		throw new SemanticErrorException(sb.toString());
 	}
 }
