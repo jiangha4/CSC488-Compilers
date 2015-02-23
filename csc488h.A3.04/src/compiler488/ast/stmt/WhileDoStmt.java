@@ -20,14 +20,15 @@ public class WhileDoStmt extends LoopingStmt {
         p.println(" do");
 
         body.prettyPrintBlock(p);
-
         p.print("end");
     }
 
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+		expn.setControlStatement(controlStatement.WHILE);
 		expn.accept(visitor);
+		body.setListControlStatement(controlStatement.WHILE);
 		body.accept(visitor);
 	}
 }

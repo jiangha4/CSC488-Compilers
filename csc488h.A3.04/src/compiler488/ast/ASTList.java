@@ -1,6 +1,9 @@
 package compiler488.ast;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
+
+import compiler488.ast.BaseAST.controlStatement;
 
 /**
  * A list of AST nodes.
@@ -18,7 +21,7 @@ import java.util.LinkedList;
  */
 public class ASTList<E extends AST> extends LinkedList<E> implements AST {
     private static final long serialVersionUID = 1L;
-
+    
     /**
      * Create an empty AST list
      */
@@ -130,7 +133,16 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
 
         return buf.toString();
     }
-
+    /**
+     * Sets the parent control statements of the child nodes. 
+     * @param statement : The control statement of the parent
+     */
+    public void setListControlStatement(controlStatement statement){
+    	for (int i = 0; i < this.size(); i++){
+    		((BaseAST) this.get(i)).setControlStatement(statement);
+    	}
+    }
+    
 	@Override
 	public void accept(ASTVisitor visitor) {
 		for (ASTVisitable node : this) {
