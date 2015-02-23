@@ -41,7 +41,10 @@ public class FunctionCallExpn extends Expn {
     
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S40: check that identifier has been declared as a function
 		visitor.visit(this);
+		
 		if (arguments.size() > 0) {
 			arguments.accept(visitor);
 		}

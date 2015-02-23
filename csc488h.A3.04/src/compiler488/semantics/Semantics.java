@@ -301,8 +301,16 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(FunctionCallExpn functionCallExpn) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting FunctionCallExpn");
+		
+		// S40: check that identifier has been declared as a function
+		String functionName = functionCallExpn.getIdent();
+		if (Symbol.searchGlobal(functionName) == null) {
+			errors.add("Function '" + functionName + "' cannot be used before it has been declared.");
+		}
+		else if (Symbol.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
+			errors.add("Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
+		}
 	}
 
 	@Override
