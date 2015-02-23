@@ -133,7 +133,10 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
 
         return buf.toString();
     }
-
+    /**
+     * Sets the parent control statements of the child nodes. 
+     * @param statement : The control statement of the parent
+     */
     public void setListControlStatement(controlStatement statement){
     	for (int i = 0; i < this.size(); i++){
     		((BaseAST) this.get(i)).setControlStatement(statement);
