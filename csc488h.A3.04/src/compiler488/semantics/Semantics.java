@@ -132,12 +132,12 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ArrayDeclPart");
 		
 		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
-			errors.add("Array dimension 1: lower bound must be less than or equal to upper bound.");
+			errors.add("Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
 		};
 		
 		if (arrayDeclPart.isTwoDimensional()) {
 			if (!(arrayDeclPart.getLowerBoundary2() <= arrayDeclPart.getUpperBoundary2())) {
-				errors.add("Array dimension 2: lower bound must be less than or equal to upper bound.");
+				errors.add("Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
 			};
 		}
 	}
