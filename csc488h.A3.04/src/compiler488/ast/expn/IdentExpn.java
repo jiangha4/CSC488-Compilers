@@ -30,6 +30,8 @@ public class IdentExpn extends Expn implements Readable {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S37: check that identifier has been declared as a scalar variable
 		visitor.visit(this);
 	}
 }
