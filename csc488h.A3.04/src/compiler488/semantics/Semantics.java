@@ -405,8 +405,16 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting ProcedureCallStmt");
+		
+		// S41: check that identifier has been declared as a procedure
+		String procName = procedureCallStmt.getName();
+		if (Symbol.searchGlobal(procName) == null) {
+			errors.add("Procedure '" + procName + "' cannot be used before it has been declared.");
+		}
+		else if (Symbol.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
+			errors.add("Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
+		}
 	}
 
 	@Override

@@ -51,7 +51,10 @@ public class ProcedureCallStmt extends Stmt {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S41: check that identifier has been declared as a procedure
     	visitor.visit(this);
+    	
 		if ((arguments != null) && (arguments.size() > 0)) {
 			arguments.accept(visitor);
 		}
