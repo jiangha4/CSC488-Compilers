@@ -185,56 +185,34 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(RoutineDecl routineDecl) {
 		System.out.println("Visiting RoutineDecl");
+	
+		/**
+		 * S11/S12: Declare function with/without parameters and with specified type
+		 * S17/S18: Declare procedure with/without parameters
+		 */
+		// Record routine declaration in symbol table
+		String routineName = routineDecl.getName();
+		SymbolType routineType = null;
+		SymbolKind routineKind = SymbolKind.PROCEDURE;
 		
-		if (!routineDecl.isVisited()) {
-			
-			/**
-			 * S11/S12: Declare function with/without parameters and with specified type
-			 * S17/S18: Declare procedure with/without parameters
-			 */
-			// Record routine declaration in symbol table
-			String routineName = routineDecl.getName();
-			SymbolType routineType = null;
-			SymbolKind routineKind = SymbolKind.PROCEDURE;
-			
-			// If the routine has a return value then it is a function; otherwise a procedure
-			if (routineDecl.getType() != null) {
-				routineType = routineDecl.getType().toSymbolType();
-				routineKind = SymbolKind.FUNCTION;
+		// If the routine has a return value then it is a function; otherwise a procedure
+		if (routineDecl.getType() != null) {
+			routineType = routineDecl.getType().toSymbolType();
+			routineKind = SymbolKind.FUNCTION;
+		}
+		
+		// Check for existing declaration
+		if (Symbol.search(routineName) != null) {
+			// Detected a re-declaration in same scope
+			errors.add("Re-declaration of identifier " + routineName + " not allowed in same scope.");
+		}
+		else {
+			boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
+			if (success) {
+				routineDecl.setSTEntry(Symbol.search(routineName));
+			} else {
+				errors.add("Unable to declare identifier " + routineName);
 			}
-			
-			// Check for existing declaration
-			if (Symbol.search(routineName) != null) {
-				// Detected a re-declaration in same scope
-				errors.add("Re-declaration of identifier " + routineName + " not allowed in same scope.");
-			}
-			else {
-				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
-				if (success) {
-					routineDecl.setSTEntry(Symbol.search(routineName));
-				} else {
-					errors.add("Unable to declare identifier " + routineName);
-				}
-			}
-			
-			/**
-			 * S04: Start function scope
-			 * S08: Start procedure scope
-			 */
-			// Begin new function/procedure scope
-			Symbol.enterScope();
-			
-			// Mark as visited
-			routineDecl.setVisited(true);
-		} else {
-			/**
-			 * S05: End function scope
-			 * S09: End procedure scope
-			 */
-			Symbol.exitScope();
-			
-			// Clear flag
-			routineDecl.setVisited(false);
 		}
 	}
 
@@ -426,21 +404,6 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(Program program) {
 		System.out.println("Visiting Program");
-		
-		/*
-		if (!program.isVisited()) {
-			// Begin new scope
-			Symbol.enterScope();
-			
-			// Mark as visited
-			program.setVisited(true);
-		} else {
-			Symbol.exitScope();
-			
-			// Clear the flag
-			program.setVisited(false);
-		}
-		*/
 	}
 
 	@Override

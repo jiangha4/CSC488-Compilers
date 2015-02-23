@@ -39,7 +39,7 @@ public class Scope extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
     	
-    	// S06: start ordinary scope
+    	// S00/S04/S06/S08: start program/function/ordinary/procedure scope
     	visitor.visit(this);
     	
     	// S03: Associate declarations and statements with scope
@@ -47,7 +47,7 @@ public class Scope extends Stmt {
 			body.accept(visitor);
 		}
 		
-		// S07: end ordinary scope
+		// S01/S05/S07/S09: end program/function/ordinary/procedure scope
 		visitor.visit(this);
 	}
 }
