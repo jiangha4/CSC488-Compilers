@@ -7,6 +7,7 @@ import compiler488.ast.AST ;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.BasePrettyPrinter;
 import compiler488.ast.stmt.Program;
+import compiler488.semantics.SemanticErrorException;
 import compiler488.semantics.Semantics;
 import compiler488.symbol.SymbolTable;
 import compiler488.codegen.CodeGen;
@@ -397,7 +398,7 @@ public class Main {
   
 
   /**  function to perform semantic analysis on the scanned and parsed program
-   *   @param  programAST    the Abstract Syntax Tree produced during parsing
+   *   @param  programAST    the Abstract Syntax Tree produced during parsing 
    */
 
   private static void semanticAnalysis( Program  programAST ) {
@@ -425,7 +426,16 @@ public class Main {
 	    e.printStackTrace ();
 	    errorOccurred = true ;
 	  }
-	
+	  
+	  // Check for any semantic errors that were found during semantic analysis
+	  try {
+		  visitor.Finalize();
+	  }
+	  catch (SemanticErrorException e) {
+		  // semantic analyzer has already printed an error message
+		  errorOccurred = true;
+	  }
+	  
 	  if (dumpSymbolTable) {
 		  String stDump = visitor.getSymbolTable().toString();
 		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );  

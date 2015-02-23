@@ -10,6 +10,7 @@ import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolKind;
 import compiler488.symbol.SymbolTable.SymbolType;
 
 /** Implement semantic analysis for compiler 488 
@@ -59,18 +60,20 @@ public class Semantics implements ASTVisitor {
 
 	/**  semanticsFinalize - called by the parser once at the        */
 	/*                      end of compilation                      */
-	void Finalize(){
+	public void Finalize() throws SemanticErrorException {
 	
-	  /*  Finalize the symbol table                 */
-	
-	  // Symbol.Finalize();
+		/*  Finalize the symbol table                 */
+		// Symbol.Finalize();
+  
+		/*********************************************/
+		/*  Additional finalization code for the      */
+		/*  semantics analysis module                 */
+		/*  GOES here.                                */
+		/**********************************************/
 	  
-	   /*********************************************/
-	  /*  Additional finalization code for the      */
-	  /*  semantics analysis module                 */
-	  /*  GOES here.                                */
-	  /**********************************************/
-	  
+		if (errors.getCount() > 0) {
+			errors.raiseException();
+		}
 	}
 	
 	/**
@@ -120,6 +123,10 @@ public class Semantics implements ASTVisitor {
 		return Symbol;
 	}
 	
+	public SemanticErrorCollector getErrors() {
+		return errors;
+	}
+	
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
 		System.out.println("Visiting ArrayDeclPart");
@@ -156,7 +163,21 @@ public class Semantics implements ASTVisitor {
 		// language assignment cannot happen simultaneously with declaration)
 		SymbolType declType = multiDeclarations.getType().toSymbolType();
 		for (DeclarationPart nextElem : multiDeclarations.getParts()) {
-			Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+			
+			// Check if identifier already exists in current scope
+			String elemId = nextElem.getName();
+			if (Symbol.search(elemId) != null) {
+				// Detected a re-declaration in same scope
+				errors.add("Re-declaration of identifier " + elemId + " not allowed in same scope.");
+			}
+			else {
+				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+				if (success) {
+					nextElem.setSTEntry(Symbol.search(elemId));
+				} else {
+					errors.add("Unable to declare identifier " + elemId);
+				}
+			}
 		}
 		
 	}
@@ -166,12 +187,50 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting RoutineDecl");
 		
 		if (!routineDecl.isVisited()) {
-			// Begin new procedure scope
+			
+			/**
+			 * S11/S12: Declare function with/without parameters and with specified type
+			 * S17/S18: Declare procedure with/without parameters
+			 */
+			// Record routine declaration in symbol table
+			String routineName = routineDecl.getName();
+			SymbolType routineType = null;
+			SymbolKind routineKind = SymbolKind.PROCEDURE;
+			
+			// If the routine has a return value then it is a function; otherwise a procedure
+			if (routineDecl.getType() != null) {
+				routineType = routineDecl.getType().toSymbolType();
+				routineKind = SymbolKind.FUNCTION;
+			}
+			
+			// Check for existing declaration
+			if (Symbol.search(routineName) != null) {
+				// Detected a re-declaration in same scope
+				errors.add("Re-declaration of identifier " + routineName + " not allowed in same scope.");
+			}
+			else {
+				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
+				if (success) {
+					routineDecl.setSTEntry(Symbol.search(routineName));
+				} else {
+					errors.add("Unable to declare identifier " + routineName);
+				}
+			}
+			
+			/**
+			 * S04: Start function scope
+			 * S08: Start procedure scope
+			 */
+			// Begin new function/procedure scope
 			Symbol.enterScope();
 			
 			// Mark as visited
 			routineDecl.setVisited(true);
 		} else {
+			/**
+			 * S05: End function scope
+			 * S09: End procedure scope
+			 */
 			Symbol.exitScope();
 			
 			// Clear flag
@@ -181,8 +240,25 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting ScalarDecl");
+		
+		String declId = scalarDecl.getName();
+		SymbolType declType = scalarDecl.getType().toSymbolType();
+		
+		// Check if identifier already exists in current scope
+		if (Symbol.search(declId) != null) {
+			// Detected a re-declaration in same scope
+			errors.add("Re-declaration of identifier " + declId + " not allowed in same scope.");
+		}
+		else {
+			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
+			if (success) {
+				scalarDecl.setSTEntry(Symbol.search(declId));
+			} else {
+				errors.add("Unable to declare identifier " + declId);
+			}
+		}
+	
 	}
 
 	@Override
@@ -351,6 +427,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(Program program) {
 		System.out.println("Visiting Program");
 		
+		/*
 		if (!program.isVisited()) {
 			// Begin new scope
 			Symbol.enterScope();
@@ -363,6 +440,7 @@ public class Semantics implements ASTVisitor {
 			// Clear the flag
 			program.setVisited(false);
 		}
+		*/
 	}
 
 	@Override

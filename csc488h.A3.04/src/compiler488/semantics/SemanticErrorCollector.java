@@ -15,6 +15,10 @@ public class SemanticErrorCollector {
 		errors.add(error);
 	}
 	
+	public int getCount() {
+		return errors.size();
+	}
+	
 	public void raiseException() throws SemanticErrorException {
 		throw new SemanticErrorException(errors.toString());
 	}
