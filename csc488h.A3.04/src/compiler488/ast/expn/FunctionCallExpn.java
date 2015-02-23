@@ -43,6 +43,8 @@ public class FunctionCallExpn extends Expn {
 	public void accept(ASTVisitor visitor) {
     	
     	// S40: check that identifier has been declared as a function
+    	// S42/S43: check that the number of parameters declared in the function declaration is the same as the 
+    	// number of arguments passed to the function call expression
 		visitor.visit(this);
 		
 		if (arguments.size() > 0) {
