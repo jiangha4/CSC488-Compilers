@@ -60,7 +60,10 @@ public class SubsExpn extends Expn implements Readable {
 
     @Override
 	public void accept(ASTVisitor visitor) {
+    	
+    	// S38: check that identifier has been declared as an array
 		visitor.visit(this);
+		
 		subscript1.accept(visitor);
 		if (subscript2 != null) {
 			subscript2.accept(visitor);

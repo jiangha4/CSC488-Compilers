@@ -348,8 +348,16 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(SubsExpn subsExpn) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting SubsExpn");
+		
+		// S38: check that identifier has been declared as an array
+		String arrayName = subsExpn.getVariable();
+		if (Symbol.searchGlobal(arrayName) == null) {
+			errors.add("Array '" + arrayName + "' cannot be used before it has been declared.");
+		}
+		else if (Symbol.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
+			errors.add("Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
+		}
 	}
 
 	@Override
