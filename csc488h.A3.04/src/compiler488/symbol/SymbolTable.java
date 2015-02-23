@@ -1,6 +1,8 @@
 package compiler488.symbol;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
@@ -22,12 +24,18 @@ import compiler488.ast.BaseAST;
 public class SymbolTable {
 
 	STScope currentScope;
+	STScope firstScope;
 
 	public class STScope {
 		private STScope parent;
+		private List<STScope> children;
 		private HashMap<String,SymbolTableEntry> symbols;
+		final static String scopeSep = "=======================================================\n";
+		final static String scopeIndent = "    ";
+		
 		public STScope () {
 			this.parent = null;
+			this.children = new ArrayList<STScope>();
 			this.symbols = new HashMap<String,SymbolTableEntry>();
 		}
 		public STScope getParent() {
@@ -35,6 +43,18 @@ public class SymbolTable {
 		}
 		public void setParent(STScope parent) {
 			this.parent = parent;
+		}
+		public List<STScope> getChildren() {
+			return children;
+		}
+		public void addChild(STScope child) {
+			this.children.add(child);
+		}
+		public void setChildren(List<STScope> children) {
+			this.children = children;
+		}
+		public void removeChildren() {
+			this.children.clear();
 		}
 		public HashMap<String, SymbolTableEntry> getSymbols() {
 			return symbols;
@@ -44,11 +64,44 @@ public class SymbolTable {
 		}
 		@Override
 		public String toString() {
+			return toString(0);
+		}
+		
+		public String toString(int depth) {
 			String s = "";
+			
 			// Get all keys in symbols
 			for(Entry<String, SymbolTableEntry> id : this.symbols.entrySet()) {
-				s += id.getKey() + " = " + id.getValue() + "\n";
+				s += displayIndent(depth) + id.getKey() + " = " + id.getValue() + "\n";
 	        }
+			// If no symbols exist in this scope, display 'Empty'
+			if (symbols.entrySet().size() == 0) {
+				s += displayIndent(depth) + "Empty scope" + "\n";
+			}
+			return s;
+		}
+		
+		public String displayIndent(int depth) {
+			String s = "";
+			for(int i = 0; i < depth; i++) {
+				s += scopeIndent;
+			}
+			return s;
+		}
+		
+		/**
+		 * display - recursively display the scope and all of its children (using indentation for child nodes)
+		 * 
+		 * @param depth
+		 * @return
+		 */
+		public String display(int depth) {
+			String s = "";
+			s += scopeSep;
+			s += toString(depth);
+			for(STScope child : children) {
+				s += child.display(depth + 1);
+			}
 			return s;
 		}
 		
@@ -64,6 +117,7 @@ public class SymbolTable {
 
 		// Instantiate
 		this.currentScope = null;
+		this.firstScope = null;
 		
 	}
 
@@ -257,10 +311,17 @@ public class SymbolTable {
 		
 		// Add new scope as child of current scope
 		STScope newScope = new STScope();
-		newScope.setParent(this.currentScope);
-		this.currentScope = newScope;
+		newScope.setParent(currentScope);
+		if (currentScope != null) {
+			currentScope.addChild(newScope);
+		}
 		
-		return this.currentScope.getSymbols();
+		currentScope = newScope;
+		if (firstScope == null) {
+			firstScope = newScope;
+		}
+		
+		return currentScope.getSymbols();
 	}
 
 	/**
@@ -284,17 +345,28 @@ public class SymbolTable {
 	public String toString() {
 		String s = "TRAVERSAL FROM CURRENT SCOPE -> GLOBAL SCOPE\n";
 		
-		STScope scope = this.currentScope;
+		STScope scope = currentScope;
 
 		while (scope != null) {
-			s += "=======================================================\n";
+			s += STScope.scopeSep;
 			s += scope.toString();
 			scope = scope.getParent();
 		}
 		
-		s += "=======================================================\n";
+		s += STScope.scopeSep;
 		s += "END OF LIST\n";
 		
+		return s;
+	}
+	
+	public String fullTraversal() {
+		
+		String s = "FULL TRAVERSAL OF SYMBOL TABLE (ROOT TO LEAVES)\n";
+		if (firstScope != null) {
+			int depth = 0;
+			s += firstScope.display(depth);
+		}
+		s += STScope.scopeSep + "END OF TRAVERSAL\n";
 		return s;
 	}
 
@@ -305,7 +377,7 @@ public class SymbolTable {
 		SymbolTable st = new SymbolTable();
 		
 		System.out.println(st);
-
+		
 		st.enterScope();
 		st.insert("i", SymbolType.INTEGER, SymbolKind.VARIABLE, "1", null);
 		st.insert("b", SymbolType.BOOLEAN, SymbolKind.VARIABLE, "Troooooo", null);
@@ -322,9 +394,6 @@ public class SymbolTable {
 		System.out.println("Value of i: " + st.getValue("i"));
 		System.out.println("Value of b: " + st.getValue("b"));
 		System.out.println();
-		
-		
-		
 		
 		st.delete("i");
 		
@@ -353,7 +422,11 @@ public class SymbolTable {
 		System.out.println();
 		
 		System.out.println("Bai.");
-
+		
+		
+		// Display entire symbol table (all retained scopes and identifiers, from root to leaves)
+		System.out.println("\n\n\n" + st.fullTraversal());
+		
 		return;
 
 	}

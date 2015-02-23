@@ -437,7 +437,7 @@ public class Main {
 	  }
 	  
 	  if (dumpSymbolTable) {
-		  String stDump = visitor.getSymbolTable().toString();
+		  String stDump = visitor.getSymbolTable().fullTraversal();
 		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );  
 	  }
    }
