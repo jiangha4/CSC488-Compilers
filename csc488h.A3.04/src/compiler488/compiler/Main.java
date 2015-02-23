@@ -653,17 +653,15 @@ public class Main {
 	  // Compile the source program
 	  compileOneProgram(   new String(argv[sourceFileIndex]) );
 
-          if( !errorOccurred ) {
-              // Execute the compiled program
-	      // Machine will handle supressExecution AFTER optional 
-              // dump of compiled code.
-        	  if (!supressExecution) {
-        		  executeProgram() ;
-        	  }
-          }
-          else
-             System.err.println("Execution supressed due to errors during compilation");
-
+	  if (!supressExecution) {
+		  if( !errorOccurred ) {
+			  // Execute the compiled program
+			  executeProgram() ;
+		  }
+		  else
+			  System.err.println("Execution supressed due to errors during compilation");
+	  }
+      
       }  // end of loop to process one input file
 
       return ;	      // normal termination
