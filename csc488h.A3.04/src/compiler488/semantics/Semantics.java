@@ -367,13 +367,15 @@ public class Semantics implements ASTVisitor {
 		
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
+		// S40: check that identifier has been declared as a function
 		String identName = identExpn.getIdent();
 		if (Symbol.searchGlobal(identName) == null) {
-			errors.add("Variable '" + identName + "' cannot be used before it has been declared.");
+			errors.add("Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE && 
-				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER) {
-			errors.add("Identifier '" + identName + "' cannot be used as a variable because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
+				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER && 
+				 Symbol.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
+			errors.add("Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
 		}
 		
 	}

@@ -32,9 +32,10 @@ public class IdentExpn extends Expn implements Readable {
 	public void accept(ASTVisitor visitor) {
     	
     	// NB: when an identifier is used as an expression, it could refer to either a parameter 
-    	// (if within function scope) or to a scalar variable
+    	// (if within function scope) or to a scalar variable or to a function call
     	// S37: check that identifier has been declared as a scalar variable
     	// S39: check that identifier has been declared as a parameter
+    	// S40: check that identifier has been declared as a function
 		visitor.visit(this);
 	}
 }
