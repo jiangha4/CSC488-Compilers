@@ -31,7 +31,10 @@ public class IdentExpn extends Expn implements Readable {
     @Override
 	public void accept(ASTVisitor visitor) {
     	
+    	// NB: when an identifier is used as an expression, it could refer to either a parameter 
+    	// (if within function scope) or to a scalar variable
     	// S37: check that identifier has been declared as a scalar variable
+    	// S39: check that identifier has been declared as a parameter
 		visitor.visit(this);
 	}
 }
