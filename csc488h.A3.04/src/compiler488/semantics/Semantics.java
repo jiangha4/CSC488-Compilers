@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.BaseAST.controlStatement;
 import compiler488.ast.decl.ArrayDeclPart;
 import compiler488.ast.decl.Declaration;
 import compiler488.ast.decl.DeclarationPart;
@@ -445,7 +446,11 @@ public class Semantics implements ASTVisitor {
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		// TODO check if exit statement is immediately contained in a loop
+		if ((exitStmt.getControlStatement() != controlStatement.LOOP) ||
+			(exitStmt.getControlStatement() != controlStatement.WHILE))
+		{
+			errors.add(exitStmt.getSourceCoord() + "EXIT not contained in LOOP or WHILE statements");
+		}
 	}
 
 	@Override

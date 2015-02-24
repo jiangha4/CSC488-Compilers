@@ -28,7 +28,7 @@ public abstract class BaseAST implements AST {
 	controlStatement parentControlType = null;
 	
 	public enum controlStatement {
-		IF, THEN, END, ELSE, LOOP, EXIT, WHILE
+		LOOP, WHILE
 	}
 	
     /**
