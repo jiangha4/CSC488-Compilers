@@ -2,6 +2,8 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.Printable;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * Represents a literal text constant.
@@ -31,5 +33,11 @@ public class TextConstExpn extends ConstExpn implements Printable {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		// TODO: should we add Text type?
+		return SymbolType.UNKNOWN;
 	}
 }

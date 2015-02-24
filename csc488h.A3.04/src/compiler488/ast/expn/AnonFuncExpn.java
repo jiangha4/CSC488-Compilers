@@ -4,6 +4,8 @@ import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.stmt.Stmt;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * Represents the parameters and instructions associated with a function or
@@ -50,6 +52,11 @@ public class AnonFuncExpn extends Expn {
 		visitor.visit(this);
 		body.accept(visitor);
 		expn.accept(visitor);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		return this.expn.getExpnType(st);
 	}
 
 }

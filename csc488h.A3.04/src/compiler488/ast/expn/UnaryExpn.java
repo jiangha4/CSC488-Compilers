@@ -1,6 +1,8 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.PrettyPrinter;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * The common features of unary expressions.
@@ -45,4 +47,9 @@ public abstract class UnaryExpn extends Expn {
         p.print(")");
 
     }
+    
+    @Override
+	public SymbolType getExpnType(SymbolTable st) {
+		return this.operand.getExpnType(st);
+	}
 }

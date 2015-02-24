@@ -3,6 +3,9 @@ package compiler488.ast.expn;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Readable;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTableEntry;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * References to an array element variable
@@ -67,6 +70,16 @@ public class SubsExpn extends Expn implements Readable {
 		subscript1.accept(visitor);
 		if (subscript2 != null) {
 			subscript2.accept(visitor);
+		}
+	}
+
+    @Override
+	public SymbolType getExpnType(SymbolTable st) {
+		SymbolTableEntry ste = st.searchGlobal(this.variable);
+		if (ste != null) {
+			return ste.getType();
+		} else {
+			return SymbolType.UNKNOWN;
 		}
 	}
 }

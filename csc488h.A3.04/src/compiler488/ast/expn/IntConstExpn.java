@@ -1,6 +1,8 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 
 /**
@@ -30,5 +32,10 @@ public class IntConstExpn extends ConstExpn {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		return SymbolType.INTEGER;
 	}
 }

@@ -2,6 +2,8 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.Printable;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * Represents the special literal constant associated with writing a new-line
@@ -20,5 +22,11 @@ public class SkipConstExpn extends ConstExpn implements Printable {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		// TODO: check: will this mess anything up?
+		return SymbolType.UNKNOWN;
 	}
 }

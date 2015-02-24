@@ -2,6 +2,9 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.Readable;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
+import compiler488.symbol.SymbolTableEntry;
 
 /**
  *  References to a scalar variable or function call without parameters.
@@ -37,5 +40,15 @@ public class IdentExpn extends Expn implements Readable {
     	// S39: check that identifier has been declared as a parameter
     	// S40: check that identifier has been declared as a function
 		visitor.visit(this);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		SymbolTableEntry ste = st.searchGlobal(this.ident);
+		if (ste != null) {
+			return ste.getType();
+		} else {
+			return SymbolType.UNKNOWN;
+		}
 	}
 }

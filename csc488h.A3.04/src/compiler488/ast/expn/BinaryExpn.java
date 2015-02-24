@@ -1,6 +1,8 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.PrettyPrinter;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * The common features of binary expressions.
@@ -47,4 +49,13 @@ public abstract class BinaryExpn extends Expn {
         right.prettyPrint(p);
         p.print(")");
     }
+    
+    @Override
+	public SymbolType getExpnType(SymbolTable st) {
+		if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+			return this.left.getExpnType(st);
+		} else {
+			return SymbolType.UNKNOWN;
+		}
+	}
 }
