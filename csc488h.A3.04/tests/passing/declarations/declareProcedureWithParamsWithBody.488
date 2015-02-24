@@ -1,0 +1,6 @@
+begin
+    procedure f(integer x, integer y) begin
+        put "arg1 = ", x, skip
+        put "arg2 = ", y, skip
+    end
+end
