@@ -144,11 +144,8 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
     }
     
     public void setParentAttribute(attribute parentAttribute){
-    	System.out.println("Hi");
-    	System.out.println(this.size());
     	for (int i = 0; i < this.size(); i++)
     	{
-    		System.out.println("Loop");
     		((BaseAST) this.get(i)).setParentAttribute(parentAttribute);
     	}
     }

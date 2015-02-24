@@ -113,11 +113,8 @@ public class RoutineDecl extends Declaration {
 			parameters.accept(visitor);
 		}
 		if (body != null) {
-			System.out.println("I get here!");
 			body.setParentNode(this);
-			System.out.println("Set Parent Node");
 			body.setParentAttribute(attribute.METHOD);
-			System.out.println("Set parent attribute");
 			body.accept(visitor);
 		}
 	}

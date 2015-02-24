@@ -38,7 +38,6 @@ public abstract class BaseAST implements AST {
 	}
 
 	public void setParentAttribute(attribute parentAttribute) {
-		System.out.println("Yo");
 		this.parentAttribute = parentAttribute;
 		System.out.println(this.parentAttribute);
 	}
