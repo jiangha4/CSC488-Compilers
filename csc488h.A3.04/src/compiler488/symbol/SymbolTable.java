@@ -154,7 +154,7 @@ public class SymbolTable {
 
 	// Allowed values for 'type'
 	public enum SymbolType {
-		INTEGER, BOOLEAN
+		INTEGER, BOOLEAN, UNKNOWN
 	}
 	
 	// Allowed values for 'kind'
