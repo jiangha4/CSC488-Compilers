@@ -1,4 +1,0 @@
-begin
-    integer a
-    if true then a <= 4 else a <= 5 end
-end

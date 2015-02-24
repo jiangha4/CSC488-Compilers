@@ -1,5 +1,0 @@
-begin
-	boolean function one_arg_bool(boolean a) begin
-		return (a & false)
-	end
-end

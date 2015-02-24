@@ -169,13 +169,13 @@ start with program;
  */
 
 program ::= scope:s
-			{: RESULT = new Program(s); :}
+			{: RESULT = new Program(s, new SourceCoord(sleft, sright)); :}
 	;
 
-scope ::= BEGIN declarationsAndStatements:d END
-			{: RESULT = new Scope(d); :}
-	|	BEGIN END
-			{: RESULT = new Scope(); :}
+scope ::= BEGIN:b declarationsAndStatements:d END
+			{: RESULT = new Scope(d, new SourceCoord(bleft, bright)); :}
+	|	BEGIN:b END
+			{: RESULT = new Scope(new SourceCoord(bleft, bright)); :}
 	;
 
 //  sequence of arbitrarily intermixed declarations and statements
@@ -190,27 +190,27 @@ declarationsAndStatements ::= statement:s
 	;
 
 statement ::= variable:v LESS EQUAL expression:e
-			{: RESULT = new AssignStmt(v, e); :}
-	|	IF expression:e THEN declarationsAndStatements:d END
-			{: RESULT = new IfStmt(e, d); :}
-	|	IF expression:e THEN declarationsAndStatements:d1 ELSE declarationsAndStatements:d2 END
-			{: RESULT = new IfStmt(e, d1, d2); :}
-	|	WHILE expression:e DO declarationsAndStatements:d END
-			{: RESULT = new WhileDoStmt(e, d); :}
-	|	LOOP declarationsAndStatements:d END
-			{: RESULT = new LoopStmt(d); :}
-	|	EXIT
-			{: RESULT = new ExitStmt(); :}
-	|	EXIT WHEN expression:e
-			{: RESULT = new ExitStmt(e); :}
-	|	RETURN
-			{: RESULT = new ReturnStmt(); :}
-	|	RETURN L_PAREN expression:e R_PAREN
-			{: RESULT = new ReturnStmt(e); :}
-	|	PUT outputs:o
-			{: RESULT = new PutStmt(o); :}
-	|	GET inputs:i
-			{: RESULT = new GetStmt(i); :}
+			{: RESULT = new AssignStmt(v, e, new SourceCoord(vleft, vright)); :}
+	|	IF:i expression:e THEN declarationsAndStatements:d END
+			{: RESULT = new IfStmt(e, d, new SourceCoord(ileft, iright)); :}
+	|	IF:i expression:e THEN declarationsAndStatements:d1 ELSE declarationsAndStatements:d2 END
+			{: RESULT = new IfStmt(e, d1, d2, new SourceCoord(ileft, iright)); :}
+	|	WHILE:w expression:e DO declarationsAndStatements:d END
+			{: RESULT = new WhileDoStmt(e, d, new SourceCoord(wleft, wright)); :}
+	|	LOOP:l declarationsAndStatements:d END
+			{: RESULT = new LoopStmt(d, new SourceCoord(lleft, lright)); :}
+	|	EXIT:e
+			{: RESULT = new ExitStmt(new SourceCoord(eleft, eright)); :}
+	|	EXIT:b WHEN expression:e
+			{: RESULT = new ExitStmt(e, new SourceCoord(bleft, bright)); :}
+	|	RETURN:r
+			{: RESULT = new ReturnStmt(new SourceCoord(rleft, rright)); :}
+	|	RETURN:r L_PAREN expression:e R_PAREN
+			{: RESULT = new ReturnStmt(e, new SourceCoord(rleft, rright)); :}
+	|	PUT:p outputs:o
+			{: RESULT = new PutStmt(o, new SourceCoord(pleft, pright)); :}
+	|	GET:g inputs:i
+			{: RESULT = new GetStmt(i, new SourceCoord(gleft, gright)); :}
 	|	procedureCall:c
 			{: RESULT = c; :}
 	|	scope:s
@@ -218,21 +218,21 @@ statement ::= variable:v LESS EQUAL expression:e
 	;
 
 procedureCall ::= IDENT:i
-			{: RESULT = new ProcedureCallStmt(i); :}
+			{: RESULT = new ProcedureCallStmt(i, new SourceCoord(ileft, iright)); :}
 	|	IDENT:i L_PAREN arguments:a R_PAREN
-			{: RESULT = new ProcedureCallStmt(i, a); :}
+			{: RESULT = new ProcedureCallStmt(i, a, new SourceCoord(ileft, iright)); :}
 	;
 
 declaration ::= type:t variablenames:v
-			{: RESULT = new MultiDeclarations(t, v); :}
+			{: RESULT = new MultiDeclarations(t, v, new SourceCoord(tleft, tright)); :}
 	|	type:t FUNCTION IDENT:i scope:s
-			{: RESULT = new RoutineDecl(i, t, s); :}
+			{: RESULT = new RoutineDecl(i, t, s, new SourceCoord(tleft, tright)); :}
 	|	type:t FUNCTION IDENT:i L_PAREN parameters:p R_PAREN scope:s
-			{: RESULT = new RoutineDecl(i, t, p, s); :}
-	|	PROCEDURE IDENT:i scope:s
-			{: RESULT = new RoutineDecl(i, s); :}
-	|	PROCEDURE IDENT:i L_PAREN parameters:p R_PAREN scope:s
-			{: RESULT = new RoutineDecl(i, p, s); :}
+			{: RESULT = new RoutineDecl(i, t, p, s, new SourceCoord(tleft, tright)); :}
+	|	PROCEDURE:p IDENT:i scope:s
+			{: RESULT = new RoutineDecl(i, s, new SourceCoord(pleft, pright)); :}
+	|	PROCEDURE:b IDENT:i L_PAREN parameters:p R_PAREN scope:s
+			{: RESULT = new RoutineDecl(i, p, s, new SourceCoord(bleft, bright)); :}
 	;
 
 variablenames ::= variablename:v
@@ -242,11 +242,11 @@ variablenames ::= variablename:v
 	;
 
 variablename ::= IDENT:i
-			{: RESULT = new ScalarDeclPart(i); :}
+			{: RESULT = new ScalarDeclPart(i, new SourceCoord(ileft, iright)); :}
 	|	IDENT:i L_SQUARE bound:b R_SQUARE
-			{: RESULT = new ArrayDeclPart(i, b); :}
+			{: RESULT = new ArrayDeclPart(i, b, new SourceCoord(ileft, iright)); :}
 	|	IDENT:i L_SQUARE bound:b1 COMMA bound:b2  R_SQUARE
-			{: RESULT = new ArrayDeclPart(i, b1, b2); :}
+			{: RESULT = new ArrayDeclPart(i, b1, b2, new SourceCoord(ileft, iright)); :}
 	;
 
 bound ::= INTCONST:i
@@ -261,10 +261,10 @@ generalBound ::= INTCONST:i
 			{: RESULT = -i; :}
 	;
 
-type ::= INTEGER
-			{: RESULT = new IntegerType(); :}
-	|	BOOLEAN
-			{: RESULT = new BooleanType(); :}
+type ::= INTEGER:i
+			{: RESULT = new IntegerType(new SourceCoord(ileft, iright)); :}
+	|	BOOLEAN:b
+			{: RESULT = new BooleanType(new SourceCoord(bleft, bright)); :}
 	;
 
 outputs	::= output:o
@@ -276,9 +276,9 @@ outputs	::= output:o
 output ::= expression:e
 			{: RESULT = e; :}
 	|	TEXTCONST:t
-			{: RESULT = new TextConstExpn(t); :}
-	|	SKIP
-			{: RESULT = new SkipConstExpn(); :}
+			{: RESULT = new TextConstExpn(t, new SourceCoord(tleft, tright)); :}
+	|	SKIP:s
+			{: RESULT = new SkipConstExpn(new SourceCoord(sleft, sright)); :}
 	;
 
 inputs ::= variable:v
@@ -300,63 +300,63 @@ parameters ::= parameter:p
 	;
 
 parameter ::= type:t IDENT:i
-			{: RESULT = new ScalarDecl(i, t); :}
+			{: RESULT = new ScalarDecl(i, t, new SourceCoord(tleft, tright)); :}
 	;
 
 expression ::= conjunction:c
 			{: RESULT = c; :}
 	|	expression:e OR conjunction:c
-			{: RESULT = new BoolExpn(BoolExpn.OP_OR, e, c); :}
+			{: RESULT = new BoolExpn(BoolExpn.OP_OR, e, c, new SourceCoord(eleft, eright)); :}
 	;
 
 conjunction	::=	negation:n
 			{: RESULT = n; :}
 	|	conjunction:c AND negation:n
-			{: RESULT = new BoolExpn(BoolExpn.OP_AND, c, n); :}
+			{: RESULT = new BoolExpn(BoolExpn.OP_AND, c, n, new SourceCoord(cleft, cright)); :}
 	;
 
 negation ::= compareExpn:c
 			{: RESULT = c; :}
 	|	NOT negation:n
-			{: RESULT = new NotExpn(n); :}
+			{: RESULT = new NotExpn(n, new SourceCoord(nleft, nright)); :}
 	;
 
 compareExpn ::= arithExpn:a
 			{: RESULT = a; :}
 	|	arithExpn:a1 EQUAL arithExpn:a2
-			{: RESULT = new EqualsExpn(EqualsExpn.OP_EQUAL, a1, a2); :}
+			{: RESULT = new EqualsExpn(EqualsExpn.OP_EQUAL, a1, a2, new SourceCoord(a1left, a1right)); :}
 	|	arithExpn:a1 NOT EQUAL arithExpn:a2
-			{: RESULT = new EqualsExpn(EqualsExpn.OP_NOT_EQUAL, a1, a2); :}
+			{: RESULT = new EqualsExpn(EqualsExpn.OP_NOT_EQUAL, a1, a2, new SourceCoord(a1left, a1right)); :}
 	|	arithExpn:a1 LESS arithExpn:a2
-			{: RESULT = new CompareExpn(CompareExpn.OP_LESS, a1, a2); :}
+			{: RESULT = new CompareExpn(CompareExpn.OP_LESS, a1, a2, new SourceCoord(a1left, a1right)); :}
 	|	arithExpn:a1 LESS EQUAL arithExpn:a2
-			{: RESULT = new CompareExpn(CompareExpn.OP_LESS_EQUAL, a1, a2); :}
+			{: RESULT = new CompareExpn(CompareExpn.OP_LESS_EQUAL, a1, a2, new SourceCoord(a1left, a1right)); :}
 	|	arithExpn:a1 GREATER arithExpn:a2
-			{: RESULT = new CompareExpn(CompareExpn.OP_GREATER, a1, a2); :}
+			{: RESULT = new CompareExpn(CompareExpn.OP_GREATER, a1, a2, new SourceCoord(a1left, a1right)); :}
 	|	arithExpn:a1 GREATER EQUAL arithExpn:a2
-			{: RESULT = new CompareExpn(CompareExpn.OP_GREATER_EQUAL, a1, a2); :}
+			{: RESULT = new CompareExpn(CompareExpn.OP_GREATER_EQUAL, a1, a2, new SourceCoord(a1left, a1right)); :}
 	;
 
 arithExpn ::= term:t
 			{: RESULT = t; :}
 	|	arithExpn:a PLUS term:t
-			{: RESULT = new ArithExpn(ArithExpn.OP_PLUS, a, t); :}
+			{: RESULT = new ArithExpn(ArithExpn.OP_PLUS, a, t, new SourceCoord(aleft, aright)); :}
 	|	arithExpn:a MINUS term:t
-			{: RESULT = new ArithExpn(ArithExpn.OP_MINUS, a, t); :}
+			{: RESULT = new ArithExpn(ArithExpn.OP_MINUS, a, t, new SourceCoord(aleft, aright)); :}
 	;
 
 term ::= factor:f
 			{: RESULT = f; :}
 	|	term:t TIMES factor:f
-			{: RESULT = new ArithExpn(ArithExpn.OP_TIMES, t, f); :}
+			{: RESULT = new ArithExpn(ArithExpn.OP_TIMES, t, f, new SourceCoord(tleft, tright)); :}
 	|	term:t DIVIDE factor:f
-			{: RESULT = new ArithExpn(ArithExpn.OP_DIVIDE, t, f); :}
+			{: RESULT = new ArithExpn(ArithExpn.OP_DIVIDE, t, f, new SourceCoord(tleft, tright)); :}
 	;
 
 factor ::= primary:p
 			{: RESULT = p; :}
 	|	MINUS factor:f
-			{: RESULT = new UnaryMinusExpn(f); :}
+			{: RESULT = new UnaryMinusExpn(f, new SourceCoord(fleft, fright)); :}
 	;
 
 primary ::= constant:c
@@ -364,25 +364,25 @@ primary ::= constant:c
 	|	variable:v
 			{: RESULT = v; :}
 	|	IDENT:i L_PAREN arguments:a R_PAREN
-			{: RESULT = new FunctionCallExpn(i, a); :}
+			{: RESULT = new FunctionCallExpn(i, a, new SourceCoord(ileft, iright)); :}
 	| 	L_PAREN  expression:e  R_PAREN
 			{: RESULT = e; :}
-	|	L_CURLEY declarationsAndStatements:d YIELDS expression:e R_CURLEY
-			{: RESULT = new AnonFuncExpn(d, e); :}
+	|	L_CURLEY:l declarationsAndStatements:d YIELDS expression:e R_CURLEY
+			{: RESULT = new AnonFuncExpn(d, e, new SourceCoord(lleft, lright)); :}
 	;
 
 constant ::= INTCONST:i
-			{: RESULT = new IntConstExpn(i); :}
-	|	TRUE
-			{: RESULT = new BoolConstExpn(true); :}
-	|	FALSE
-			{: RESULT = new BoolConstExpn(false); :}
+			{: RESULT = new IntConstExpn(i, new SourceCoord(ileft, iright)); :}
+	|	TRUE:t
+			{: RESULT = new BoolConstExpn(true, new SourceCoord(tleft, tright)); :}
+	|	FALSE:f
+			{: RESULT = new BoolConstExpn(false, new SourceCoord(fleft, fright)); :}
 	;
 
 variable ::= IDENT:i
-			{: RESULT = new IdentExpn(i); :}
+			{: RESULT = new IdentExpn(i, new SourceCoord(ileft, iright)); :}
 	|	IDENT:i L_SQUARE expression:e R_SQUARE
-			{: RESULT = new SubsExpn(i, e); :}
+			{: RESULT = new SubsExpn(i, e, new SourceCoord(ileft, iright)); :}
 	|	IDENT:i L_SQUARE expression:e1 COMMA expression:e2 R_SQUARE
-			{: RESULT = new SubsExpn(i, e1, e2); :}
+			{: RESULT = new SubsExpn(i, e1, e2, new SourceCoord(ileft, iright)); :}
 	;

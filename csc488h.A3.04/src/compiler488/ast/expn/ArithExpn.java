@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 
 
 /**
@@ -13,8 +14,8 @@ public class ArithExpn extends BinaryExpn {
     public final static String OP_TIMES 	= "*";
     public final static String OP_DIVIDE 	= "/";
 
-    public ArithExpn(String opSymbol, Expn left, Expn right) {
-        super(opSymbol, left, right);
+    public ArithExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
+        super(opSymbol, left, right, sourceCoord);
 
         assert ((opSymbol == OP_PLUS) ||
                 (opSymbol == OP_MINUS) ||

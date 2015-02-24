@@ -1,8 +1,0 @@
-begin
-    procedure outer(integer a, integer b) begin
-        procedure inner(integer c, integer d) begin
-            return (c)
-        end
-        return (a)
-    end
-end

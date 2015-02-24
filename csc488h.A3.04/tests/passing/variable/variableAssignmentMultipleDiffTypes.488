@@ -1,6 +1,0 @@
-begin
-    a <= 1
-	b <= -10
-    c <= true
-	d <= false
-end

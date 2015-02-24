@@ -1,5 +1,0 @@
-begin
-	integer function mult_args_int(integer a, integer b, integer c) begin
-		return (a + b - c)
-	end
-end

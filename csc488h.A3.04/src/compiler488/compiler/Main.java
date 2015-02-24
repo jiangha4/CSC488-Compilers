@@ -664,7 +664,8 @@ public class Main {
       
       }  // end of loop to process one input file
 
-      return ;	      // normal termination
+      //return ;	      // normal termination
+      System.exit(0);
     }	// end main function
 
 }  // end Main class

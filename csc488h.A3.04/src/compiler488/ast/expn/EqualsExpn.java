@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 
 
 /**
@@ -11,8 +12,8 @@ public class EqualsExpn extends BinaryExpn {
     public final static String OP_EQUAL 	= "=";
     public final static String OP_NOT_EQUAL	= "!=";
 
-    public EqualsExpn(String opSymbol, Expn left, Expn right) {
-        super(opSymbol, left, right);
+    public EqualsExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
+        super(opSymbol, left, right, sourceCoord);
 
         assert ((opSymbol == OP_EQUAL) ||
                 (opSymbol == OP_NOT_EQUAL));

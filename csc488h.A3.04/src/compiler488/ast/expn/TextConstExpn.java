@@ -4,6 +4,7 @@ import compiler488.ast.ASTVisitor;
 import compiler488.ast.Printable;
 import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTable.SymbolType;
+import compiler488.ast.SourceCoord;
 
 /**
  * Represents a literal text constant.
@@ -12,8 +13,8 @@ public class TextConstExpn extends ConstExpn implements Printable {
     /** The value of this literal. */
     private String value;
 
-    public TextConstExpn(String value) {
-        super();
+    public TextConstExpn(String value, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.value = value;
     }

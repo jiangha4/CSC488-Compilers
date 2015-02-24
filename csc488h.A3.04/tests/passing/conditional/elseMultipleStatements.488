@@ -1,8 +1,0 @@
-begin
-    if true then
-        a <= 1
-    else
-        b <= 2
-        c <= 3
-    end
-end

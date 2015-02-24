@@ -1,4 +1,0 @@
-begin
-    b(integer a, boolean b) begin
-    end
-end

@@ -6,6 +6,7 @@ import compiler488.ast.Readable;
 import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTableEntry;
 import compiler488.symbol.SymbolTable.SymbolType;
+import compiler488.ast.SourceCoord;
 
 /**
  * References to an array element variable
@@ -20,16 +21,16 @@ public class SubsExpn extends Expn implements Readable {
     /** Second subscript (if any.) */
     private Expn subscript2 = null;
 
-    public SubsExpn(String variable, Expn subscript1, Expn subscript2) {
-        super();
+    public SubsExpn(String variable, Expn subscript1, Expn subscript2, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.variable = variable;
         this.subscript1 = subscript1;
         this.subscript2 = subscript2;
     }
 
-    public SubsExpn(String variable, Expn subscript1) {
-        this(variable, subscript1, null);
+    public SubsExpn(String variable, Expn subscript1, SourceCoord sourceCoord) {
+        this(variable, subscript1, null, sourceCoord);
     }
 
     public String getVariable() {

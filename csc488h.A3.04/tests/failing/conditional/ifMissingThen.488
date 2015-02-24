@@ -1,5 +1,0 @@
-begin
-    if true
-        a <= 1
-    end
-end

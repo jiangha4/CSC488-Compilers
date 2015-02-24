@@ -3,6 +3,7 @@ package compiler488.ast.expn;
 import compiler488.ast.PrettyPrinter;
 import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTable.SymbolType;
+import compiler488.ast.SourceCoord;
 
 /**
  * The common features of unary expressions.
@@ -22,8 +23,8 @@ public abstract class UnaryExpn extends Expn {
      */
     protected String opSymbol;
 
-    public UnaryExpn(String opSymbol, Expn operand) {
-        super();
+    public UnaryExpn(String opSymbol, Expn operand, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.opSymbol = opSymbol;
         this.operand = operand;

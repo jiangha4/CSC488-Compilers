@@ -1,9 +1,0 @@
-begin
-	integer retval
-	integer function mult_args_int(integer a, integer b, integer c) begin
-		return (a + b - c)
-	end
-
-	retval <= mult_args_int(3, 2, 1)
-
-end

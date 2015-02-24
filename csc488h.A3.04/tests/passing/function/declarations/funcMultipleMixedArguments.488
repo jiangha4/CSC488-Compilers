@@ -1,5 +1,0 @@
-begin
-	boolean function mult_args_mixed(integer a, integer b, boolean c) begin
-		return (a + b | true)
-	end
-end

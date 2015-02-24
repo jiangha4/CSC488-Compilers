@@ -3,6 +3,7 @@ package compiler488.ast.stmt;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
 
 /**
@@ -19,15 +20,15 @@ public class ProcedureCallStmt extends Stmt {
      */
     private ASTList<Expn> arguments;
 
-    public ProcedureCallStmt(String name, ASTList<Expn> arguments) {
-        super();
+    public ProcedureCallStmt(String name, ASTList<Expn> arguments, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.name = name;
         this.arguments = arguments;
     }
 
-    public ProcedureCallStmt(String name) {
-        this(name, new ASTList<Expn>());
+    public ProcedureCallStmt(String name, SourceCoord sourceCoord) {
+        this(name, new ASTList<Expn>(), sourceCoord);
     }
 
     public String getName() {

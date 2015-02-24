@@ -1,4 +1,0 @@
-begin
-    a <= ! b = c & b = d | b = e
-	a <= ! b != c | b > d & b < e
-end

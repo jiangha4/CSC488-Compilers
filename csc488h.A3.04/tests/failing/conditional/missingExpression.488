@@ -1,5 +1,0 @@
-begin
-    if then
-        a <= 1
-    end
-end

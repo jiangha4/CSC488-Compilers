@@ -12,6 +12,10 @@ import compiler488.symbol.SymbolTableEntry;
  */
 public abstract class BaseAST implements AST {
 	
+	/* Every AST node contains a source coordinate (in the source program) 
+	 * This is used for error reporting */
+	SourceCoord sourceCoord = null;
+	
 	/* Every AST node contains a link to a SymbolTable entry */
 	SymbolTableEntry stEntry = null;
 	
@@ -24,17 +28,39 @@ public abstract class BaseAST implements AST {
 	controlStatement parentControlType = null;
 	
 	public enum controlStatement {
-		IF, THEN, END, ELSE, LOOP, EXIT, WHILE
+		LOOP, WHILE
 	}
+	
+	/*
+	 * The parent of the current node
+	 */
+	BaseAST parentNode = null;
 	
     /**
      * Default constructor.
      *
      * <p>Add additional information to your AST tree nodes here.</p>
      */
-	public BaseAST() {
+	public BaseAST(SourceCoord sourceCoord) {
+		this.sourceCoord = sourceCoord;
 	}
-
+	
+	/**
+	 * 
+	 * @return SourceCoord : the source coordinates (line and col) into the source program
+	 */
+	public SourceCoord getSourceCoord() {
+		return sourceCoord;
+	}
+	
+	/**
+	 * 
+	 * @param sourceCoord : the source coordinates (line and col) in the source program
+	 */
+	public void setSourceCoord(SourceCoord sourceCoord) {
+		this.sourceCoord = sourceCoord;
+	}
+	
 	/**
 	 * getSTEntry - get the symbol table entry that this AST node links to
 	 * 
@@ -83,6 +109,22 @@ public abstract class BaseAST implements AST {
 	 */
 	public controlStatement getControlStatement(){
 		return this.parentControlType;
+	}
+	
+	/**
+	 * Sets the parent node for the current node
+	 * @param node : The parent node
+	 */
+	public void setParentNode(BaseAST node){
+		this.parentNode = node;
+	}
+	
+	/**
+	 * 
+	 * @return : The parent of the current node
+	 */
+	public BaseAST getParentNode(){
+		return this.parentNode;
 	}
 	
     /**

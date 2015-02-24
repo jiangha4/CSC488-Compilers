@@ -3,13 +3,14 @@ package compiler488.ast.stmt;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 
 /**
  * Represents a loop in which the exit condition is evaluated before each pass.
  */
 public class LoopStmt extends LoopingStmt {
-    public LoopStmt(ASTList<Stmt> body) {
-        super(body);
+    public LoopStmt(ASTList<Stmt> body, SourceCoord sourceCoord) {
+        super(body, sourceCoord);
     }
 
     /**

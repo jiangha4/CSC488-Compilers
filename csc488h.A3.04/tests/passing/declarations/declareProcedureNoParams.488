@@ -1,0 +1,4 @@
+begin
+    procedure f begin
+    end
+end

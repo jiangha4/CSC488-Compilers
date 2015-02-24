@@ -1,5 +1,0 @@
-begin
-    a <= ! true
-	b <= true & false
-	c <= true | false
-end

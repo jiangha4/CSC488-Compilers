@@ -2,13 +2,14 @@ package compiler488.ast.stmt;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 
 /**
  * Placeholder for the scope that is the entire program
  */
 public class Program extends Scope {
-    public Program(Scope scope) {
-        super(scope.getBody());
+    public Program(Scope scope, SourceCoord sourceCoord) {
+        super(scope.getBody(), sourceCoord);
     }
 
     @Override
