@@ -516,6 +516,9 @@ public class Semantics implements ASTVisitor {
 	public void visit(ReturnStmt returnStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ReturnStmt");
+		
+		// S51-52 Must check that return statements are in procedure 
+		// or function scope 
 	}
 
 	@Override

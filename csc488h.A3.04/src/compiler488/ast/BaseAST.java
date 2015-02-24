@@ -31,6 +31,11 @@ public abstract class BaseAST implements AST {
 		LOOP, WHILE
 	}
 	
+	/*
+	 * The parent of the current node
+	 */
+	BaseAST parentNode = null;
+	
     /**
      * Default constructor.
      *
@@ -104,6 +109,22 @@ public abstract class BaseAST implements AST {
 	 */
 	public controlStatement getControlStatement(){
 		return this.parentControlType;
+	}
+	
+	/**
+	 * Sets the parent node for the current node
+	 * @param node : The parent node
+	 */
+	public void setParentNode(BaseAST node){
+		this.parentNode = node;
+	}
+	
+	/**
+	 * 
+	 * @return : The parent of the current node
+	 */
+	public BaseAST getParentNode(){
+		return this.parentNode;
 	}
 	
     /**

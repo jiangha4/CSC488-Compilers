@@ -142,6 +142,17 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
     	}
     }
     
+    /**
+     * Sets the parent node 
+     * @param node
+     */
+    public void setParentNode(BaseAST node)
+    {
+    	for (int i = 0; i < this.size(); i++){
+    		((BaseAST) this.get(i)).setParentNode(node);
+    	}
+    }
+    
 	@Override
 	public void accept(ASTVisitor visitor) {
 		for (ASTVisitable node : this) {
