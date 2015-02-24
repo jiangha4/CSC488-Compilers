@@ -1,3 +1,0 @@
-begin
-    a <= true | false | true
-end

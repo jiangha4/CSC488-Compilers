@@ -1,3 +1,0 @@
-begin
-    procedure a(integer a, boolean b)
-end

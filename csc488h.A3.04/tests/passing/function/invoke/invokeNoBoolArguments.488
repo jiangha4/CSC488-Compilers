@@ -1,9 +1,0 @@
-begin
-	boolean retval
-	boolean function no_args_bool begin
-		return (true)
-	end
-
-	retval <= no_args_bool
-	
-end

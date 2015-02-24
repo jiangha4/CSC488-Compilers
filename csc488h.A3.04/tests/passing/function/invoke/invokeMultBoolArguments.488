@@ -1,9 +1,0 @@
-begin
-	boolean retval
-	boolean function mult_args_int(boolean a, boolean b, boolean c) begin
-		return (a | b | c)
-	end
-
-	retval <= mult_args_int(true, true, false)
-
-end

@@ -1,4 +1,0 @@
-begin
-    procedure a(integer a) begin
-    end
-end

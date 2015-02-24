@@ -1,3 +1,0 @@
-begin
-    integer a[-4..-2]
-end

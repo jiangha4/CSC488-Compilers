@@ -1,5 +1,0 @@
-begin
-    while do
-        a <= 1
-    end
-end

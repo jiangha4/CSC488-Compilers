@@ -1,9 +1,0 @@
-begin
-	integer retval
-	integer function no_args_int begin
-		return (5)
-	end
-
-	retval <= no_args_int
-	
-end

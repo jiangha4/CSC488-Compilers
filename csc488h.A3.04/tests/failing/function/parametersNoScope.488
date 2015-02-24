@@ -1,3 +1,0 @@
-begin
-    integer function a(integer b, boolean c)
-end
