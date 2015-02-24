@@ -19,7 +19,6 @@ public class WhileDoStmt extends LoopingStmt {
         p.print("while ");
         expn.prettyPrint(p);
         p.println(" do");
-
         body.prettyPrintBlock(p);
         p.print("end");
     }

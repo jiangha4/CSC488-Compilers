@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.BaseAST.attribute;
 import compiler488.ast.BaseAST.controlStatement;
+import compiler488.ast.PrettyPrinter;
 import compiler488.ast.decl.ArrayDeclPart;
 import compiler488.ast.decl.Declaration;
 import compiler488.ast.decl.DeclarationPart;
@@ -242,6 +245,9 @@ public class Semantics implements ASTVisitor {
 			// S53 If it is a function, we must also check to make sure that we have 
 			// a return function in the body
 		
+			// Not sure how to iterate over this to check for return stmt
+			Scope routineBody = routineDecl.getBody();
+			
 		}
 		
 		// Check for existing declaration
@@ -451,7 +457,8 @@ public class Semantics implements ASTVisitor {
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		if ((exitStmt.getControlStatement() != controlStatement.LOOP) ||
+		System.out.println(exitStmt.getControlStatement());
+		if ((exitStmt.getControlStatement() != controlStatement.LOOP) &&
 			(exitStmt.getControlStatement() != controlStatement.WHILE))
 		{
 			errors.add(exitStmt.getSourceCoord() + "EXIT not contained in LOOP or WHILE statements");
@@ -524,10 +531,12 @@ public class Semantics implements ASTVisitor {
 		
 		// S51-52 Must check that return statements are in procedure 
 		// or function scope
-		if (!(returnStmt.getParentNode() instanceof RoutineDecl))
+		/*if (returnStmt.getParentAttribute() != attribute.METHOD)
 		{
-			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
-		}
+			System.out.println(returnStmt.getParentNode());
+			System.out.println(returnStmt.getParentAttribute());
+			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
+		}*/
 	}
 
 	@Override

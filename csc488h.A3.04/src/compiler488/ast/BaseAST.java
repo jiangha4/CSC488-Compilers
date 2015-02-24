@@ -31,6 +31,22 @@ public abstract class BaseAST implements AST {
 		LOOP, WHILE
 	}
 	
+	attribute parentAttribute = null;
+	
+	public attribute getParentAttribute() {
+		return this.parentAttribute;
+	}
+
+	public void setParentAttribute(attribute parentAttribute) {
+		System.out.println("Yo");
+		this.parentAttribute = parentAttribute;
+		System.out.println(this.parentAttribute);
+	}
+
+	public enum attribute {
+		METHOD
+	}
+	
 	/*
 	 * The parent of the current node
 	 */
