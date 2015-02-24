@@ -238,6 +238,10 @@ public class Semantics implements ASTVisitor {
 		if (routineDecl.getType() != null) {
 			routineType = routineDecl.getType().toSymbolType();
 			routineKind = SymbolKind.FUNCTION;
+			
+			// S53 If it is a function, we must also check to make sure that we have 
+			// a return function in the body
+		
 		}
 		
 		// Check for existing declaration
@@ -253,6 +257,7 @@ public class Semantics implements ASTVisitor {
 				errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
 			}
 		}
+		
 	}
 
 	@Override
@@ -518,7 +523,11 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ReturnStmt");
 		
 		// S51-52 Must check that return statements are in procedure 
-		// or function scope 
+		// or function scope
+		if (!(returnStmt.getParentNode() instanceof RoutineDecl))
+		{
+			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
+		}
 	}
 
 	@Override
