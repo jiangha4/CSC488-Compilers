@@ -498,7 +498,10 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ExitStmt");
 		
-		s30check(exitStmt.getExpn());
+		// Only do S30 check if "exit when"
+		if (exitStmt.getExpn() != null) {
+			s30check(exitStmt.getExpn());
+		}
 		
 		/**S50 Check that exit statement is directly inside a loop
 		*  Checks if symbols "loop" or "while" have been declared in the scope
