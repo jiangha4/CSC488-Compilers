@@ -2,6 +2,7 @@ package compiler488.ast;
 
 import java.util.LinkedList;
 
+import compiler488.ast.BaseAST.attribute;
 import compiler488.ast.BaseAST.controlStatement;
 
 /**
@@ -139,6 +140,16 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
     public void setListControlStatement(controlStatement statement){
     	for (int i = 0; i < this.size(); i++){
     		((BaseAST) this.get(i)).setControlStatement(statement);
+    	}
+    }
+    
+    public void setParentAttribute(attribute parentAttribute){
+    	System.out.println("Hi");
+    	System.out.println(this.size());
+    	for (int i = 0; i < this.size(); i++)
+    	{
+    		System.out.println("Loop");
+    		((BaseAST) this.get(i)).setParentAttribute(parentAttribute);
     	}
     }
     
