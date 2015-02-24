@@ -3,6 +3,7 @@ package compiler488.ast.decl;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.type.Type;
 
 /**
@@ -12,8 +13,8 @@ public class MultiDeclarations extends Declaration {
     /** The parts being declared */
     private ASTList<DeclarationPart> elements;
 
-    public MultiDeclarations(Type type, ASTList<DeclarationPart> elements) {
-        super(null, type);
+    public MultiDeclarations(Type type, ASTList<DeclarationPart> elements, SourceCoord sourceCoord) {
+        super(null, type, sourceCoord);
 
         this.elements = elements;
     }

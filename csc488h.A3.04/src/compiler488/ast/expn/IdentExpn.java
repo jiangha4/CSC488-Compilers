@@ -2,6 +2,7 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.Readable;
+import compiler488.ast.SourceCoord;
 
 /**
  *  References to a scalar variable or function call without parameters.
@@ -10,8 +11,8 @@ public class IdentExpn extends Expn implements Readable {
     /** Name of the identifier. */
     private String ident;
 
-    public IdentExpn(String ident) {
-        super();
+    public IdentExpn(String ident, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.ident = ident;
     }

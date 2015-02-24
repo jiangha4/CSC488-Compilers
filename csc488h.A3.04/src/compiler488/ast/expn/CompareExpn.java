@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 
 
 /**
@@ -13,8 +14,8 @@ public class CompareExpn extends BinaryExpn {
     public final static String OP_GREATER 		= ">";
     public final static String OP_GREATER_EQUAL	= ">=";
 
-    public CompareExpn(String opSymbol, Expn left, Expn right) {
-        super(opSymbol, left, right);
+    public CompareExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
+        super(opSymbol, left, right, sourceCoord);
 
         assert ((opSymbol == OP_LESS) ||
                 (opSymbol == OP_LESS_EQUAL) ||

@@ -3,6 +3,7 @@ package compiler488.ast.stmt;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
 
 /**
@@ -18,16 +19,16 @@ public class IfStmt extends Stmt {
     /** Represents the statement to execute when the condition is false. */
     private ASTList<Stmt> whenFalse = null;
 
-    public IfStmt(Expn condition, ASTList<Stmt> whenTrue, ASTList<Stmt> whenFalse) {
-        super();
+    public IfStmt(Expn condition, ASTList<Stmt> whenTrue, ASTList<Stmt> whenFalse, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.condition = condition;
         this.whenTrue = whenTrue;
         this.whenFalse = whenFalse;
     }
 
-    public IfStmt(Expn condition, ASTList<Stmt> whenTrue) {
-        this(condition, whenTrue, null);
+    public IfStmt(Expn condition, ASTList<Stmt> whenTrue, SourceCoord sourceCoord) {
+        this(condition, whenTrue, null, sourceCoord);
     }
 
     public Expn getCondition() {

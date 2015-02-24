@@ -2,6 +2,7 @@ package compiler488.ast.stmt;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
 
 /**
@@ -15,8 +16,8 @@ public class ReturnStmt extends Stmt {
      * Construct a function <code>return <em>value</em></code> statement with a value expression.
      *   @param  value  AST for the return expression
      */
-    public ReturnStmt(Expn value) {
-        super();
+    public ReturnStmt(Expn value, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.value = value;
     }
@@ -24,8 +25,8 @@ public class ReturnStmt extends Stmt {
     /**
      * Construct a procedure <code>return</code> statement (with no return value)
      */
-    public ReturnStmt() {
-        this(null);
+    public ReturnStmt(SourceCoord sourceCoord) {
+        this(null, sourceCoord);
     }
 
     public Expn getValue() {

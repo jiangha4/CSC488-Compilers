@@ -4,6 +4,7 @@ import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Printable;
+import compiler488.ast.SourceCoord;
 
 /**
  * The command to write data on the output device.
@@ -12,8 +13,8 @@ public class PutStmt extends Stmt {
     /** The values to be printed. */
     private ASTList<Printable> outputs;
 
-    public PutStmt(ASTList<Printable> outputs) {
-        super();
+    public PutStmt(ASTList<Printable> outputs, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.outputs = outputs;
     }

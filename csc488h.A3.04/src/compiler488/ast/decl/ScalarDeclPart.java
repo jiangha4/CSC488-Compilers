@@ -1,14 +1,15 @@
 package compiler488.ast.decl;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
  * Represents the declaration of a simple variable.
  */
 public class ScalarDeclPart extends DeclarationPart {
-    public ScalarDeclPart(String name) {
-        super(name);
+    public ScalarDeclPart(String name, SourceCoord sourceCoord) {
+        super(name, sourceCoord);
     }
 
     /**

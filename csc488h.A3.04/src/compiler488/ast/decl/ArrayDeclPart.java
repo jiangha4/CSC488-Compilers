@@ -2,6 +2,7 @@ package compiler488.ast.decl;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
@@ -23,8 +24,8 @@ public class ArrayDeclPart extends DeclarationPart {
     /** True iff this is an 2D array */
     private Boolean isTwoDimensional = false;
 
-    public ArrayDeclPart(String name, Integer lb1, Integer ub1) {
-        super(name);
+    public ArrayDeclPart(String name, Integer lb1, Integer ub1, SourceCoord sourceCoord) {
+        super(name, sourceCoord);
 
         this.lb1 = lb1;
         this.ub1 = ub1;
@@ -34,20 +35,20 @@ public class ArrayDeclPart extends DeclarationPart {
         this.ub2 = null;
     }
 
-    public ArrayDeclPart(String name, Integer lb1, Integer ub1, Integer lb2, Integer ub2) {
-        this(name, lb1, ub1);
+    public ArrayDeclPart(String name, Integer lb1, Integer ub1, Integer lb2, Integer ub2, SourceCoord sourceCoord) {
+        this(name, lb1, ub1, sourceCoord);
 
         this.isTwoDimensional = true;
         this.lb2 = lb2;
         this.ub2 = ub2;
     }
 
-    public ArrayDeclPart(String name, Integer[] dim1) {
-        this(name, dim1[0], dim1[1]);
+    public ArrayDeclPart(String name, Integer[] dim1, SourceCoord sourceCoord) {
+        this(name, dim1[0], dim1[1], sourceCoord);
     }
 
-    public ArrayDeclPart(String name, Integer[] dim1, Integer[] dim2) {
-        this(name, dim1[0], dim1[1], dim2[0], dim2[1]);
+    public ArrayDeclPart(String name, Integer[] dim1, Integer[] dim2, SourceCoord sourceCoord) {
+        this(name, dim1[0], dim1[1], dim2[0], dim2[1], sourceCoord);
     }
 
     /**

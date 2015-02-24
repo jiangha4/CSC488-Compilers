@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 
 
 /**
@@ -12,8 +13,8 @@ public class IntConstExpn extends ConstExpn {
      */
     private Integer value;
 
-    public IntConstExpn(Integer value) {
-        super();
+    public IntConstExpn(Integer value, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.value = value;
     }

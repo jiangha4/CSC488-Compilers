@@ -2,6 +2,7 @@ package compiler488.ast.stmt;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
 
 /**
@@ -14,8 +15,8 @@ public class AssignStmt extends Stmt {
     /** The value being assigned. */
     private Expn rval;
 
-    public AssignStmt(Expn lval, Expn rval) {
-        super();
+    public AssignStmt(Expn lval, Expn rval, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.lval = lval;
         this.rval = rval;

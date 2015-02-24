@@ -2,14 +2,15 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.Printable;
+import compiler488.ast.SourceCoord;
 
 /**
  * Represents the special literal constant associated with writing a new-line
  * character on the output device.
  */
 public class SkipConstExpn extends ConstExpn implements Printable {
-    public SkipConstExpn() {
-        super();
+    public SkipConstExpn(SourceCoord sourceCoord) {
+        super(sourceCoord);
     }
 
     @Override

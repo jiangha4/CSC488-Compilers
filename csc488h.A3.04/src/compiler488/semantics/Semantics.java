@@ -170,12 +170,12 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ArrayDeclPart");
 		
 		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
-			errors.add("Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
+			errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
 		};
 		
 		if (arrayDeclPart.isTwoDimensional()) {
 			if (!(arrayDeclPart.getLowerBoundary2() <= arrayDeclPart.getUpperBoundary2())) {
-				errors.add("Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
+				errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
 			};
 		}
 	}
@@ -206,14 +206,14 @@ public class Semantics implements ASTVisitor {
 			String elemId = nextElem.getName();
 			if (Symbol.search(elemId) != null) {
 				// Detected a re-declaration in same scope
-				errors.add("Re-declaration of identifier " + elemId + " not allowed in same scope.");
+				errors.add(nextElem.getSourceCoord() + ": Re-declaration of identifier " + elemId + " not allowed in same scope.");
 			}
 			else {
 				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
 				if (success) {
 					nextElem.setSTEntry(Symbol.search(elemId));
 				} else {
-					errors.add("Unable to declare identifier " + elemId);
+					errors.add(nextElem.getSourceCoord() + ": Unable to declare identifier " + elemId);
 				}
 			}
 		}
@@ -242,14 +242,14 @@ public class Semantics implements ASTVisitor {
 		// Check for existing declaration
 		if (Symbol.search(routineName) != null) {
 			// Detected a re-declaration in same scope
-			errors.add("Re-declaration of identifier " + routineName + " not allowed in same scope.");
+			errors.add(routineDecl.getSourceCoord() + ": Re-declaration of identifier " + routineName + " not allowed in same scope.");
 		}
 		else {
 			boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
 			if (success) {
 				routineDecl.setSTEntry(Symbol.search(routineName));
 			} else {
-				errors.add("Unable to declare identifier " + routineName);
+				errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
 			}
 		}
 	}
@@ -264,14 +264,14 @@ public class Semantics implements ASTVisitor {
 		// Check if identifier already exists in current scope
 		if (Symbol.search(declId) != null) {
 			// Detected a re-declaration in same scope
-			errors.add("Re-declaration of identifier " + declId + " not allowed in same scope.");
+			errors.add(scalarDecl.getSourceCoord() + ": Re-declaration of identifier " + declId + " not allowed in same scope.");
 		}
 		else {
 			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(Symbol.search(declId));
 			} else {
-				errors.add("Unable to declare identifier " + declId);
+				errors.add(scalarDecl.getSourceCoord() + ": Unable to declare identifier " + declId);
 			}
 		}
 	
@@ -344,10 +344,10 @@ public class Semantics implements ASTVisitor {
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
 		if (Symbol.searchGlobal(functionName) == null) {
-			errors.add("Function '" + functionName + "' cannot be used before it has been declared.");
+			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
-			errors.add("Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
+			errors.add(functionCallExpn.getSourceCoord() + ": Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
 		}
 		
 		// S42/S43: check that the number of parameters declared in the function declaration is the same as the 
@@ -357,7 +357,7 @@ public class Semantics implements ASTVisitor {
 		int numArgs = functionCallExpn.getArguments().size();
 		int numParams = declaredFuncASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add("Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
 	}
 
@@ -370,12 +370,12 @@ public class Semantics implements ASTVisitor {
 		// S40: check that identifier has been declared as a function
 		String identName = identExpn.getIdent();
 		if (Symbol.searchGlobal(identName) == null) {
-			errors.add("Identifier '" + identName + "' cannot be used before it has been declared.");
+			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE && 
 				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER && 
 				 Symbol.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
-			errors.add("Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
+			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
 		}
 		
 	}
@@ -405,10 +405,10 @@ public class Semantics implements ASTVisitor {
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
 		if (Symbol.searchGlobal(arrayName) == null) {
-			errors.add("Array '" + arrayName + "' cannot be used before it has been declared.");
+			errors.add(subsExpn.getSourceCoord() + ": Array '" + arrayName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
-			errors.add("Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
+			errors.add(subsExpn.getSourceCoord() + ": Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
 		}
 	}
 
@@ -479,10 +479,10 @@ public class Semantics implements ASTVisitor {
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
 		if (Symbol.searchGlobal(procName) == null) {
-			errors.add("Procedure '" + procName + "' cannot be used before it has been declared.");
+			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
-			errors.add("Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
+			errors.add(procedureCallStmt.getSourceCoord() + ": Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
 		}
 		
 		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the 
@@ -492,7 +492,7 @@ public class Semantics implements ASTVisitor {
 		int numArgs = procedureCallStmt.getArguments().size();
 		int numParams = declaredProcASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add("Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
 	}
 

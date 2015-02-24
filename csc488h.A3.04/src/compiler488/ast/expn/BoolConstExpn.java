@@ -1,6 +1,7 @@
 package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.SourceCoord;
 
 /**
  * Boolean literal constants.
@@ -9,8 +10,8 @@ public class BoolConstExpn extends ConstExpn {
     /** The value of the constant */
     private boolean value;
 
-    public BoolConstExpn(boolean value) {
-        super();
+    public BoolConstExpn(boolean value, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.value = value;
     }

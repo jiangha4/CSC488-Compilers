@@ -3,6 +3,7 @@ package compiler488.ast.stmt;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 
 /**
  * Represents the declarations and instructions of a scope construct.
@@ -11,15 +12,13 @@ public class Scope extends Stmt {
     /** Body of the scope, mixed list of declarations and statements. */
     protected ASTList<Stmt> body;
 
-    public Scope() {
-        super();
-
+    public Scope(SourceCoord sourceCoord) {
+        super(sourceCoord);
         this.body = null;
     }
 
-    public Scope(ASTList<Stmt> body) {
-        this();
-
+    public Scope(ASTList<Stmt> body, SourceCoord sourceCoord) {
+    	super(sourceCoord);
         this.body = body;
     }
 

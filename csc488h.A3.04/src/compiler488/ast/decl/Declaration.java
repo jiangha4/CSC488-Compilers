@@ -1,5 +1,6 @@
 package compiler488.ast.decl;
 
+import compiler488.ast.SourceCoord;
 import compiler488.ast.stmt.Stmt;
 import compiler488.ast.type.Type;
 
@@ -13,8 +14,8 @@ public abstract class Declaration extends Stmt {
     /** The type of thing being declared. */
     protected Type type = null;
 
-    public Declaration(String name, Type type) {
-        super();
+    public Declaration(String name, Type type, SourceCoord sourceCoord) {
+        super(sourceCoord);
 
         this.name = name;
         this.type = type;

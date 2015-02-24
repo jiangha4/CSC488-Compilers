@@ -3,6 +3,7 @@ package compiler488.ast.decl;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.SourceCoord;
 import compiler488.ast.stmt.Scope;
 import compiler488.ast.type.Type;
 
@@ -27,8 +28,8 @@ public class RoutineDecl extends Declaration {
      *   @param  parameters   List of parameters to the routine
      *   @param  body	      Body scope for the routine
      */
-    public RoutineDecl(String name, Type type, ASTList<ScalarDecl> parameters, Scope body) {
-        super(name, type);
+    public RoutineDecl(String name, Type type, ASTList<ScalarDecl> parameters, Scope body, SourceCoord sourceCoord) {
+        super(name, type, sourceCoord);
 
         this.parameters = parameters;
         this.body = body;
@@ -40,8 +41,8 @@ public class RoutineDecl extends Declaration {
      *   @param  type	      Type returned by the function
      *   @param  body	      Body scope for the routine
      */
-    public RoutineDecl(String name, Type type, Scope body) {
-        this(name, type, new ASTList<ScalarDecl>(), body);
+    public RoutineDecl(String name, Type type, Scope body, SourceCoord sourceCoord) {
+        this(name, type, new ASTList<ScalarDecl>(), body, sourceCoord);
     }
 
     /**
@@ -50,8 +51,8 @@ public class RoutineDecl extends Declaration {
      *   @param  parameters   List of parameters to the routine
      *   @param  body	      Body scope for the routine
      */
-    public RoutineDecl(String name, ASTList<ScalarDecl> parameters, Scope body) {
-        this(name, null, parameters, body);
+    public RoutineDecl(String name, ASTList<ScalarDecl> parameters, Scope body, SourceCoord sourceCoord) {
+        this(name, null, parameters, body, sourceCoord);
 
         this.parameters = parameters;
         this.body = body;
@@ -62,8 +63,8 @@ public class RoutineDecl extends Declaration {
      *   @param  name	      Name of the routine
      *   @param  body	      Body scope for the routine
      */
-    public RoutineDecl(String name, Scope body) {
-        this(name, null, new ASTList<ScalarDecl>(), body);
+    public RoutineDecl(String name, Scope body, SourceCoord sourceCoord) {
+        this(name, null, new ASTList<ScalarDecl>(), body, sourceCoord);
     }
 
     public ASTList<ScalarDecl> getParameters() {

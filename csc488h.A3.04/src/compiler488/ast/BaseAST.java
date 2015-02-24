@@ -12,6 +12,10 @@ import compiler488.symbol.SymbolTableEntry;
  */
 public abstract class BaseAST implements AST {
 	
+	/* Every AST node contains a source coordinate (in the source program) 
+	 * This is used for error reporting */
+	SourceCoord sourceCoord = null;
+	
 	/* Every AST node contains a link to a SymbolTable entry */
 	SymbolTableEntry stEntry = null;
 	
@@ -32,9 +36,26 @@ public abstract class BaseAST implements AST {
      *
      * <p>Add additional information to your AST tree nodes here.</p>
      */
-	public BaseAST() {
+	public BaseAST(SourceCoord sourceCoord) {
+		this.sourceCoord = sourceCoord;
 	}
-
+	
+	/**
+	 * 
+	 * @return SourceCoord : the source coordinates (line and col) into the source program
+	 */
+	public SourceCoord getSourceCoord() {
+		return sourceCoord;
+	}
+	
+	/**
+	 * 
+	 * @param sourceCoord : the source coordinates (line and col) in the source program
+	 */
+	public void setSourceCoord(SourceCoord sourceCoord) {
+		this.sourceCoord = sourceCoord;
+	}
+	
 	/**
 	 * getSTEntry - get the symbol table entry that this AST node links to
 	 * 
