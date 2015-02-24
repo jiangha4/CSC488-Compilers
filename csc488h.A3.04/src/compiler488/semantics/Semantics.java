@@ -213,7 +213,15 @@ public class Semantics implements ASTVisitor {
 				errors.add(nextElem.getSourceCoord() + ": Re-declaration of identifier " + elemId + " not allowed in same scope.");
 			}
 			else {
-				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+				SymbolKind kind = nextElem.getKind();
+				
+				// S37: Check that identifier has been declared as a scalar variable
+				// TODO: check if this is right?
+				if (kind != SymbolKind.VARIABLE) {
+					errors.add("Identifier has not been declared as scalar");
+				}
+				
+				boolean success = Symbol.insert(nextElem.getName(), declType, kind, "", nextElem);
 				if (success) {
 					nextElem.setSTEntry(Symbol.search(elemId));
 				} else {
@@ -279,6 +287,10 @@ public class Semantics implements ASTVisitor {
 			errors.add(scalarDecl.getSourceCoord() + ": Re-declaration of identifier " + declId + " not allowed in same scope.");
 		}
 		else {
+			
+			// TODO: implement S37
+			// TODO: check if below kind should always be PARAMETER (I don't think it should?)
+			
 			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(Symbol.search(declId));
@@ -299,59 +311,79 @@ public class Semantics implements ASTVisitor {
 	public void visit(AnonFuncExpn anonFuncExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting AnonFuncExpn");
+		System.out.println("Type: " + anonFuncExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(ArithExpn arithExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ArithExpn");
+		System.out.println("Type: " + arithExpn.getExpnType(Symbol));
+		
+		s31check(arithExpn);
 	}
 
 	@Override
 	public void visit(BinaryExpn binaryExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting BinaryExpn");
+		System.out.println("Type: " + binaryExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(BoolConstExpn boolConstExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting BoolConstExpn");
+		System.out.println("Type: " + boolConstExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(BoolExpn boolExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting BoolExpn");
+		System.out.println("Type: " + boolExpn.getExpnType(Symbol));
+		
+		s30check(boolExpn);
 	}
 
 	@Override
 	public void visit(CompareExpn compareExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting CompareExpn");
+		System.out.println("Type: " + compareExpn.getExpnType(Symbol));
+		
+		s31check(compareExpn);
 	}
 
 	@Override
 	public void visit(ConstExpn constExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ConstExpn");
+		System.out.println("Type: " + constExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(EqualsExpn equalsExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting EqualsExpn");
+		System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
+		
+		s31check(equalsExpn);
 	}
 
 	@Override
 	public void visit(Expn expn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Expn");
+		System.out.println("Type: " + expn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(FunctionCallExpn functionCallExpn) {
 		System.out.println("Visiting FunctionCallExpn");
+		System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
+		
+		// TODO: implement S36
 		
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
@@ -376,6 +408,7 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(IdentExpn identExpn) {
 		System.out.println("Visiting IdentExpn");
+		System.out.println("Type: " + identExpn.getExpnType(Symbol));
 		
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
@@ -396,23 +429,29 @@ public class Semantics implements ASTVisitor {
 	public void visit(IntConstExpn intConstExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting IntConstExpn");
+		System.out.println("Type: " + intConstExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(NotExpn notExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting NotExpn");
+		System.out.println("Type: " + notExpn.getExpnType(Symbol));
+		
+		s30check(notExpn);
 	}
 
 	@Override
 	public void visit(SkipConstExpn skipConstExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting SkipConstExpn");
+		System.out.println("Type: " + skipConstExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(SubsExpn subsExpn) {
 		System.out.println("Visiting SubsExpn");
+		System.out.println("Type: " + subsExpn.getExpnType(Symbol));
 		
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
@@ -428,30 +467,44 @@ public class Semantics implements ASTVisitor {
 	public void visit(TextConstExpn textConstExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting TextConstExpn");
+		System.out.println("Type: " + textConstExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(UnaryExpn unaryExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting UnaryExpn");
+		System.out.println("Type: " + unaryExpn.getExpnType(Symbol));
 	}
 
 	@Override
 	public void visit(UnaryMinusExpn unaryMinusExpn) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting UnaryMinusExpn");
+		System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
+		
+		s31check(unaryMinusExpn);
 	}
 
 	@Override
 	public void visit(AssignStmt assignStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting AssignStmt");
+		
+		// S34: Check that variable and expression in assignment are the same type
+		SymbolType lType = assignStmt.getLval().getExpnType(Symbol);
+		SymbolType rType = assignStmt.getRval().getExpnType(Symbol);
+		if (lType != rType) {
+			errors.add("LHS type (" + lType + ") in assignment differs from RHS type (" + rType + ")");
+		}
 	}
 
 	@Override
 	public void visit(ExitStmt exitStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ExitStmt");
+		
+		s30check(exitStmt.getExpn());
 		
 		/**S50 Check that exit statement is directly inside a loop
 		*  Checks if symbols "loop" or "while" have been declared in the scope
@@ -463,18 +516,27 @@ public class Semantics implements ASTVisitor {
 		{
 			errors.add(exitStmt.getSourceCoord() + "EXIT not contained in LOOP or WHILE statements");
 		}
+		// TODO check if exit statement is immediately contained in a loop
+		
 	}
 
 	@Override
 	public void visit(GetStmt getStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting GetStmt");
+		
+		// S31: check that variables are integers
+		for (Expn expn : getStmt.getInputs()) {
+			s31check(expn);
+		}
 	}
 
 	@Override
 	public void visit(IfStmt ifStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting IfStmt");
+		
+		s30check(ifStmt.getCondition());
 	}
 
 	@Override
@@ -492,6 +554,8 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		System.out.println("Visiting ProcedureCallStmt");
+		
+		// TODO: implement S36
 		
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
@@ -522,6 +586,8 @@ public class Semantics implements ASTVisitor {
 	public void visit(PutStmt putStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting PutStmt");
+		
+		// TODO: implement S31
 	}
 
 	@Override
@@ -537,7 +603,9 @@ public class Semantics implements ASTVisitor {
 			System.out.println(returnStmt.getParentAttribute());
 			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
 		}*/
-	}
+			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
+		}
+		// TODO: implement S35
 
 	@Override
 	public void visit(Scope scope) {
@@ -567,6 +635,8 @@ public class Semantics implements ASTVisitor {
 	public void visit(WhileDoStmt whileDoStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting WhileDoStmt");
+		
+		s30check(whileDoStmt.getExpn());
 	}
 
 	@Override
@@ -586,5 +656,25 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Type");
 	}
+	
+	// compare expn type to expectedType, and error if not the same
+	private void checkExpnType(Expn expn, SymbolType expectedType) {
+		SymbolType type = expn.getExpnType(Symbol);
+		if (type != expectedType) {
+			errors.add("Expression is not of type " + expectedType);
+		}
+	}
+	
+	// S30: check that type of expression is boolean
+	private void s30check(Expn expn) {
+		checkExpnType(expn, SymbolType.BOOLEAN);
+	}
+	
+	// S31: check that type of expression is integer
+	private void s31check(Expn expn) {
+		checkExpnType(expn, SymbolType.INTEGER);
+	}
+	
+	
 
 }
