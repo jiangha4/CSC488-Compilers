@@ -343,7 +343,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ArithExpn");
 		System.out.println("Type: " + arithExpn.getExpnType(Symbol));
 
-		s31check(arithExpn);
+		assertIsIntExpn(arithExpn);
 	}
 
 	@Override
@@ -366,7 +366,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting BoolExpn");
 		System.out.println("Type: " + boolExpn.getExpnType(Symbol));
 
-		s30check(boolExpn);
+		assertIsBoolExpn(boolExpn);
 	}
 
 	@Override
@@ -375,7 +375,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting CompareExpn");
 		System.out.println("Type: " + compareExpn.getExpnType(Symbol));
 
-		s31check(compareExpn);
+		assertIsIntExpn(compareExpn);
 	}
 
 	@Override
@@ -391,7 +391,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting EqualsExpn");
 		System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
 
-		s31check(equalsExpn);
+		assertIsIntExpn(equalsExpn);
 	}
 
 	@Override
@@ -462,7 +462,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting NotExpn");
 		System.out.println("Type: " + notExpn.getExpnType(Symbol));
 
-		s30check(notExpn);
+		assertIsBoolExpn(notExpn);
 	}
 
 	@Override
@@ -507,7 +507,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting UnaryMinusExpn");
 		System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
 
-		s31check(unaryMinusExpn);
+		assertIsIntExpn(unaryMinusExpn);
 	}
 
 	@Override
@@ -532,7 +532,7 @@ public class Semantics implements ASTVisitor {
 
 		// Only do S30 check if "exit when"
 		if (exitStmt.getExpn() != null) {
-			s30check(exitStmt.getExpn());
+			assertIsBoolExpn(exitStmt.getExpn());
 		}
 
 		/**S50 Check that exit statement is directly inside a loop
@@ -566,7 +566,7 @@ public class Semantics implements ASTVisitor {
 
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
-			s31check(expn);
+			assertIsIntExpn(expn);
 		}
 	}
 
@@ -575,7 +575,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting IfStmt");
 
-		s30check(ifStmt.getCondition());
+		assertIsBoolExpn(ifStmt.getCondition());
 	}
 
 	@Override
@@ -693,7 +693,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting WhileDoStmt");
 
-		s30check(whileDoStmt.getExpn());
+		assertIsBoolExpn(whileDoStmt.getExpn());
 	}
 
 	@Override
@@ -723,12 +723,12 @@ public class Semantics implements ASTVisitor {
 	}
 
 	// S30: check that type of expression is boolean
-	private void s30check(Expn expn) {
+	private void assertIsBoolExpn(Expn expn) {
 		checkExpnType(expn, SymbolType.BOOLEAN);
 	}
 
 	// S31: check that type of expression is integer
-	private void s31check(Expn expn) {
+	private void assertIsIntExpn(Expn expn) {
 		checkExpnType(expn, SymbolType.INTEGER);
 	}
 
