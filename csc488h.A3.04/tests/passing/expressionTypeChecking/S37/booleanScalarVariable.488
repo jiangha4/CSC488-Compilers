@@ -1,0 +1,4 @@
+begin
+	boolean x
+	x <= true
+end
