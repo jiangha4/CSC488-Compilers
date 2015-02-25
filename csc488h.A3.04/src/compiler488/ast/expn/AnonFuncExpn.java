@@ -57,7 +57,10 @@ public class AnonFuncExpn extends Expn {
 
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
-		return this.expn.getExpnType(st);
+		if (this.expnType == null) {
+			this.expnType = this.expn.getExpnType(st);
+		}
+		return this.expnType;
 	}
 
 }

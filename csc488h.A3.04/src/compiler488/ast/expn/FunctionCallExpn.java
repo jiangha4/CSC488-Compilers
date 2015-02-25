@@ -56,14 +56,12 @@ public class FunctionCallExpn extends Expn {
 		}
 	}
 
-	@Override
+    @Override
 	public SymbolType getExpnType(SymbolTable st) {
-		SymbolTableEntry ste = st.searchGlobal(this.ident);
-		if (ste != null) {
-			return ste.getType();
-		} else {
-			return SymbolType.UNKNOWN;
+		if (this.expnType == null) {
+			this.expnType = this.getSTETypeOrUnknown(st, this.ident);
 		}
+		return this.expnType;
 	}
 
 }

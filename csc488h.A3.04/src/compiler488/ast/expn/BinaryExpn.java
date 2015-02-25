@@ -53,10 +53,13 @@ public abstract class BinaryExpn extends Expn {
     
     @Override
 	public SymbolType getExpnType(SymbolTable st) {
-		if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
-			return this.left.getExpnType(st);
-		} else {
-			return SymbolType.UNKNOWN;
-		}
+    	if (this.expnType == null) {
+    		if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+    			this.expnType = this.left.getExpnType(st);
+    		} else {
+    			this.expnType = SymbolType.UNKNOWN;
+    		}
+    	}
+		return this.expnType;
 	}
 }

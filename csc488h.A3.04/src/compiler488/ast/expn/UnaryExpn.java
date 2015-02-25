@@ -51,6 +51,9 @@ public abstract class UnaryExpn extends Expn {
     
     @Override
 	public SymbolType getExpnType(SymbolTable st) {
-		return this.operand.getExpnType(st);
-	}
+		if (this.expnType == null) {
+			this.expnType = this.operand.getExpnType(st);
+		}
+    	return this.expnType;
+    }
 }
