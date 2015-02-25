@@ -11,6 +11,7 @@ Enum describing the possible test result types.
 class ResultType(Enum):
     passed = 1
     failed = 2
+    test_fail = 3
 
 
 '''
@@ -31,6 +32,13 @@ def parsing_succeeded(parser_output):
 
 
 '''
+Return True iff the semantic analysis was successful.
+'''
+def semantic_analysis_succeeded(parser_output):
+    return "Exception during Semantic Analysis" not in parser_output
+
+
+'''
 Run the given test and return a TestResult.
 '''
 def run_test(test_path, compiler_path, should_pass):
@@ -40,14 +48,18 @@ def run_test(test_path, compiler_path, should_pass):
     parser_output = raw_output.decode("utf-8")
 
     # Check if this is a positive or negative test case
-    parse_success = parsing_succeeded(parser_output)
-    test_success = parse_success if should_pass else not parse_success
+    sem_success = semantic_analysis_succeeded(parser_output)
+    test_success = sem_success if should_pass else not sem_success
 
     # Return result
-    if test_success:
-        return TestResult(test_path, ResultType.passed)
+    if not parsing_succeeded(parser_output):
+        details = str.join("\n", parser_output.split(sep='\n')[2:-2])
+        return TestResult(test_path, ResultType.test_fail, details)
+    elif not test_success:
+        details = str.join("\n", parser_output.split(sep='\n')[1:-2])
+        return TestResult(test_path, ResultType.failed, details)
     else:
-        return TestResult(test_path, ResultType.failed, parser_output)
+        return TestResult(test_path, ResultType.passed)
 
 
 '''
@@ -56,6 +68,8 @@ Prints the result of running a single test.
 def print_test_result(result):
     if result.type == ResultType.passed:
         print("\033[92m.\033[0m", end="")
+    elif result.type == ResultType.failed:
+        print("\033[91mF\033[0m", end="")
     else:
         print("\033[91mF\033[0m", end="")
     sys.stdout.flush()
@@ -85,11 +99,11 @@ def run_tests(test_dir_path, compiler_path, should_pass):
         print("\n")
 
     # Print detailed error messages
-    errors = [r for r in results if r.type == ResultType.failed]
+    errors = [r for r in results if r.type != ResultType.passed]
     for err_result in errors:
         if should_pass:
             print ("  \033[91m" + err_result.test_name + "\033[0m:")
-            indented = "    " + str.join("\n    ", err_result.details.split(sep='\n')[1:-2])
+            indented = "    " + str.join("\n    ", err_result.details.split(sep='\n'))
             print(indented + "\n")
         else:
             print ("  \033[91m" + err_result.test_name + "\033[0m")
@@ -110,16 +124,18 @@ def get_result_str(results, run_time):
     # Parse results
     num_pass = len([r for r in results if r.type == ResultType.passed])
     num_fail = len([r for r in results if r.type == ResultType.failed])
+    num_test_fail = len([r for r in results if r.type == ResultType.test_fail])
 
     # Construct time and pass/fail summaries
     time_str = "Ran " + str(len(results)) + " tests in " + str(run_time) + "ms."
     pass_str = str(num_pass) + " passed" if num_pass else ""
     fail_str = str(num_fail) + " failed" if num_fail else ""
-    result_strs = [s for s in [pass_str, fail_str] if s != ""]
+    test_fail_str = str(num_test_fail) + " invalid" if num_test_fail else ""
+    result_strs = [s for s in [pass_str, fail_str, test_fail_str] if s != ""]
     result_str = str.join(", ", result_strs)
 
     # Construct and return total string
-    total_str = "\033[91m" if num_fail else "\033[92m"
+    total_str = "\033[91m" if num_fail or num_test_fail else "\033[92m"
     total_str += time_str + " " + result_str
     total_str += ".\033[0m"
 
