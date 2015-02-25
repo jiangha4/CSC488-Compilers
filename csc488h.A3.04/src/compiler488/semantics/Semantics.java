@@ -9,7 +9,6 @@ import java.util.Iterator;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.BaseAST;
-import compiler488.ast.BaseAST.attribute;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Printable;
 import compiler488.ast.decl.ArrayDeclPart;
@@ -656,8 +655,18 @@ public class Semantics implements ASTVisitor {
 
 		// S51-52 Must check that return statements are in procedure
 		// or function scope
-		if (returnStmt.getParentAttribute() != attribute.METHOD)
+		
+		BaseAST currNode = returnStmt;
+		boolean foundMethod = false;
+		while(currNode != null)
 		{
+			if ((currNode.getParentNode() instanceof RoutineDecl)){
+				foundMethod = true;
+			}
+			currNode = currNode.getParentNode();
+		}
+		
+		if (!foundMethod){
 			errors.add(returnStmt.getSourceCoord() + " Return statement is not in the scope of a function or procedure");
 		}
 	}

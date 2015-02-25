@@ -21,22 +21,7 @@ public abstract class BaseAST implements AST {
 	
 	/* Keep track if the AST node has been visited */
 	boolean isVisited = false;
-	
-	
-	attribute parentAttribute = null;
-	
-	public attribute getParentAttribute() {
-		return this.parentAttribute;
-	}
-
-	public void setParentAttribute(attribute parentAttribute) {
-		this.parentAttribute = parentAttribute;
-	}
-
-	public enum attribute {
-		METHOD
-	}
-	
+		
 	/*
 	 * The parent of the current node
 	 */
