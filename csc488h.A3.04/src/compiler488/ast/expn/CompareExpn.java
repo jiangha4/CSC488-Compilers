@@ -35,7 +35,8 @@ public class CompareExpn extends BinaryExpn {
   @Override
 	public SymbolType getExpnType(SymbolTable st) {
     if (this.expnType == null) {
-      if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+      if (this.left.getExpnType(st) == SymbolType.INTEGER &&
+          this.right.getExpnType(st) == SymbolType.INTEGER) {
         this.expnType = SymbolType.BOOLEAN;
       } else {
         this.expnType = SymbolType.UNKNOWN;

@@ -31,7 +31,8 @@ public class BoolExpn extends BinaryExpn {
   @Override
   public SymbolType getExpnType(SymbolTable st) {
     if (this.expnType == null) {
-      if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+      if (this.left.getExpnType(st) == SymbolType.BOOLEAN &&
+          this.right.getExpnType(st) == SymbolType.BOOLEAN) {
         this.expnType = SymbolType.BOOLEAN;
       } else {
         this.expnType = SymbolType.UNKNOWN;

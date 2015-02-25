@@ -35,7 +35,8 @@ public class ArithExpn extends BinaryExpn {
   @Override
   public SymbolType getExpnType(SymbolTable st) {
     if (this.expnType == null) {
-      if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+      if (this.left.getExpnType(st) == SymbolType.INTEGER &&
+          this.right.getExpnType(st) == SymbolType.INTEGER) {
         this.expnType = SymbolType.INTEGER;
       } else {
         this.expnType = SymbolType.UNKNOWN;
