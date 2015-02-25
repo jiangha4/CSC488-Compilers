@@ -1,0 +1,7 @@
+begin 
+    boolean a
+    a <= true
+    while a then
+        put "lol"
+    end
+end
