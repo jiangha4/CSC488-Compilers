@@ -136,7 +136,7 @@ public class Semantics implements ASTVisitor {
 				if (success) {
 					nextElem.setSTEntry(symbolTable.search(elemId));
 				} else {
-					errors.add(nextElem.getSourceCoord(), "Unable to declare identifier " + elemId);
+					throw new IllegalStateException("Insertion in symbol table failed.");
 				}
 			}
 		}
