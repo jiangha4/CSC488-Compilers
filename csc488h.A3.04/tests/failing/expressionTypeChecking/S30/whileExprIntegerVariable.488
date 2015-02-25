@@ -1,0 +1,7 @@
+begin
+    integer a
+    a <= 3
+    while a do
+        put "lol"
+    end
+end
