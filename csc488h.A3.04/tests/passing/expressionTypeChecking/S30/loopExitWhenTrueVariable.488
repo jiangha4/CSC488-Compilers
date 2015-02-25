@@ -1,0 +1,8 @@
+begin
+    boolean a
+    a <= true
+    loop
+        put "lol"
+        exit when a
+    end
+end
