@@ -1,0 +1,10 @@
+begin
+    integer x, y
+    integer function f(integer a, integer b) begin
+        return(a)
+    end
+    
+    boolean function g(integer a, integer b) begin
+        return(true)
+    end
+end

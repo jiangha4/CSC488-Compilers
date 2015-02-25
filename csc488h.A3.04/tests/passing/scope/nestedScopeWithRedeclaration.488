@@ -1,0 +1,7 @@
+begin
+    integer x, y
+    begin
+        integer x
+        boolean z
+    end
+end

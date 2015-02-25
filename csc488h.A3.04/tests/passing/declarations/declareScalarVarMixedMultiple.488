@@ -1,0 +1,4 @@
+begin
+    integer a, b
+    boolean x, y
+end
