@@ -124,24 +124,30 @@ public class Semantics implements ASTVisitor {
 		// (The value for the newly inserted elements is blank: in the project
 		// language assignment cannot happen simultaneously with declaration)
 		SymbolType declType = multiDeclarations.getType().toSymbolType();
-		for (DeclarationPart nextElem : multiDeclarations.getParts()) {
+		for (DeclarationPart elem : multiDeclarations.getParts()) {
+			String elemName = elem.getName();
+			SymbolKind elemKind = elem.getKind();
 
 			// Check if identifier already exists in current scope
-			String elemId = nextElem.getName();
-			if (symbolTable.search(elemId) != null) {
+			SymbolTableEntry searchResult = symbolTable.search(elemName);
+			if (searchResult != null) {
 				// Detected a re-declaration in same scope
-				errors.add(nextElem.getSourceCoord(), "Re-declaration of identifier " + elemId + " not allowed in same scope.");
+				SourceCoord originalDeclCoord = searchResult.getNode().getSourceCoord();
+				String msg = String.format(
+					"Redeclaration of '%s' not allowed in same scope. Original declaration at %s.",
+					elemName, originalDeclCoord
+				);
+				errors.add(elem.getSourceCoord(), msg);
 			}
 			else {
-				boolean success = symbolTable.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
-				if (success) {
-					nextElem.setSTEntry(symbolTable.search(elemId));
+				boolean success = symbolTable.insert(elemName, declType, elemKind, "", elem);
+				if (!success) {
+					elem.setSTEntry(symbolTable.search(elemName));
 				} else {
 					throw new IllegalStateException("Insertion in symbol table failed.");
 				}
 			}
 		}
-
 	}
 
 	@Override
