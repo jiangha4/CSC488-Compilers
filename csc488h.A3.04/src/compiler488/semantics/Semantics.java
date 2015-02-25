@@ -8,9 +8,11 @@ import java.util.Iterator;
 
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.BaseAST;
 import compiler488.ast.BaseAST.attribute;
 import compiler488.ast.BaseAST.controlStatement;
 import compiler488.ast.PrettyPrinter;
+import compiler488.ast.Printable;
 import compiler488.ast.decl.ArrayDeclPart;
 import compiler488.ast.decl.Declaration;
 import compiler488.ast.decl.DeclarationPart;
@@ -617,7 +619,16 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting PutStmt");
 		
-		// TODO: implement S31
+		// S31: Check that type of expression or variable is integer
+		// Also added in check for text/skip
+		for (Printable e : putStmt.getOutputs()) {
+			SymbolType type = ((Expn)e).getExpnType(Symbol);
+			if (type != SymbolType.INTEGER &&
+				type != SymbolType.TEXT &&
+				type != SymbolType.SKIP) {
+				errors.add("Put statement can only contain integer expressions, text, or skips");
+			}
+		}
 	}
 
 	@Override
