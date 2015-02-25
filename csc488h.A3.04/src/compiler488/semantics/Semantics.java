@@ -228,40 +228,54 @@ public class Semantics implements ASTVisitor {
 	public void visit(RoutineDecl routineDecl) {
 		System.out.println("Visiting RoutineDecl");
 	
-		/**
-		 * S11/S12: Declare function with/without parameters and with specified type
-		 * S17/S18: Declare procedure with/without parameters
-		 */
-		// Record routine declaration in symbol table
-		String routineName = routineDecl.getName();
-		SymbolType routineType = null;
-		SymbolKind routineKind = SymbolKind.PROCEDURE;
-		
-		// If the routine has a return value then it is a function; otherwise a procedure
-		if (routineDecl.getType() != null) {
-			routineType = routineDecl.getType().toSymbolType();
-			routineKind = SymbolKind.FUNCTION;
+		if (!routineDecl.isVisited()) {
+			/**
+			 * S11/S12: Declare function with/without parameters and with specified type
+			 * S17/S18: Declare procedure with/without parameters
+			 */
+			// Record routine declaration in symbol table
+			String routineName = routineDecl.getName();
+			SymbolType routineType = null;
+			SymbolKind routineKind = SymbolKind.PROCEDURE;
 			
-			// S53 If it is a function, we must also check to make sure that we have 
-			// a return function in the body
-		
-			// Not sure how to iterate over this to check for return stmt
-			Scope routineBody = routineDecl.getBody();
+			// If the routine has a return value then it is a function; otherwise a procedure
+			if (routineDecl.getType() != null) {
+				routineType = routineDecl.getType().toSymbolType();
+				routineKind = SymbolKind.FUNCTION;
+				
+				// S53 If it is a function, we must also check to make sure that we have 
+				// a return function in the body
 			
-		}
-		
-		// Check for existing declaration
-		if (Symbol.search(routineName) != null) {
-			// Detected a re-declaration in same scope
-			errors.add(routineDecl.getSourceCoord() + ": Re-declaration of identifier " + routineName + " not allowed in same scope.");
-		}
-		else {
-			boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
-			if (success) {
-				routineDecl.setSTEntry(Symbol.search(routineName));
-			} else {
-				errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
+				// Not sure how to iterate over this to check for return stmt
+				Scope routineBody = routineDecl.getBody();
+				
 			}
+			
+			// Check for existing declaration
+			if (Symbol.search(routineName) != null) {
+				// Detected a re-declaration in same scope
+				errors.add(routineDecl.getSourceCoord() + ": Re-declaration of identifier " + routineName + " not allowed in same scope.");
+			}
+			else {
+				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
+				if (success) {
+					routineDecl.setSTEntry(Symbol.search(routineName));
+				} else {
+					errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
+				}
+			}
+		
+			// Begin new scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			routineDecl.setVisited(true);
+		} else {
+			// Exit the scope
+			Symbol.exitScope();
+			
+			// Clear the flag
+			routineDecl.setVisited(false);
 		}
 		
 	}
@@ -279,10 +293,6 @@ public class Semantics implements ASTVisitor {
 			errors.add(scalarDecl.getSourceCoord() + ": Re-declaration of identifier " + declId + " not allowed in same scope.");
 		}
 		else {
-			
-			// TODO: implement S37
-			// TODO: check if below kind should always be PARAMETER (I don't think it should?)
-			
 			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(Symbol.search(declId));
@@ -575,6 +585,20 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(Program program) {
 		System.out.println("Visiting Program");
+		
+		if (!program.isVisited()) {
+			// Begin new scope
+			Symbol.enterScope();
+			
+			// Mark as visited
+			program.setVisited(true);
+		} else {
+			// Exit the scope
+			Symbol.exitScope();
+			
+			// Clear the flag
+			program.setVisited(false);
+		}
 	}
 
 	@Override
@@ -605,19 +629,6 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(Scope scope) {
 		System.out.println("Visiting Scope");
-		
-		if (!scope.isVisited()) {
-			// Begin new scope
-			Symbol.enterScope();
-			
-			// Mark as visited
-			scope.setVisited(true);
-		} else {
-			Symbol.exitScope();
-			
-			// Clear the flag
-			scope.setVisited(false);
-		}
 	}
 
 	@Override

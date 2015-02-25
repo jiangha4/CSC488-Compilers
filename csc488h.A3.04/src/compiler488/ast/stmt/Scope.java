@@ -38,15 +38,11 @@ public class Scope extends Stmt {
     @Override
 	public void accept(ASTVisitor visitor) {
     	
-    	// S00/S04/S06/S08: start program/function/ordinary/procedure scope
     	visitor.visit(this);
     	
     	// S03: Associate declarations and statements with scope
 		if (body != null && body.size() > 0) {
 			body.accept(visitor);
 		}
-		
-		// S01/S05/S07/S09: end program/function/ordinary/procedure scope
-		visitor.visit(this);
 	}
 }
