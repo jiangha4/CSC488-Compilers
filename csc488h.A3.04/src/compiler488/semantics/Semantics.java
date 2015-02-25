@@ -146,7 +146,6 @@ public class Semantics implements ASTVisitor {
 					}
 				}
 				if (!hasReturn) {
-					// S53
 					errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must have at least one return statement.");
 				}
 			}
