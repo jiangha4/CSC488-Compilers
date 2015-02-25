@@ -73,14 +73,12 @@ public class SubsExpn extends Expn implements Readable {
 			subscript2.accept(visitor);
 		}
 	}
-
+    
     @Override
 	public SymbolType getExpnType(SymbolTable st) {
-		SymbolTableEntry ste = st.searchGlobal(this.variable);
-		if (ste != null) {
-			return ste.getType();
-		} else {
-			return SymbolType.UNKNOWN;
+		if (this.expnType == null) {
+			this.expnType = this.getSTETypeOrUnknown(st, this.variable);
 		}
+		return this.expnType;
 	}
 }

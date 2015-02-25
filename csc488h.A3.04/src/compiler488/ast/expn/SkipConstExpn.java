@@ -27,7 +27,6 @@ public class SkipConstExpn extends ConstExpn implements Printable {
 
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
-		// TODO: check: will this mess anything up?
 		return SymbolType.SKIP;
 	}
 }
