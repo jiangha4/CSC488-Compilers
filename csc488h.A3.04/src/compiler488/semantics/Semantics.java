@@ -160,31 +160,21 @@ public class Semantics implements ASTVisitor {
 			 * S11/S12: Declare function with/without parameters and with specified type
 			 * S17/S18: Declare procedure with/without parameters
 			 */
+
 			// Record routine declaration in symbol table
 			String routineName = routineDecl.getName();
 			SymbolType routineType = null;
 			SymbolKind routineKind = SymbolKind.PROCEDURE;
 
-			// If the routine has a return value then it is a function; otherwise a procedure
-			if (routineDecl.getType() != null) {
+			if (routineDecl.isFunctionDecl()) {
 				routineType = routineDecl.getType().toSymbolType();
 				routineKind = SymbolKind.FUNCTION;
 
 				// S53: check that a function body contains at least one return statement
-				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
-				boolean hasReturn = false;
-				ReturnStmt rs = null;
-				if (routineBody != null){
-					for (Stmt routineStmt : routineBody) {
-						rs = routineStmt.containsReturn();
-						if (rs != null) {
-							hasReturn = true;
-							break;
-						}
-					}
-				}
-				if (!hasReturn) {
-					errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must have at least one return statement.");
+				Scope routineScope = routineDecl.getBody();
+				ReturnStmt returnStatement = routineScope.containsReturn();
+				if (returnStatement == null) {
+					errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must contain at least one return statement.");
 				}
 			}
 
@@ -640,7 +630,7 @@ public class Semantics implements ASTVisitor {
 		if (parentRoutine == null){
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
 		}
-		else if (parentRoutine.getType() != null) {
+		else if (parentRoutine.isFunctionDecl()) {
 			// S35: Check that expression type matches the return type of enclosing function
 			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
 			SymbolType routineType = parentRoutine.getType().toSymbolType();
