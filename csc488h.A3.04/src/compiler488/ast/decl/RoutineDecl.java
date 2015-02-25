@@ -111,12 +111,10 @@ public class RoutineDecl extends Declaration {
 		}
 		if (parameters.size() > 0) {
 			parameters.setParentNode(this);
-			parameters.setParentAttribute(attribute.METHOD);
 			parameters.accept(visitor);
 		}
 		if (body != null) {
 			body.getBody().setParentNode(this);
-			body.getBody().setParentAttribute(attribute.METHOD);
 			body.accept(visitor);
 		}
 		
