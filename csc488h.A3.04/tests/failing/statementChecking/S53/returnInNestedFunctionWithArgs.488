@@ -1,0 +1,7 @@
+begin
+	boolean function a(integer b) begin
+		boolean function c(integer d) begin
+			return (true)
+		end
+	end
+end
