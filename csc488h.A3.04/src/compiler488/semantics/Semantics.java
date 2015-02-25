@@ -70,16 +70,33 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
 		if (this.trace) { System.out.println("Visiting ArrayDeclPart"); }
+		if (this.trace) {
+			System.out.println("Visiting ArrayDeclPart");
+		}
 
-
-		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
-			errors.add(arrayDeclPart.getSourceCoord(), "Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
+		// Check first dimension
+		Integer lowerBound = arrayDeclPart.getLowerBoundary1();
+		Integer upperBound = arrayDeclPart.getUpperBoundary1();
+		if (lowerBound > upperBound) {
+			String msg = String.format(
+				"Invalid bounds on first dimension of array '%s'. Lower bound '%d' must not be greater than upper bound '%d'.",
+				arrayDeclPart.getName(), lowerBound, upperBound
+			);
+			errors.add(arrayDeclPart.getSourceCoord(), msg);
 		};
 
+		// Check second dimension if applicable
 		if (arrayDeclPart.isTwoDimensional()) {
-			if (!(arrayDeclPart.getLowerBoundary2() <= arrayDeclPart.getUpperBoundary2())) {
-				errors.add(arrayDeclPart.getSourceCoord(), "Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
-			};
+			lowerBound = arrayDeclPart.getLowerBoundary2();
+			upperBound = arrayDeclPart.getUpperBoundary2();
+
+			if (lowerBound > upperBound) {
+				String msg = String.format(
+					"Invalid bounds on second dimension of array '%s'. Lower bound '%d' must not be greater than upper bound '%d'.",
+					arrayDeclPart.getName(), lowerBound, upperBound
+				);
+				errors.add(arrayDeclPart.getSourceCoord(), msg);
+			}
 		}
 	}
 
