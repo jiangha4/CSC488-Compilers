@@ -1,0 +1,9 @@
+begin
+	boolean function foo(integer x) begin
+		put x, skip
+		return(true)
+	end
+	
+	boolean x
+	x <= foo(1, 2)
+end
