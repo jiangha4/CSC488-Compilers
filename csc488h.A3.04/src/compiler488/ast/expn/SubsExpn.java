@@ -3,10 +3,9 @@ package compiler488.ast.expn;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Readable;
-import compiler488.symbol.SymbolTable;
-import compiler488.symbol.SymbolTableEntry;
-import compiler488.symbol.SymbolTable.SymbolType;
 import compiler488.ast.SourceCoord;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
  * References to an array element variable

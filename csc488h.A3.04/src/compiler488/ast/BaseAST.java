@@ -1,6 +1,5 @@
 package compiler488.ast;
 
-import compiler488.ast.stmt.Scope;
 import compiler488.symbol.SymbolTableEntry;
 
 /**
