@@ -39,6 +39,13 @@ def semantic_analysis_succeeded(parser_output):
 
 
 '''
+Return True iff there was a semantic error.
+'''
+def semantic_error_occurred(parser_output):
+    return "SemanticErrorException" in parser_output
+
+
+'''
 Run the given test and return a TestResult.
 '''
 def run_test(test_path, compiler_path, should_pass):
@@ -49,7 +56,8 @@ def run_test(test_path, compiler_path, should_pass):
 
     # Check if this is a positive or negative test case
     sem_success = semantic_analysis_succeeded(parser_output)
-    test_success = sem_success if should_pass else not sem_success
+    sem_error = semantic_error_occurred(parser_output)
+    test_success = sem_success if should_pass else (not sem_success and sem_error)
 
     # Return result
     if not parsing_succeeded(parser_output):
