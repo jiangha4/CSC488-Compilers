@@ -1,8 +1,10 @@
 package compiler488.semantics;
 
+import java.awt.geom.Area;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
@@ -246,9 +248,12 @@ public class Semantics implements ASTVisitor {
 				// S53: check that a function body contains at least one return statement
 				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
 				boolean hasReturn = false;
-				for (Stmt routineStmt : routineBody) {
-					if (routineStmt instanceof ReturnStmt) {
-						hasReturn = true;
+				if (routineBody != null){
+					for (Stmt routineStmt : routineBody) {
+						System.out.println("LOOP" + routineBody);
+						if (routineStmt instanceof ReturnStmt) {
+							hasReturn = true;
+						}
 					}
 				}
 				if (!hasReturn) {
@@ -390,8 +395,6 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting FunctionCallExpn");
 		System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
 		
-		// TODO: implement S36
-		
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
 		if (Symbol.searchGlobal(functionName) == null) {
@@ -410,6 +413,9 @@ public class Semantics implements ASTVisitor {
 		if (numArgs != numParams) {
 			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
+		
+		// S36: Check that type of argument expression matches type of corresponding formal parameter
+		s36check(functionCallExpn.getArguments(), declaredFuncASTNode.getParameters());
 	}
 
 	@Override
@@ -520,11 +526,10 @@ public class Semantics implements ASTVisitor {
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		System.out.println(exitStmt.getControlStatement());
 		if ((exitStmt.getControlStatement() != controlStatement.LOOP) &&
 			(exitStmt.getControlStatement() != controlStatement.WHILE))
 		{
-			errors.add(exitStmt.getSourceCoord() + "EXIT not contained in LOOP or WHILE statements");
+			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
 		}
 		// TODO check if exit statement is immediately contained in a loop
 		
@@ -565,8 +570,6 @@ public class Semantics implements ASTVisitor {
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		System.out.println("Visiting ProcedureCallStmt");
 		
-		// TODO: implement S36
-		
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
 		if (Symbol.searchGlobal(procName) == null) {
@@ -585,6 +588,9 @@ public class Semantics implements ASTVisitor {
 		if (numArgs != numParams) {
 			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
+		
+		// S36: Check that type of argument expression matches type of corresponding formal parameter
+		s36check(procedureCallStmt.getArguments(), declaredProcASTNode.getParameters());
 	}
 
 	@Override
@@ -621,13 +627,10 @@ public class Semantics implements ASTVisitor {
 		
 		// S51-52 Must check that return statements are in procedure 
 		// or function scope
-		/*if (returnStmt.getParentAttribute() != attribute.METHOD)
+		if (returnStmt.getParentAttribute() != attribute.METHOD)
 		{
-			System.out.println(returnStmt.getParentNode());
-			System.out.println(returnStmt.getParentAttribute());
-			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
-		}*/
-//			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
+			errors.add(returnStmt.getSourceCoord() + " Return statement is not in the scope of a function or procedure");
+		}
 	}
 
 	@Override
@@ -683,6 +686,21 @@ public class Semantics implements ASTVisitor {
 	// S31: check that type of expression is integer
 	private void s31check(Expn expn) {
 		checkExpnType(expn, SymbolType.INTEGER);
+	}
+	
+	// S36: Check that type of argument expression matches type of corresponding formal parameter
+	private void s36check(ASTList<Expn> argList, ASTList<ScalarDecl> paramList) {
+		Iterator<Expn> argExpnIter = argList.iterator();
+		Iterator<ScalarDecl> paramsIter  = paramList.iterator();
+		int count = 1;
+		while (argExpnIter.hasNext()) {
+			SymbolType aType = argExpnIter.next().getExpnType(Symbol);
+			SymbolType pType = paramsIter.next().getSTEntry().getType();
+			if ( aType != pType ) {
+				errors.add("Arg expression " + count + "'s type (" + aType + ") does not match expected param type (" + pType + ")");
+			}
+			count++;
+		}
 	}
 	
 	
