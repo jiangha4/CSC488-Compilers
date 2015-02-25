@@ -25,6 +25,20 @@ public class Scope extends Stmt {
     public ASTList<Stmt> getBody() {
         return body;
     }
+    
+    /**
+     * containsReturn - the scope statement will recursively check each of its child statements for a return statement
+     */
+    @Override
+    public boolean containsReturn() {
+    	
+    	for (Stmt child : body) {
+			if (child.containsReturn()) {
+				return true;
+			}
+		}
+		return false;
+    }
 
     @Override
     public void prettyPrint(PrettyPrinter p) {

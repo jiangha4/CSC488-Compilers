@@ -44,6 +44,25 @@ public class IfStmt extends Stmt {
     }
 
     /**
+     * containsReturn - the if statement will recursively check each of its child statements for a return statement
+     */
+    @Override
+    public boolean containsReturn() {
+    	
+    	for (Stmt child : whenTrue) {
+			if (child.containsReturn()) {
+				return true;
+			}
+		}
+		for (Stmt child : whenFalse) {
+			if (child.containsReturn()) {
+				return true;
+			}
+		}
+		return false;
+    }
+    
+    /**
      * Print a description of the <strong>if-then-else</strong> construct. If the
      * <strong>else</strong> part is empty, just print an <strong>if-then</strong> construct.
      */

@@ -32,4 +32,18 @@ public abstract class LoopingStmt extends Stmt {
     public ASTList<Stmt> getBody() {
         return body;
     }
+    
+    /**
+     * containsReturn - the looping statement will recursively check each of its child statements for a return statement
+     */
+    @Override
+    public boolean containsReturn() {
+    	
+    	for (Stmt child : body) {
+			if (child.containsReturn()) {
+				return true;
+			}
+		}
+		return false;
+    }
 }
