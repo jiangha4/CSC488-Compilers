@@ -1,0 +1,10 @@
+begin
+    boolean a
+    a <= true
+    boolean b
+    b <= true
+    if a | b then
+        put "lol"
+    end
+end
+
