@@ -1,7 +1,0 @@
-begin
-    loop 
-        loop
-        exit
-        end
-    end
-end
