@@ -369,13 +369,21 @@ public class Semantics implements ASTVisitor {
 		// S39: check that identifier has been declared as a parameter
 		// S40: check that identifier has been declared as a function
 		String identName = identExpn.getIdent();
-		if (symbolTable.searchGlobal(identName) == null) {
+		SymbolTableEntry identSymbol = symbolTable.searchGlobal(identName);
+		if (identSymbol == null) {
 			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
-		else if (symbolTable.searchGlobal(identName).getKind() != SymbolKind.VARIABLE &&
-				 symbolTable.searchGlobal(identName).getKind() != SymbolKind.PARAMETER &&
-				 symbolTable.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
+		else if (identSymbol.getKind() != SymbolKind.VARIABLE &&
+				 identSymbol.getKind() != SymbolKind.PARAMETER &&
+				 identSymbol.getKind() != SymbolKind.FUNCTION ) {
 			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used in this context because it has been declared as " + symbolTable.searchGlobal(identName).getKind() + ".");
+		}
+		else if (identSymbol.getKind() == SymbolKind.FUNCTION) {
+			// S42: check that the function has no parameters
+			int numParams = ((RoutineDecl)identSymbol.getNode()).getParameters().size();
+			if ( numParams > 0 ) {
+				errors.add(identExpn.getSourceCoord(), "Function '" + identName + "' is called with no arguments, but requires " + numParams + " parameters.");
+			}
 		}
 
 	}
