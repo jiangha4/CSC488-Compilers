@@ -622,9 +622,8 @@ public class Semantics implements ASTVisitor {
 			System.out.println(returnStmt.getParentAttribute());
 			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
 		}*/
-			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
-		}
-		// TODO: implement S35
+//			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
+	}
 
 	@Override
 	public void visit(Scope scope) {
