@@ -626,7 +626,7 @@ public class Semantics implements ASTVisitor {
 		if (parentRoutine == null){
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
 		}
-		else {
+		else if (parentRoutine.getType() != null) {
 			// S35: Check that expression type matches the return type of enclosing function
 			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
 			SymbolType routineType = parentRoutine.getType().toSymbolType();
@@ -636,7 +636,6 @@ public class Semantics implements ASTVisitor {
 					"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
 			}
 		}
-
 	}
 
 	@Override
