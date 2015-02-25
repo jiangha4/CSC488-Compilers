@@ -39,6 +39,6 @@ public class TextConstExpn extends ConstExpn implements Printable {
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		// TODO: should we add Text type?
-		return SymbolType.UNKNOWN;
+		return SymbolType.TEXT;
 	}
 }
