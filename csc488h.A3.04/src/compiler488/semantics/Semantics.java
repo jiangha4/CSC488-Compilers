@@ -299,7 +299,7 @@ public class Semantics implements ASTVisitor {
 			System.out.println("Type: " + compareExpn.getExpnType(symbolTable));
 		}
 
-		assertIsIntExpn(compareExpn);
+		assertIsBoolExpn(compareExpn);
 	}
 
 	@Override
@@ -317,7 +317,7 @@ public class Semantics implements ASTVisitor {
 			System.out.println("Type: " + equalsExpn.getExpnType(symbolTable));
 		}
 
-		assertIsIntExpn(equalsExpn);
+		assertIsBoolExpn(equalsExpn);
 	}
 
 	@Override

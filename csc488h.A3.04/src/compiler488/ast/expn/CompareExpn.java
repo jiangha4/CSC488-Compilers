@@ -2,6 +2,8 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.SourceCoord;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 
 /**
@@ -9,24 +11,37 @@ import compiler488.ast.SourceCoord;
  * be integer expressions.  e.g. &lt; , &gt;  etc. comparisons
  */
 public class CompareExpn extends BinaryExpn {
-    public final static String OP_LESS 			= "<";
-    public final static String OP_LESS_EQUAL 	= "<=";
-    public final static String OP_GREATER 		= ">";
-    public final static String OP_GREATER_EQUAL	= ">=";
+  public final static String OP_LESS 			= "<";
+  public final static String OP_LESS_EQUAL 	= "<=";
+  public final static String OP_GREATER 		= ">";
+  public final static String OP_GREATER_EQUAL	= ">=";
 
-    public CompareExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
-        super(opSymbol, left, right, sourceCoord);
+  public CompareExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
+    super(opSymbol, left, right, sourceCoord);
 
-        assert ((opSymbol == OP_LESS) ||
-                (opSymbol == OP_LESS_EQUAL) ||
-                (opSymbol == OP_GREATER) ||
-                (opSymbol == OP_GREATER_EQUAL));
+    assert ((opSymbol == OP_LESS) ||
+            (opSymbol == OP_LESS_EQUAL) ||
+            (opSymbol == OP_GREATER) ||
+            (opSymbol == OP_GREATER_EQUAL));
     }
 
-    @Override
+  @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
 		left.accept(visitor);
 		right.accept(visitor);
+	}
+
+  @Override
+	public SymbolType getExpnType(SymbolTable st) {
+    if (this.expnType == null) {
+      if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+        this.expnType = SymbolType.BOOLEAN;
+      } else {
+        this.expnType = SymbolType.UNKNOWN;
+      }
+    }
+
+    return this.expnType;
 	}
 }
