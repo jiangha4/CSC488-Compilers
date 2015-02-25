@@ -260,8 +260,11 @@ public class Semantics implements ASTVisitor {
 				}
 				if (hasReturn) {
 					// S35: Check that expression type matches the return type of enclosing function
-					if ( routineType != rs.getValue().getExpnType(Symbol) ) {
-						errors.add(rs.getSourceCoord(), "Return statement type does not match function type.");
+					SymbolType returnStatementType = rs.getValue().getExpnType(Symbol);
+					if ( routineType != returnStatementType ) {
+						errors.add(
+							rs.getSourceCoord(),
+							"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
 					}
 				} else {
 					// S53
