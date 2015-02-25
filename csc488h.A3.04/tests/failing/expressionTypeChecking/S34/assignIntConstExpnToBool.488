@@ -1,0 +1,4 @@
+begin
+	boolean a
+	a <= 10 + 5
+end

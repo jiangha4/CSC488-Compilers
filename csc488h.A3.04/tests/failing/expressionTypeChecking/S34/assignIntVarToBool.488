@@ -1,0 +1,5 @@
+begin
+	boolean a
+	integer b
+	a <= b
+end
