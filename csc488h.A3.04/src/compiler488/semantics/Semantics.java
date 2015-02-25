@@ -686,7 +686,8 @@ public class Semantics implements ASTVisitor {
 	private void checkExpnType(Expn expn, SymbolType expectedType) {
 		SymbolType type = expn.getExpnType(symbolTable);
 		if (type != expectedType) {
-			errors.add(expn.getSourceCoord(), "Expression is not of type " + expectedType);
+			String msg = String.format("%s expression expected, but is %s.", expectedType, type);
+			errors.add(expn.getSourceCoord(), msg);
 		}
 	}
 
