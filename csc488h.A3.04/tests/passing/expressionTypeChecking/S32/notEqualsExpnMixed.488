@@ -1,0 +1,7 @@
+begin
+    boolean b
+    b <= true != (true != false)
+    b <= (false != true) != false
+    b <= (true != false) != (1 != 2)
+    b <= (1 != 1) != true
+end

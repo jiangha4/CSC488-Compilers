@@ -1,0 +1,5 @@
+begin
+    boolean b, t, f
+    integer i
+    b <= i != (t != f)
+end
