@@ -12,15 +12,22 @@ Who Did What
 ------------
 
 Haohan Jiang (g3jiangh)
-- SymbolTable implementation
+- SymbolTable implementation, design
+- Semantic Analysis
+- AST node additions
+- Testing cases for S30, S50-S52
 
 Chandeep Singh (g2singh)
 - SymbolTable implementation
+- Semantic Analysis
+- Testing cases
 
 Maria Yancheva (c2yanche)
 - AST traversal using visitor pattern
 - SymbolTable implementation
+- Majority of the Semantic Analysis
 
 Timo Vink (c4vinkti)	
 - AST construction in cup (grammar) file
-				
+- Testing cases
+- Improved code readability and fixed multiple errors i
