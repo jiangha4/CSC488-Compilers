@@ -1,0 +1,5 @@
+begin
+	if x = 1 then
+		put "x is 1", skip
+	end
+end
