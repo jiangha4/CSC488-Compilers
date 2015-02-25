@@ -1,0 +1,5 @@
+begin
+	while x[1] < 10 do
+		put "a", skip
+	end
+end
