@@ -249,16 +249,9 @@ public class Semantics implements ASTVisitor {
 				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
 				boolean hasReturn = false;
 				if (routineBody != null){
-					/* for (Stmt routineStmt : routineBody) {
+					for (Stmt routineStmt : routineBody) {
 						System.out.println("LOOP" + routineBody);
 						if (routineStmt instanceof ReturnStmt) {
-							hasReturn = true;
-						}
-					}*/
-					for(int i = 0; i < routineBody.size(); i++){
-						
-						if(routineBody.get(i) instanceof ReturnStmt){
-							System.out.println("LOOP" + routineBody);
 							hasReturn = true;
 						}
 					}
