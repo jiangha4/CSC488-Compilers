@@ -10,7 +10,6 @@ import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.BaseAST;
 import compiler488.ast.BaseAST.attribute;
-import compiler488.ast.BaseAST.controlStatement;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.Printable;
 import compiler488.ast.decl.ArrayDeclPart;
@@ -533,7 +532,6 @@ public class Semantics implements ASTVisitor {
 		boolean foundLoop = false;
 		while(currNode != null)
 		{
-			System.out.println(currNode + " " + currNode.getParentNode());
 			if ((currNode.getParentNode() instanceof LoopStmt) ||
 				(currNode.getParentNode() instanceof WhileDoStmt)){
 				foundLoop = true;
