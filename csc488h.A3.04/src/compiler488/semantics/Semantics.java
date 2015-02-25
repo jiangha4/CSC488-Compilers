@@ -3,6 +3,7 @@ package compiler488.semantics;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.IllegalStateException;
 import java.util.Iterator;
 
 import compiler488.ast.*;
