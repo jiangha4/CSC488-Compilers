@@ -1,0 +1,4 @@
+begin
+	boolean a
+	a <= { return (true) yields true }
+end
