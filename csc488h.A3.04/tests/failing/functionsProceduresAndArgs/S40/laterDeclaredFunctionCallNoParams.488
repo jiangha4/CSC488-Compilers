@@ -1,0 +1,9 @@
+begin
+	boolean x
+	x <= foo
+	
+	boolean function foo begin
+		return(true)
+	end
+	
+end

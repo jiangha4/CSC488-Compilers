@@ -1,0 +1,14 @@
+begin
+	boolean function foo(integer x, integer y, boolean a, boolean b) begin
+		put x, skip
+		put y, skip
+		if a & b then
+			return(true)
+		else
+			return(false)
+		end
+	end
+	
+	boolean x
+	x <= foo(1,2,true)
+end

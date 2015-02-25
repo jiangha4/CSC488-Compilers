@@ -1,0 +1,7 @@
+begin
+	boolean function a begin
+		while true do
+			return (true)
+		end
+	end
+end

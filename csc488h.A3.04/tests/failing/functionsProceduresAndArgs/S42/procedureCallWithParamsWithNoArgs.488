@@ -1,0 +1,7 @@
+begin
+	procedure foo(integer x, integer y) begin
+		put "hello"
+	end
+	
+	foo
+end
