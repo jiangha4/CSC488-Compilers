@@ -1,7 +1,7 @@
 begin 
     boolean a
     a <= false
-    while a then
+    while a do
         put "lol"
     end
 end
