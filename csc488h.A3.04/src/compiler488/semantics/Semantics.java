@@ -243,12 +243,17 @@ public class Semantics implements ASTVisitor {
 				routineType = routineDecl.getType().toSymbolType();
 				routineKind = SymbolKind.FUNCTION;
 				
-				// S53 If it is a function, we must also check to make sure that we have 
-				// a return function in the body
-			
-				// Not sure how to iterate over this to check for return stmt
-				Scope routineBody = routineDecl.getBody();
-				
+				// S53: check that a function body contains at least one return statement
+				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
+				boolean hasReturn = false;
+				for (Stmt routineStmt : routineBody) {
+					if (routineStmt instanceof ReturnStmt) {
+						hasReturn = true;
+					}
+				}
+				if (!hasReturn) {
+					errors.add(routineDecl.getSourceCoord() + ": Function '" + routineName + "' must have at least one return statement.");
+				}
 			}
 			
 			// Check for existing declaration
