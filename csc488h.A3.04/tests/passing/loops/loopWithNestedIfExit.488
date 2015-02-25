@@ -7,4 +7,5 @@ begin
             exit
         end
         a <= a + 1
+    end
 end
