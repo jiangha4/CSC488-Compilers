@@ -252,9 +252,9 @@ public class Semantics implements ASTVisitor {
 				boolean hasReturn = false;
 				if (routineBody != null){
 					for (Stmt routineStmt : routineBody) {
-						System.out.println("LOOP" + routineBody);
-						if (routineStmt instanceof ReturnStmt) {
+						if (routineStmt.containsReturn()) {
 							hasReturn = true;
+							break;
 						}
 					}
 				}
