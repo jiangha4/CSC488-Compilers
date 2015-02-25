@@ -108,14 +108,17 @@ def run_tests(test_dir_path, compiler_path, should_pass):
 
     # Print detailed error messages
     errors = [r for r in results if r.type != ResultType.passed]
+    add_newline = False
     for err_result in errors:
-        if should_pass:
+        if should_pass or err_result.type == ResultType.test_fail:
             print ("  \033[91m" + err_result.test_name + "\033[0m:")
             indented = "    " + str.join("\n    ", err_result.details.split('\n'))
             print(indented + "\n")
+            add_newline = False
         else:
             print ("  \033[91m" + err_result.test_name + "\033[0m")
-    if len(errors) and not should_pass:
+            add_newline = True
+    if add_newline:
         print()
 
     # Recursively run tests in subdirectories
