@@ -402,8 +402,8 @@ public class Main {
    */
 
   private static void semanticAnalysis( Program  programAST ) {
-	  Semantics visitor = new Semantics();
 
+	  Semantics visitor = new Semantics(traceSemantics);
 	  try {
 		  programAST.accept(visitor);
 	  }
