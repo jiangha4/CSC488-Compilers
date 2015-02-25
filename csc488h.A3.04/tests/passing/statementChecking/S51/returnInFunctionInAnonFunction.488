@@ -1,0 +1,10 @@
+begin
+	boolean a
+	a <= {
+		boolean function b begin
+			return (true)
+		end
+		yields
+		b
+	}
+end
