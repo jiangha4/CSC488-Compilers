@@ -21,9 +21,8 @@ import compiler488.symbol.SymbolTable.*;
  *           </B>
  */
 public class Semantics implements ASTVisitor {
-
 	/** flag for tracing semantic analysis */
-	private boolean traceSemantics = false;
+	private boolean trace = false;
 
 	/** file sink for semantic analysis trace */
 	private String traceFile = new String();
@@ -37,7 +36,8 @@ public class Semantics implements ASTVisitor {
     private SemanticErrorCollector errors;
 
     /** SemanticAnalyzer constructor */
-	public Semantics (){
+	public Semantics (boolean trace) {
+		this.trace = trace;
 		Symbol = new SymbolTable();
 		errors = new SemanticErrorCollector();
 	}
@@ -60,7 +60,8 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
-		System.out.println("Visiting ArrayDeclPart");
+		if (this.trace) { System.out.println("Visiting ArrayDeclPart"); }
+
 
 		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
 			errors.add(arrayDeclPart.getSourceCoord(), "Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
@@ -75,19 +76,17 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Declaration declaration) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting Declaration");
+		if (this.trace) { System.out.println("Visiting Declaration"); }
 	}
 
 	@Override
 	public void visit(DeclarationPart declarationPart) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting DeclarationPart");
+		if (this.trace) { System.out.println("Visiting DeclarationPart"); }
 	}
 
 	@Override
 	public void visit(MultiDeclarations multiDeclarations) {
-		System.out.println("Visiting MultiDeclarations");
+		if (this.trace) { System.out.println("Visiting MultiDeclarations"); }
 
 		// Add a symbol for every element in the declaration (into current scope)
 		// (The value for the newly inserted elements is blank: in the project
@@ -115,7 +114,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(RoutineDecl routineDecl) {
-		System.out.println("Visiting RoutineDecl");
+		if (this.trace) { System.out.println("Visiting RoutineDecl"); }
 
 		if (!routineDecl.isVisited()) {
 			/**
@@ -190,7 +189,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
-		System.out.println("Visiting ScalarDecl");
+		if (this.trace) { System.out.println("Visiting ScalarDecl"); }
 
 		String declId = scalarDecl.getName();
 		SymbolType declType = scalarDecl.getType().toSymbolType();
@@ -208,90 +207,99 @@ public class Semantics implements ASTVisitor {
 				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declId);
 			}
 		}
-
 	}
 
 	@Override
 	public void visit(ScalarDeclPart scalarDeclPart) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting ScalarDeclPart");
+		if (this.trace) { System.out.println("Visiting ScalarDeclPart"); }
 	}
 
 	@Override
 	public void visit(AnonFuncExpn anonFuncExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting AnonFuncExpn");
-		System.out.println("Type: " + anonFuncExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting AnonFuncExpn");
+			System.out.println("Type: " + anonFuncExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(ArithExpn arithExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting ArithExpn");
-		System.out.println("Type: " + arithExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting ArithExpn");
+			System.out.println("Type: " + arithExpn.getExpnType(Symbol));
+		}
 
 		assertIsIntExpn(arithExpn);
 	}
 
 	@Override
 	public void visit(BinaryExpn binaryExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting BinaryExpn");
-		System.out.println("Type: " + binaryExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting BinaryExpn");
+			System.out.println("Type: " + binaryExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(BoolConstExpn boolConstExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting BoolConstExpn");
-		System.out.println("Type: " + boolConstExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting BoolConstExpn");
+			System.out.println("Type: " + boolConstExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(BoolExpn boolExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting BoolExpn");
-		System.out.println("Type: " + boolExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting BoolExpn");
+			System.out.println("Type: " + boolExpn.getExpnType(Symbol));
+		}
 
 		assertIsBoolExpn(boolExpn);
 	}
 
 	@Override
 	public void visit(CompareExpn compareExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting CompareExpn");
-		System.out.println("Type: " + compareExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting CompareExpn");
+			System.out.println("Type: " + compareExpn.getExpnType(Symbol));
+		}
 
 		assertIsIntExpn(compareExpn);
 	}
 
 	@Override
 	public void visit(ConstExpn constExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting ConstExpn");
-		System.out.println("Type: " + constExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting ConstExpn");
+			System.out.println("Type: " + constExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(EqualsExpn equalsExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting EqualsExpn");
-		System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting EqualsExpn");
+			System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
+		}
 
 		assertIsIntExpn(equalsExpn);
 	}
 
 	@Override
 	public void visit(Expn expn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting Expn");
-		System.out.println("Type: " + expn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting Expn");
+			System.out.println("Type: " + expn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(FunctionCallExpn functionCallExpn) {
-		System.out.println("Visiting FunctionCallExpn");
-		System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting FunctionCallExpn");
+			System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
+		}
 
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
@@ -318,8 +326,10 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(IdentExpn identExpn) {
-		System.out.println("Visiting IdentExpn");
-		System.out.println("Type: " + identExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting IdentExpn");
+			System.out.println("Type: " + identExpn.getExpnType(Symbol));
+		}
 
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
@@ -338,31 +348,36 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(IntConstExpn intConstExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting IntConstExpn");
-		System.out.println("Type: " + intConstExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting IntConstExpn");
+			System.out.println("Type: " + intConstExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(NotExpn notExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting NotExpn");
-		System.out.println("Type: " + notExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting NotExpn");
+			System.out.println("Type: " + notExpn.getExpnType(Symbol));
+		}
 
 		assertIsBoolExpn(notExpn);
 	}
 
 	@Override
 	public void visit(SkipConstExpn skipConstExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting SkipConstExpn");
-		System.out.println("Type: " + skipConstExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting SkipConstExpn");
+			System.out.println("Type: " + skipConstExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(SubsExpn subsExpn) {
-		System.out.println("Visiting SubsExpn");
-		System.out.println("Type: " + subsExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting SubsExpn");
+			System.out.println("Type: " + subsExpn.getExpnType(Symbol));
+		}
 
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
@@ -376,31 +391,33 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(TextConstExpn textConstExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting TextConstExpn");
-		System.out.println("Type: " + textConstExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting TextConstExpn");
+			System.out.println("Type: " + textConstExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(UnaryExpn unaryExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting UnaryExpn");
-		System.out.println("Type: " + unaryExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting UnaryExpn");
+			System.out.println("Type: " + unaryExpn.getExpnType(Symbol));
+		}
 	}
 
 	@Override
 	public void visit(UnaryMinusExpn unaryMinusExpn) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting UnaryMinusExpn");
-		System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
+		if (this.trace) {
+			System.out.println("Visiting UnaryMinusExpn");
+			System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
+		}
 
 		assertIsIntExpn(unaryMinusExpn);
 	}
 
 	@Override
 	public void visit(AssignStmt assignStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting AssignStmt");
+		if (this.trace) { System.out.println("Visiting AssignStmt"); }
 
 		// S34: Check that variable and expression in assignment are the same type
 		SymbolType lType = assignStmt.getLval().getExpnType(Symbol);
@@ -414,8 +431,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ExitStmt exitStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting ExitStmt");
+		if (this.trace) { System.out.println("Visiting ExitStmt"); }
 
 		// Only do S30 check if "exit when"
 		if (exitStmt.getExpn() != null) {
@@ -448,8 +464,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(GetStmt getStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting GetStmt");
+		if (this.trace) { System.out.println("Visiting GetStmt"); }
 
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
@@ -459,27 +474,24 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(IfStmt ifStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting IfStmt");
+		if (this.trace) { System.out.println("Visiting IfStmt"); }
 
 		assertIsBoolExpn(ifStmt.getCondition());
 	}
 
 	@Override
 	public void visit(LoopingStmt loopingStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting LoopingStmt");
+		if (this.trace) { System.out.println("Visiting LoopingStmt"); }
 	}
 
 	@Override
 	public void visit(LoopStmt loopStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting LoopStmt");
+		if (this.trace) { System.out.println("Visiting LoopStmt"); }
 	}
 
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
-		System.out.println("Visiting ProcedureCallStmt");
+		if (this.trace) { System.out.println("Visiting ProcedureCallStmt"); }
 
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
@@ -506,7 +518,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Program program) {
-		System.out.println("Visiting Program");
+		if (this.trace) { System.out.println("Visiting Program"); }
 
 		if (!program.isVisited()) {
 			// Begin new scope
@@ -525,8 +537,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(PutStmt putStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting PutStmt");
+		if (this.trace) { System.out.println("Visiting PutStmt"); }
 
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
@@ -542,8 +553,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ReturnStmt returnStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting ReturnStmt");
+		if (this.trace) { System.out.println("Visiting ReturnStmt"); }
 
 		// S51-52 Must check that return statements are in procedure
 		// or function scope
@@ -566,39 +576,34 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Scope scope) {
-		System.out.println("Visiting Scope");
+		if (this.trace) { System.out.println("Visiting Scope"); }
 	}
 
 	@Override
 	public void visit(Stmt stmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting Stmt");
+		if (this.trace) { System.out.println("Visiting Stmt"); }
 	}
 
 	@Override
 	public void visit(WhileDoStmt whileDoStmt) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting WhileDoStmt");
+		if (this.trace) { System.out.println("Visiting WhileDoStmt"); }
 
 		assertIsBoolExpn(whileDoStmt.getExpn());
 	}
 
 	@Override
 	public void visit(BooleanType booleanType) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting BooleanType");
+		if (this.trace) { System.out.println("Visiting BooleanType"); }
 	}
 
 	@Override
 	public void visit(IntegerType integerType) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting IntegerType");
+		if (this.trace) { System.out.println("Visiting IntegerType"); }
 	}
 
 	@Override
 	public void visit(Type type) {
-		// TODO Auto-generated method stub
-		System.out.println("Visiting Type");
+		if (this.trace) { System.out.println("Visiting Type"); }
 	}
 
 	// compare expn type to expectedType, and error if not the same
@@ -628,7 +633,7 @@ public class Semantics implements ASTVisitor {
 			Expn nextArg = argExpnIter.next();
 			SymbolType aType = nextArg.getExpnType(Symbol);
 			SymbolType pType = paramsIter.next().getSTEntry().getType();
-			if ( aType != pType ) {
+			if (aType != pType) {
 				errors.add(
 					nextArg.getSourceCoord(),
 					"Arg expression " + count + "'s type (" + aType + ") does not match expected param type (" + pType + ")");
@@ -636,7 +641,4 @@ public class Semantics implements ASTVisitor {
 			count++;
 		}
 	}
-
-
-
 }
