@@ -355,7 +355,7 @@ public class Semantics implements ASTVisitor {
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
-		s36check(functionCallExpn.getArguments(), declaredFuncASTNode.getParameters());
+		assertArgmtAndParamTypesMatch(functionCallExpn.getArguments(), declaredFuncASTNode.getParameters());
 	}
 
 	@Override
@@ -561,7 +561,7 @@ public class Semantics implements ASTVisitor {
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
-		s36check(procedureCallStmt.getArguments(), declaredProcASTNode.getParameters());
+		assertArgmtAndParamTypesMatch(procedureCallStmt.getArguments(), declaredProcASTNode.getParameters());
 	}
 
 	@Override
@@ -701,7 +701,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	// S36: Check that type of argument expression matches type of corresponding formal parameter
-	private void s36check(ASTList<Expn> argList, ASTList<ScalarDecl> paramList) {
+	private void assertArgmtAndParamTypesMatch(ASTList<Expn> argList, ASTList<ScalarDecl> paramList) {
 		Iterator<Expn> argExpnIter = argList.iterator();
 		Iterator<ScalarDecl> paramsIter	= paramList.iterator();
 		int count = 1;
