@@ -22,7 +22,9 @@ public class AnonFuncExpn extends Expn {
     public AnonFuncExpn(ASTList<Stmt> body, Expn expn, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        body.setParentNode(this);
         this.body = body;
+        expn.setParentNode(this);
         this.expn = expn;
     }
 

@@ -18,7 +18,9 @@ public class AssignStmt extends Stmt {
     public AssignStmt(Expn lval, Expn rval, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        lval.setParentNode(this);
         this.lval = lval;
+        rval.setParentNode(this);
         this.rval = rval;
     }
 

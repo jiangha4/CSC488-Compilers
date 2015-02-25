@@ -17,7 +17,11 @@ public abstract class LoopingStmt extends Stmt {
     public LoopingStmt(Expn expn, ASTList<Stmt> body, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        if (expn != null) {
+          expn.setParentNode(this);
+        }
         this.expn = expn;
+        body.setParentNode(this);
         this.body = body;
     }
 

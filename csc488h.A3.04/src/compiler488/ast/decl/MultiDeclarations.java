@@ -16,6 +16,7 @@ public class MultiDeclarations extends Declaration {
     public MultiDeclarations(Type type, ASTList<DeclarationPart> elements, SourceCoord sourceCoord) {
         super(null, type, sourceCoord);
 
+        elements.setParentNode(this);
         this.elements = elements;
     }
 

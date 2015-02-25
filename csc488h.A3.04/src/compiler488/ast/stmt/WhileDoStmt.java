@@ -26,9 +26,7 @@ public class WhileDoStmt extends LoopingStmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
-		expn.setParentNode(this);
 		expn.accept(visitor);
-		body.setParentNode(this);
 		body.accept(visitor);
 	}
 }

@@ -22,6 +22,7 @@ public class FunctionCallExpn extends Expn {
         super(sourceCoord);
 
         this.ident = ident;
+        arguments.setParentNode(this);
         this.arguments = arguments;
     }
 

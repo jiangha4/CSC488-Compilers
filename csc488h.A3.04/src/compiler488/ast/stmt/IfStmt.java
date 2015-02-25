@@ -22,8 +22,13 @@ public class IfStmt extends Stmt {
     public IfStmt(Expn condition, ASTList<Stmt> whenTrue, ASTList<Stmt> whenFalse, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        condition.setParentNode(this);
         this.condition = condition;
+        whenTrue.setParentNode(this);
         this.whenTrue = whenTrue;
+        if (whenFalse != null) {
+            whenFalse.setParentNode(this);
+        }
         this.whenFalse = whenFalse;
     }
 
@@ -84,16 +89,13 @@ public class IfStmt extends Stmt {
     }
 
     @Override
-	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
-		condition.setParentNode(this);
-		condition.accept(visitor);
-		whenTrue.setParentNode(this);
-		whenTrue.accept(visitor);
-		
-		if (whenFalse != null) {
-			whenFalse.setParentNode(this);
-			whenFalse.accept(visitor);
-		}
-	}
+  public void accept(ASTVisitor visitor) {
+    visitor.visit(this);
+    condition.accept(visitor);
+    whenTrue.accept(visitor);
+
+    if (whenFalse != null) {
+      whenFalse.accept(visitor);
+    }
+  }
 }

@@ -24,6 +24,7 @@ public class ProcedureCallStmt extends Stmt {
         super(sourceCoord);
 
         this.name = name;
+        arguments.setParentNode(this);
         this.arguments = arguments;
     }
 
@@ -52,12 +53,12 @@ public class ProcedureCallStmt extends Stmt {
 
     @Override
 	public void accept(ASTVisitor visitor) {
-    	
+
     	// S41: check that identifier has been declared as a procedure
-    	// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the 
+    	// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the
     	// number of arguments passed to the procedure call statement
     	visitor.visit(this);
-    	
+
 		if ((arguments != null) && (arguments.size() > 0)) {
 			arguments.accept(visitor);
 		}

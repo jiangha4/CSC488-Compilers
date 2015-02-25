@@ -16,6 +16,7 @@ public class PutStmt extends Stmt {
     public PutStmt(ASTList<Printable> outputs, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        outputs.setParentNode(this);
         this.outputs = outputs;
     }
 
@@ -28,7 +29,7 @@ public class PutStmt extends Stmt {
         p.print("put ");
         outputs.prettyPrintCommas(p);
     }
-    
+
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);

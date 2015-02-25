@@ -17,8 +17,11 @@ public abstract class Declaration extends Stmt {
     public Declaration(String name, Type type, SourceCoord sourceCoord) {
         super(sourceCoord);
 
-        this.name = name;
+        if (type != null) {
+          type.setParentNode(this);
+        }
         this.type = type;
+        this.name = name;
     }
 
     public String getName() {

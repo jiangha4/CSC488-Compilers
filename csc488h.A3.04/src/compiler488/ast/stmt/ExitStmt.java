@@ -15,6 +15,9 @@ public class ExitStmt extends Stmt {
     public ExitStmt(Expn expn, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        if (expn != null) {
+          expn.setParentNode(this);
+        }
         this.expn = expn;
     }
 

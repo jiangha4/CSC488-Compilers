@@ -31,7 +31,9 @@ public class RoutineDecl extends Declaration {
     public RoutineDecl(String name, Type type, ASTList<ScalarDecl> parameters, Scope body, SourceCoord sourceCoord) {
         super(name, type, sourceCoord);
 
+        parameters.setParentNode(this);
         this.parameters = parameters;
+        body.setParentNode(this);
         this.body = body;
     }
 
@@ -110,12 +112,10 @@ public class RoutineDecl extends Declaration {
 			type.accept(visitor);
 		}
 		if (parameters.size() > 0) {
-			parameters.setParentNode(this);
 			parameters.setParentAttribute(attribute.METHOD);
 			parameters.accept(visitor);
 		}
 		if (body != null) {
-			body.getBody().setParentNode(this);
 			body.getBody().setParentAttribute(attribute.METHOD);
 			body.accept(visitor);
 		}

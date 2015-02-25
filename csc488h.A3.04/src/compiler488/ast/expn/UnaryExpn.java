@@ -27,6 +27,7 @@ public abstract class UnaryExpn extends Expn {
         super(sourceCoord);
 
         this.opSymbol = opSymbol;
+        operand.setParentNode(this);
         this.operand = operand;
 
         assert ((opSymbol == OP_NOT) ||

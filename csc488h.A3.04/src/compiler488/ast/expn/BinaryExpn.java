@@ -26,7 +26,9 @@ public abstract class BinaryExpn extends Expn {
         super(sourceCoord);
 
         this.opSymbol = opSymbol;
+        left.setParentNode(this);
         this.left = left;
+        right.setParentNode(this);
         this.right = right;
     }
 

@@ -19,6 +19,7 @@ public class ReturnStmt extends Stmt {
     public ReturnStmt(Expn value, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        value.setParentNode(this);
         this.value = value;
     }
 
@@ -42,11 +43,11 @@ public class ReturnStmt extends Stmt {
             p.print(")");
         }
     }
-    
+
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
-		
+
 		if (value != null) {
 			value.accept(visitor);
 		}

@@ -25,7 +25,11 @@ public class SubsExpn extends Expn implements Readable {
         super(sourceCoord);
 
         this.variable = variable;
+        subscript1.setParentNode(this);
         this.subscript1 = subscript1;
+        if (subscript2 != null) {
+            subscript2.setParentNode(this);
+        }
         this.subscript2 = subscript2;
     }
 

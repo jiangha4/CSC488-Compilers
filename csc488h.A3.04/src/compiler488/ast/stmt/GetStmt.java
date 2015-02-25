@@ -16,6 +16,7 @@ public class GetStmt extends Stmt {
     public GetStmt (ASTList<Expn> inputs, SourceCoord sourceCoord) {
         super(sourceCoord);
 
+        inputs.setParentNode(this);
         this.inputs = inputs;
     }
 
