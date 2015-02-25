@@ -1,0 +1,6 @@
+begin
+	boolean a
+	loop
+		a <= { exit yields true}
+	end
+end
