@@ -597,12 +597,14 @@ public class Semantics implements ASTVisitor {
 
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
-		for (Printable e : putStmt.getOutputs()) {
-			SymbolType type = ((Expn)e).getExpnType(symbolTable);
+		for (Printable printable : putStmt.getOutputs()) {
+			Expn expn = (Expn)printable;
+			SymbolType type = expn.getExpnType(symbolTable);
 			if (type != SymbolType.INTEGER &&
 				type != SymbolType.TEXT &&
 				type != SymbolType.SKIP) {
-				errors.add(((Expn)e).getSourceCoord(), "Put statement can only contain integer expressions, text, or skips");
+				String msg = String.format("Can't 'put' %s expression. Can only 'put' integer expressions, text, and skips", type);
+				errors.add(expn.getSourceCoord(), msg);
 			}
 		}
 	}
