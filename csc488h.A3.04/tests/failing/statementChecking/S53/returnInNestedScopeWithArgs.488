@@ -1,7 +1,0 @@
-begin
-	boolean function a(integer b) begin
-		begin
-			return (true)
-		end
-	end
-end
