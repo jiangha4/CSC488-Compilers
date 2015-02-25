@@ -19,7 +19,9 @@ public class ReturnStmt extends Stmt {
     public ReturnStmt(Expn value, SourceCoord sourceCoord) {
         super(sourceCoord);
 
-        value.setParentNode(this);
+        if (value != null) {
+          value.setParentNode(this);
+        }
         this.value = value;
     }
 

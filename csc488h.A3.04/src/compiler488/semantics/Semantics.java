@@ -655,17 +655,18 @@ public class Semantics implements ASTVisitor {
 
 		// S51-52 Must check that return statements are in procedure
 		// or function scope
-		
+
 		BaseAST currNode = returnStmt;
 		boolean foundMethod = false;
 		while(currNode != null)
 		{
-			if ((currNode.getParentNode() instanceof RoutineDecl)){
+			if (currNode instanceof RoutineDecl){
 				foundMethod = true;
+				break;
 			}
 			currNode = currNode.getParentNode();
 		}
-		
+
 		if (!foundMethod){
 			errors.add(returnStmt.getSourceCoord() + " Return statement is not in the scope of a function or procedure");
 		}
