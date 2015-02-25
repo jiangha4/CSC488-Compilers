@@ -1,0 +1,5 @@
+begin
+    if false | false then 
+        put "lol"
+    end
+end

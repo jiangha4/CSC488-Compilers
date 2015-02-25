@@ -1,0 +1,8 @@
+begin
+    integer a
+    a <= 3
+    loop
+        put "lol"
+        exit when a
+    end
+end

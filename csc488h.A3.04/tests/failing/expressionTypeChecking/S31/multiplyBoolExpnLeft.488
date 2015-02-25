@@ -1,0 +1,4 @@
+begin
+	integer a
+	a <= true * 1
+end
