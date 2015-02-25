@@ -1,6 +1,0 @@
-begin
-    integer x, y
-    begin
-        boolean z
-    end
-end

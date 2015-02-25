@@ -1,3 +1,0 @@
-begin
-    boolean x[0..0, 2..2]
-end

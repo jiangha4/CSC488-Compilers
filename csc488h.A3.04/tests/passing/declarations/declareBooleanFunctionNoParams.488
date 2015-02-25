@@ -1,5 +1,0 @@
-begin
-    boolean function f begin
-        return(true)
-    end
-end

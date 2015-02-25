@@ -1,5 +1,0 @@
-begin
-    integer function f begin
-        return(1)
-    end
-end

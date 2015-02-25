@@ -1,8 +1,0 @@
-begin
-    integer x, y
-    procedure foo begin
-    end
-    
-    procedure bar begin
-    end
-end

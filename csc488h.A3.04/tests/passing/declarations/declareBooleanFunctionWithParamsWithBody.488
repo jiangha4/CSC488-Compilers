@@ -1,9 +1,0 @@
-begin
-    boolean function f(integer x, integer y) begin
-        if (x > y) then
-            return(true)
-        else
-            return(false)
-        end
-    end
-end

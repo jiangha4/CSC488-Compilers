@@ -1,5 +1,0 @@
-begin
-    integer function f(integer x, boolean y) begin
-        return(1)
-    end
-end

@@ -1,9 +1,0 @@
-begin
-    integer function f(integer x, integer y) begin
-        if (x > y) then
-            return(1)
-        else
-            return(0)
-        end
-    end
-end

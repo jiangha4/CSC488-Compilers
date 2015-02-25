@@ -1,4 +1,0 @@
-begin
-    procedure f(integer x, boolean y) begin
-    end
-end
