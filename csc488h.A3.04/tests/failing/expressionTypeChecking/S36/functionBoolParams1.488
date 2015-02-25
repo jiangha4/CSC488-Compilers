@@ -1,0 +1,7 @@
+begin
+    boolean function bruh(boolean b1, boolean b2) begin
+        return(b1 & b2)
+    end
+    boolean b
+    b <= bruh(1, true)
+end

@@ -1,0 +1,7 @@
+begin
+    procedure Hai2u(integer n, boolean b) begin
+        b <= b | (n = n)
+    end
+    Hai2u(1+200, 1 = 2)
+    Hai2u(500*2*3+1+2, 0 != 1)
+end

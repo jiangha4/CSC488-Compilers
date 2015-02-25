@@ -1,0 +1,8 @@
+begin
+    integer function Hai2u(integer n1, integer n2) begin
+        return(n1+n2+100)
+    end
+    integer i
+    i <= Hai2u(1 + 200, 21)
+    i <= Hai2u(100, 200 - 1 * 20 + 2)
+end

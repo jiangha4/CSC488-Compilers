@@ -1,0 +1,6 @@
+begin
+    procedure bruh(integer n, boolean b) begin
+        b <= (n = n | b)
+    end
+    bruh(true = false, 200+5)
+end

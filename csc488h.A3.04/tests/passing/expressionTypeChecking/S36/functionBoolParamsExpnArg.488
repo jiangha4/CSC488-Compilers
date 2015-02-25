@@ -1,0 +1,8 @@
+begin
+    boolean function Hai2u(boolean a, boolean b) begin
+        return(a & b)
+    end
+    boolean b
+    b <= Hai2u(1 = 1, 1 != 1)
+    b <= Hai2u(1 != 2, 1 = (2 + 3))
+end

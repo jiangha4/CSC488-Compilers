@@ -1,0 +1,8 @@
+begin
+    boolean function Hai2u(integer n, boolean b) begin
+        return(b | (n = n))
+    end
+    boolean b
+    b <= Hai2u(1, true)
+    b <= Hai2u(0, false)
+end

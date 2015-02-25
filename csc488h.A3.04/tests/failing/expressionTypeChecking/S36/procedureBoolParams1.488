@@ -1,0 +1,6 @@
+begin
+    procedure bruh(boolean b1, boolean b2) begin
+        b1<=(b1 & b2)
+    end
+    bruh(1, true)
+end
