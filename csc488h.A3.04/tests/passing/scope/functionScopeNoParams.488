@@ -3,8 +3,8 @@ begin
     integer function foo begin
         return(1)
     end
-    
+
     boolean function bar begin
-        return(0)
+        return(false)
     end
 end

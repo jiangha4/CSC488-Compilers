@@ -15,7 +15,7 @@ import compiler488.runtime.*;
 
 /** This class serves as the main driver for the CSC488S compiler.<BR>
  *  It accepts user options and coordinates overall control flow.
- *  The main flow of control includes the following activities: 
+ *  The main flow of control includes the following activities:
  *  <ul>
  *    <li> Parse user supplied arguments and options.
  *    <li> Open output files.
@@ -33,26 +33,26 @@ import compiler488.runtime.*;
 
 public class Main {
 
-  /** Only constructor is private, 
-   *  Do not allocate any instances of this class. 
+  /** Only constructor is private,
+   *  Do not allocate any instances of this class.
    */
   private Main() { }
 
-  /**  public error flag  
-   *   Setting this flag to true will suppress further processing 
+  /**  public error flag
+   *   Setting this flag to true will suppress further processing
    *   This can be used by parsing, semantic analysis or code generation
    *   to quit early if errors have occurred.
    */
   public static boolean errorOccurred = false ;
 
   /*
-   * Options set by the user 
+   * Options set by the user
    */
 
   /** User option -- supress execution */
   public static boolean supressExecution   = false ;
 
-  // DUMP Options 
+  // DUMP Options
   /** User option -- dump AST after parsing */
   private static boolean dumpAST1  = false;
   /** User option -- dump AST after semantic analysis */
@@ -93,7 +93,7 @@ public class Main {
   private static String executeTraceFileName  = new String() ;
   /** User option -- alternative file sink for program execution input */
   private static String executeInputFileName  = new String () ;
-  
+
   /* FILES and STREAMS */
   /** compiler and program input file */
   private static File  inputFile = null ;
@@ -122,16 +122,16 @@ public class Main {
   public static PrintStream dumpStream = null ;
 
   /** PrintStream for trace output. <BR>
-   *  All implementations of tracing should write on this stream 
+   *  All implementations of tracing should write on this stream
    */
   public static PrintStream traceStream = null ;
 
   /** index of compiler source file in argv  */
   private static int sourceFileIndex = -1 ;
 
-  /** 
+  /**
    *  process command line arguments to Main program. <BR>
-   *  Will accept any name as a file argument, 
+   *  Will accept any name as a file argument,
    *  if the name is invalid the error  will be caught where the file is used.<BR>
    *  Sets boolean flags to activate compiler options
    * @param arguments is an array of strings containing command line arguments.
@@ -187,7 +187,7 @@ public class Main {
 		    errorFileName = new String(arguments[i]);
 		}
 		else if(arguments[i].equals("-O")) {
-		    i++;   // advance to next argument 
+		    i++;   // advance to next argument
 		    compilerOutputFileName = new String(arguments[i]);
 		}
 		else if(arguments[i].equals("-R")){
@@ -222,7 +222,7 @@ public class Main {
 		    }
 		}  // end for length loop
 	    }
-	    //  ran off end of argv 
+	    //  ran off end of argv
 	    catch(ArrayIndexOutOfBoundsException arrayBounds ){
 		    System.err.println( badUsage );
 		    errorOccurred = true ;
@@ -233,7 +233,7 @@ public class Main {
   /** Set System.in to be the specified file
    *  @param  fileName - the input file
    */
-  private static void setInputSource( String fileName ) 
+  private static void setInputSource( String fileName )
     {
         if( fileName.length() == 0 )
 	    return ; 	// use existing System.in
@@ -248,7 +248,7 @@ public class Main {
 				    + ": " + e.getMessage());
 	    return ;  // continue with System.in  unchanged
         }
-        try{ 
+        try{
               inputStream = new FileInputStream( inputFile );
 	      System.setIn( inputStream  ) ;
            }
@@ -260,10 +260,10 @@ public class Main {
         }
      }
 
-  /** Set System.out to point at the specified file 
+  /** Set System.out to point at the specified file
    *  @param  fileName  name of the output file
    */
-  private static void setOutputSink( String fileName ) 
+  private static void setOutputSink( String fileName )
     {
 	/* set System.out to point at specifed file */
 	try{
@@ -275,7 +275,7 @@ public class Main {
 				    + ": " + e.getMessage());
 	    return ;  // continue with System.out  unchanged
         }
-        try{ 
+        try{
               outputStream = new FileOutputStream( outputFile );
               // use autoflush for more accurate output
 	      System.setOut( new PrintStream( outputStream , true ) ) ;
@@ -289,9 +289,9 @@ public class Main {
      }
 
   /** Set System.err to point at the specifed file
-   *  @param fileName  name of the error file 
+   *  @param fileName  name of the error file
    */
-  private static void setErrorSink( String fileName ) 
+  private static void setErrorSink( String fileName )
     {
 	/* set System.err to point at specifed file */
 	try{
@@ -303,7 +303,7 @@ public class Main {
 				    + ": " + e.getMessage());
 	    return ;  // continue with System.err  unchanged
         }
-        try{ 
+        try{
               errorStream = new FileOutputStream( errorFile );
 		// use autoflush for more precise output
 	      System.setErr( new PrintStream( errorStream , true ) ) ;
@@ -316,7 +316,7 @@ public class Main {
         }
      }
 
-  /** set traceStream to point at specifed file 
+  /** set traceStream to point at specifed file
    *  @param fileName  name of trace file
    */
   private static void setTraceStream( String fileName )
@@ -337,9 +337,9 @@ public class Main {
 	    System.err.println(e.getClass().getName()
 				    + ": " + e.getMessage());
         }
-        try{ 
+        try{
               traceFileStream = new FileOutputStream( traceFile );
-              // use autoFlush for more accurate output 
+              // use autoFlush for more accurate output
 	      traceStream =  new PrintStream( traceFileStream , true )  ;
            }
 	catch( Exception e ) {
@@ -350,7 +350,7 @@ public class Main {
         }
      }
 
-   /**  procedre to dump the Abstract Syntax Tree  
+   /**  procedre to dump the Abstract Syntax Tree
     *   @param  programAST   the abstract syntax tree to dump
     *   @param  whichDump    message describing AST being dumped
     */
@@ -367,7 +367,7 @@ public class Main {
                 	programAST.prettyPrint(new BasePrettyPrinter(saveSysOut));
                 }
 	   }
-           catch( Exception e) 
+           catch( Exception e)
 	       {
 	       System.err.println( whichDump );
 	       System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -375,7 +375,7 @@ public class Main {
 	       System.exit(100);
 	       }
    }
-  
+
   private static void dumpSymbolTable( String st, String whichDump ) {
 	  try {
 		  if (compilerDumpFileName.length() > 0) {
@@ -395,30 +395,17 @@ public class Main {
 		  System.exit(100);
 	  }
   }
-  
+
 
   /**  function to perform semantic analysis on the scanned and parsed program
-   *   @param  programAST    the Abstract Syntax Tree produced during parsing 
+   *   @param  programAST    the Abstract Syntax Tree produced during parsing
    */
 
   private static void semanticAnalysis( Program  programAST ) {
-	
 	  Semantics visitor = new Semantics();
+
 	  try {
-	   // INSERT CODE HERE TO DO SEMANTIC ANALYSIS
-           // e.g.
-           //
-          
 		  programAST.accept(visitor);
-           
-           //
-           // or
-           //
-	   // programAST.doSemantics() ;
-           //
-	   // or
-           //
-	   // Semantics.doIt( programAST );
 	  }
 	  catch( Exception e) {
 	    System.err.println("Exception during Semantic Analysis");
@@ -426,7 +413,7 @@ public class Main {
 	    e.printStackTrace ();
 	    errorOccurred = true ;
 	  }
-	  
+
 	  // Check for any semantic errors that were found during semantic analysis
 	  try {
 		  visitor.Finalize();
@@ -436,15 +423,15 @@ public class Main {
 		  e.printStackTrace ();
 		  errorOccurred = true;
 	  }
-	  
+
 	  if (dumpSymbolTable) {
 		  String stDump = visitor.getSymbolTable().fullTraversal();
-		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );  
+		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );
 	  }
    }
-  
-   
-	
+
+
+
    /**  function to do code generation
     *   @param  programAST   the Abstract Syntax Tree to generate code for
     */
@@ -453,7 +440,7 @@ public class Main {
 	try{
 	    Machine.powerOn();
 	}
-        catch( Exception e) 
+        catch( Exception e)
 	    {
 	    System.err.println("Exception during Machine initialization");
             System.err.println("Please file a Bug Report with the course instructor");
@@ -476,7 +463,7 @@ public class Main {
 	   //
 	   // codeGen.doIt( programAST );
 	}
-        catch( Exception e) 
+        catch( Exception e)
 	    {
 	    System.err.println("Exception during Code Generation");
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -498,14 +485,14 @@ public class Main {
 	try{
 	     Machine.run( ) ;
 	}
-        catch( ExecutionException e) 
+        catch( ExecutionException e)
 	    {
-	    System.err.println("Exception during Machine Execution" 
+	    System.err.println("Exception during Machine Execution"
 	    		+ e.getMessage());
 	    // Run error has already dumped machine state.
 	    return ;
 	    }
-        catch( Exception e) 
+        catch( Exception e)
 	    {
 	    System.err.println("Unexpected Exception during Machine Execution");
             System.err.println("Please file a Bug Report with the course instructor");
@@ -513,9 +500,9 @@ public class Main {
 	    e.printStackTrace ();
             System.exit( 200 );
 	    }
-	
+
         if( traceStream != null && traceStream != saveSysOut )
-            traceStream.close();	// finish execution trace 
+            traceStream.close();	// finish execution trace
 
 	System.out.println("End of Execution" );
         return ;
@@ -527,7 +514,7 @@ public class Main {
   /*                                                            */
   /*------------------------------------------------------------*/
 
-  /**  The processing for compiling one source program     
+  /**  The processing for compiling one source program
    *   @param sourceFileName   name of file containing the program
    */
   private static void compileOneProgram( String  sourceFileName ){
@@ -546,7 +533,7 @@ public class Main {
 	         parserResult = p.parse().value;
 	    programAST = (Program) parserResult ;
 	    }
-        catch( FileNotFoundException e) 
+        catch( FileNotFoundException e)
            {
               System.err.println("Unable to open file: " + sourceFileName );
               errorOccurred = true ;
@@ -562,7 +549,7 @@ public class Main {
 	    e.printStackTrace ();
 	    errorOccurred = true ;
 	    }
-	
+
         if( errorOccurred ){
 	    System.out.println("Processing Terminated due to errors during parsing");
 	    return ;
@@ -584,7 +571,7 @@ public class Main {
 	if( dumpAST2 )
            dumpAST( programAST , "Exception during AST dump after semantic analysis");
 
-	
+
         /* do code generation for the program 	*/
         generateCode( programAST );
 
@@ -596,7 +583,7 @@ public class Main {
             System.out.println("End of Compilation");
 
         if( traceStream != null && traceStream != saveSysOut )
-            traceStream.close();	// finish compilation trace 
+            traceStream.close();	// finish compilation trace
 
 	return ;		// normal termination after compilation
   }
@@ -607,23 +594,23 @@ public class Main {
   /*								*/
   /*-----------------------------------------------------------*/
 
-  /** The main driver for the system. 
+  /** The main driver for the system.
    * @param argv an array of strings containing command line arguments.
    */
-  public static void main(String argv[]) 
+  public static void main(String argv[])
     {
 
 	/* process user options and arguments */
 	try{
 	   commandLineArgs( argv );
 	}
-        catch( Exception e) 
+        catch( Exception e)
 	    {
 		System.err.println("Exception during command line argument processing");
 	        System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		System.exit( 90 );
 	    }
-	
+
         if( errorOccurred ){
 	    System.out.println("Processing Terminated due to command line errors");
 	    return ;
@@ -636,7 +623,7 @@ public class Main {
             setOutputSink( compilerOutputFileName );
         setTraceStream( compilerTraceFileName  );
 
-	/* Setup compiler input file for compilation 
+	/* Setup compiler input file for compilation
           sourceFileIndex points to file name in argument list
 
 	  sourceFileIndex will be -1 if no input file was found during
@@ -647,7 +634,7 @@ public class Main {
             return ;
         }
 
-       //  loop over list of files to compile 
+       //  loop over list of files to compile
        for( ; sourceFileIndex < argv.length ; sourceFileIndex++ ) {
 
 	  // Compile the source program
@@ -661,7 +648,7 @@ public class Main {
 		  else
 			  System.err.println("Execution supressed due to errors during compilation");
 	  }
-      
+
       }  // end of loop to process one input file
 
       //return ;	      // normal termination

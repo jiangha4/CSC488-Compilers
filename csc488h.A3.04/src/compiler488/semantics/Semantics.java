@@ -1,61 +1,17 @@
 package compiler488.semantics;
 
-import java.awt.geom.Area;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 
-import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitor;
-import compiler488.ast.BaseAST;
-import compiler488.ast.PrettyPrinter;
-import compiler488.ast.Printable;
-import compiler488.ast.decl.ArrayDeclPart;
-import compiler488.ast.decl.Declaration;
-import compiler488.ast.decl.DeclarationPart;
-import compiler488.ast.decl.MultiDeclarations;
-import compiler488.ast.decl.RoutineDecl;
-import compiler488.ast.decl.ScalarDecl;
-import compiler488.ast.decl.ScalarDeclPart;
-import compiler488.ast.expn.AnonFuncExpn;
-import compiler488.ast.expn.ArithExpn;
-import compiler488.ast.expn.BinaryExpn;
-import compiler488.ast.expn.BoolConstExpn;
-import compiler488.ast.expn.BoolExpn;
-import compiler488.ast.expn.CompareExpn;
-import compiler488.ast.expn.ConstExpn;
-import compiler488.ast.expn.EqualsExpn;
-import compiler488.ast.expn.Expn;
-import compiler488.ast.expn.FunctionCallExpn;
-import compiler488.ast.expn.IdentExpn;
-import compiler488.ast.expn.IntConstExpn;
-import compiler488.ast.expn.NotExpn;
-import compiler488.ast.expn.SkipConstExpn;
-import compiler488.ast.expn.SubsExpn;
-import compiler488.ast.expn.TextConstExpn;
-import compiler488.ast.expn.UnaryExpn;
-import compiler488.ast.expn.UnaryMinusExpn;
-import compiler488.ast.stmt.AssignStmt;
-import compiler488.ast.stmt.ExitStmt;
-import compiler488.ast.stmt.GetStmt;
-import compiler488.ast.stmt.IfStmt;
-import compiler488.ast.stmt.LoopStmt;
-import compiler488.ast.stmt.LoopingStmt;
-import compiler488.ast.stmt.ProcedureCallStmt;
-import compiler488.ast.stmt.Program;
-import compiler488.ast.stmt.PutStmt;
-import compiler488.ast.stmt.ReturnStmt;
-import compiler488.ast.stmt.Scope;
-import compiler488.ast.stmt.Stmt;
-import compiler488.ast.stmt.WhileDoStmt;
-import compiler488.ast.type.BooleanType;
-import compiler488.ast.type.IntegerType;
-import compiler488.ast.type.Type;
-import compiler488.symbol.SymbolTable;
-import compiler488.symbol.SymbolTable.SymbolKind;
-import compiler488.symbol.SymbolTable.SymbolType;
-import compiler488.symbol.SymbolTableEntry;
+import compiler488.ast.*;
+import compiler488.ast.decl.*;
+import compiler488.ast.expn.*;
+import compiler488.ast.stmt.*;
+import compiler488.ast.type.*;
+import compiler488.symbol.*;
+import compiler488.symbol.SymbolTable.*;
 
 /** Implement semantic analysis for compiler 488
  *  @author  <B> Haohan Jiang (g3jiangh)
@@ -86,82 +42,13 @@ public class Semantics implements ASTVisitor {
 		errors = new SemanticErrorCollector();
 	}
 
-	/**  semanticsInitialize - called once by the parser at the      */
-	/*                        start of  compilation                 */
-	void Initialize() {
-
-	   /*   Initialize the symbol table             */
-
-	   //Symbol.Initialize();
-
-	   /*********************************************/
-	   /*  Additional initialization code for the   */
-	   /*  semantic analysis module                 */
-	   /*  GOES HERE                                */
-	   /*********************************************/
-
-	}
-
 	/**  semanticsFinalize - called by the parser once at the        */
 	/*                      end of compilation                      */
 	public void Finalize() throws SemanticErrorException {
-
-		/*  Finalize the symbol table                 */
-		// Symbol.Finalize();
-
-		/*********************************************/
-		/*  Additional finalization code for the      */
-		/*  semantics analysis module                 */
-		/*  GOES here.                                */
-		/**********************************************/
-
 		if (errors.getCount() > 0) {
 			errors.raiseException();
 		}
 	}
-
-	/**
-	 *  Perform one semantic analysis action
-         *  @param  actionNumber  semantic analysis action number
-         */
-	void semanticAction( int actionNumber ) {
-
-	if( traceSemantics ){
-		if(traceFile.length() > 0 ){
-	 		//output trace to the file represented by traceFile
-	 		try{
-	 			//open the file for writing and append to it
-	 			Tracer = new FileWriter(traceFile, true);
-
-	 		    Tracer.write("Sematics: S" + actionNumber + "\n");
-	 		    //always be sure to close the file
-	 		    Tracer.close();
-	 		}
-	 		catch (IOException e) {
-	 		  System.out.println(traceFile +
-				" could be opened/created.  It may be in use.");
-	 	  	}
-	 	}
-	 	else{
-	 		//output the trace to standard out.
-	 		System.out.println("Sematics: S" + actionNumber );
-	 	}
-
-	}
-
-	   /*************************************************************/
-	   /*  Code to implement each semantic action GOES HERE         */
-	   /*  This stub semantic analyzer just prints the actionNumber */
-	   /*                                                           */
-           /*  FEEL FREE TO ignore or replace this procedure            */
-	   /*************************************************************/
-
-	   System.out.println("Semantic Action: S" + actionNumber  );
-	   return ;
-	}
-
-
-	// ADDITIONAL FUNCTIONS TO IMPLEMENT SEMANTIC ANALYSIS GO HERE
 
 	public SymbolTable getSymbolTable() {
 		return Symbol;
@@ -176,12 +63,12 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ArrayDeclPart");
 
 		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
-			errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
+			errors.add(arrayDeclPart.getSourceCoord(), "Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
 		};
 
 		if (arrayDeclPart.isTwoDimensional()) {
 			if (!(arrayDeclPart.getLowerBoundary2() <= arrayDeclPart.getUpperBoundary2())) {
-				errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
+				errors.add(arrayDeclPart.getSourceCoord(), "Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
 			};
 		}
 	}
@@ -212,14 +99,14 @@ public class Semantics implements ASTVisitor {
 			String elemId = nextElem.getName();
 			if (Symbol.search(elemId) != null) {
 				// Detected a re-declaration in same scope
-				errors.add(nextElem.getSourceCoord() + ": Re-declaration of identifier " + elemId + " not allowed in same scope.");
+				errors.add(nextElem.getSourceCoord(), "Re-declaration of identifier " + elemId + " not allowed in same scope.");
 			}
 			else {
 				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
 				if (success) {
 					nextElem.setSTEntry(Symbol.search(elemId));
 				} else {
-					errors.add(nextElem.getSourceCoord() + ": Unable to declare identifier " + elemId);
+					errors.add(nextElem.getSourceCoord(), "Unable to declare identifier " + elemId);
 				}
 			}
 		}
@@ -260,26 +147,29 @@ public class Semantics implements ASTVisitor {
 				}
 				if (hasReturn) {
 					// S35: Check that expression type matches the return type of enclosing function
-					if ( routineType != rs.getValue().getExpnType(Symbol) ) {
-						errors.add(rs.getSourceCoord() + ": Return statement type does not match function type.");
+					SymbolType returnStatementType = rs.getValue().getExpnType(Symbol);
+					if ( routineType != returnStatementType ) {
+						errors.add(
+							rs.getSourceCoord(),
+							"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
 					}
 				} else {
 					// S53
-					errors.add(routineDecl.getSourceCoord() + ": Function '" + routineName + "' must have at least one return statement.");
+					errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must have at least one return statement.");
 				}
 			}
 
 			// Check for existing declaration
 			if (Symbol.search(routineName) != null) {
 				// Detected a re-declaration in same scope
-				errors.add(routineDecl.getSourceCoord() + ": Re-declaration of identifier " + routineName + " not allowed in same scope.");
+				errors.add(routineDecl.getSourceCoord(), "Re-declaration of identifier " + routineName + " not allowed in same scope.");
 			}
 			else {
 				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
 				if (success) {
 					routineDecl.setSTEntry(Symbol.search(routineName));
 				} else {
-					errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
+					errors.add(routineDecl.getSourceCoord(), "Unable to declare identifier " + routineName);
 				}
 			}
 
@@ -308,14 +198,14 @@ public class Semantics implements ASTVisitor {
 		// Check if identifier already exists in current scope
 		if (Symbol.search(declId) != null) {
 			// Detected a re-declaration in same scope
-			errors.add(scalarDecl.getSourceCoord() + ": Re-declaration of identifier " + declId + " not allowed in same scope.");
+			errors.add(scalarDecl.getSourceCoord(), "Re-declaration of identifier " + declId + " not allowed in same scope.");
 		}
 		else {
 			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(Symbol.search(declId));
 			} else {
-				errors.add(scalarDecl.getSourceCoord() + ": Unable to declare identifier " + declId);
+				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declId);
 			}
 		}
 
@@ -340,7 +230,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting ArithExpn");
 		System.out.println("Type: " + arithExpn.getExpnType(Symbol));
 
-		s31check(arithExpn);
+		assertIsIntExpn(arithExpn);
 	}
 
 	@Override
@@ -363,7 +253,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting BoolExpn");
 		System.out.println("Type: " + boolExpn.getExpnType(Symbol));
 
-		s30check(boolExpn);
+		assertIsBoolExpn(boolExpn);
 	}
 
 	@Override
@@ -372,7 +262,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting CompareExpn");
 		System.out.println("Type: " + compareExpn.getExpnType(Symbol));
 
-		s31check(compareExpn);
+		assertIsIntExpn(compareExpn);
 	}
 
 	@Override
@@ -388,7 +278,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting EqualsExpn");
 		System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
 
-		s31check(equalsExpn);
+		assertIsIntExpn(equalsExpn);
 	}
 
 	@Override
@@ -406,10 +296,10 @@ public class Semantics implements ASTVisitor {
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
 		if (Symbol.searchGlobal(functionName) == null) {
-			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' cannot be used before it has been declared.");
+			errors.add(functionCallExpn.getSourceCoord(), "Function '" + functionName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
-			errors.add(functionCallExpn.getSourceCoord() + ": Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
+			errors.add(functionCallExpn.getSourceCoord(), "Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
 		}
 
 		// S42/S43: check that the number of parameters declared in the function declaration is the same as the
@@ -419,7 +309,7 @@ public class Semantics implements ASTVisitor {
 		int numArgs = functionCallExpn.getArguments().size();
 		int numParams = declaredFuncASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			errors.add(functionCallExpn.getSourceCoord(), "Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
@@ -436,12 +326,12 @@ public class Semantics implements ASTVisitor {
 		// S40: check that identifier has been declared as a function
 		String identName = identExpn.getIdent();
 		if (Symbol.searchGlobal(identName) == null) {
-			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used before it has been declared.");
+			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE &&
 				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER &&
 				 Symbol.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
-			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
+			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
 		}
 
 	}
@@ -459,7 +349,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting NotExpn");
 		System.out.println("Type: " + notExpn.getExpnType(Symbol));
 
-		s30check(notExpn);
+		assertIsBoolExpn(notExpn);
 	}
 
 	@Override
@@ -477,10 +367,10 @@ public class Semantics implements ASTVisitor {
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
 		if (Symbol.searchGlobal(arrayName) == null) {
-			errors.add(subsExpn.getSourceCoord() + ": Array '" + arrayName + "' cannot be used before it has been declared.");
+			errors.add(subsExpn.getSourceCoord(), "Array '" + arrayName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
-			errors.add(subsExpn.getSourceCoord() + ": Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
+			errors.add(subsExpn.getSourceCoord(), "Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
 		}
 	}
 
@@ -504,7 +394,7 @@ public class Semantics implements ASTVisitor {
 		System.out.println("Visiting UnaryMinusExpn");
 		System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
 
-		s31check(unaryMinusExpn);
+		assertIsIntExpn(unaryMinusExpn);
 	}
 
 	@Override
@@ -516,7 +406,9 @@ public class Semantics implements ASTVisitor {
 		SymbolType lType = assignStmt.getLval().getExpnType(Symbol);
 		SymbolType rType = assignStmt.getRval().getExpnType(Symbol);
 		if (lType != rType) {
-			errors.add("LHS type (" + lType + ") in assignment differs from RHS type (" + rType + ")");
+			errors.add
+				(assignStmt.getRval().getSourceCoord(),
+				"LHS type (" + lType + ") in assignment differs from RHS type (" + rType + ")");
 		}
 	}
 
@@ -527,7 +419,7 @@ public class Semantics implements ASTVisitor {
 
 		// Only do S30 check if "exit when"
 		if (exitStmt.getExpn() != null) {
-			s30check(exitStmt.getExpn());
+			assertIsBoolExpn(exitStmt.getExpn());
 		}
 
 		/**S50 Check that exit statement is directly inside a loop
@@ -550,7 +442,7 @@ public class Semantics implements ASTVisitor {
 		}
 
 		if (!foundLoop){
-			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
+			errors.add(exitStmt.getSourceCoord(), "EXIT not contained in LOOP or WHILE statements");
 		}
 	}
 
@@ -561,7 +453,7 @@ public class Semantics implements ASTVisitor {
 
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
-			s31check(expn);
+			assertIsIntExpn(expn);
 		}
 	}
 
@@ -570,7 +462,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting IfStmt");
 
-		s30check(ifStmt.getCondition());
+		assertIsBoolExpn(ifStmt.getCondition());
 	}
 
 	@Override
@@ -592,10 +484,10 @@ public class Semantics implements ASTVisitor {
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
 		if (Symbol.searchGlobal(procName) == null) {
-			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' cannot be used before it has been declared.");
+			errors.add(procedureCallStmt.getSourceCoord(), "Procedure '" + procName + "' cannot be used before it has been declared.");
 		}
 		else if (Symbol.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
-			errors.add(procedureCallStmt.getSourceCoord() + ": Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
+			errors.add(procedureCallStmt.getSourceCoord(), "Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
 		}
 
 		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the
@@ -605,7 +497,7 @@ public class Semantics implements ASTVisitor {
 		int numArgs = procedureCallStmt.getArguments().size();
 		int numParams = declaredProcASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			errors.add(procedureCallStmt.getSourceCoord(), "Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
@@ -643,7 +535,7 @@ public class Semantics implements ASTVisitor {
 			if (type != SymbolType.INTEGER &&
 				type != SymbolType.TEXT &&
 				type != SymbolType.SKIP) {
-				errors.add("Put statement can only contain integer expressions, text, or skips");
+				errors.add(((Expn)e).getSourceCoord(), "Put statement can only contain integer expressions, text, or skips");
 			}
 		}
 	}
@@ -668,7 +560,7 @@ public class Semantics implements ASTVisitor {
 		}
 
 		if (!foundMethod){
-			errors.add(returnStmt.getSourceCoord() + " Return statement is not in the scope of a function or procedure");
+			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
 		}
 	}
 
@@ -688,7 +580,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting WhileDoStmt");
 
-		s30check(whileDoStmt.getExpn());
+		assertIsBoolExpn(whileDoStmt.getExpn());
 	}
 
 	@Override
@@ -713,17 +605,17 @@ public class Semantics implements ASTVisitor {
 	private void checkExpnType(Expn expn, SymbolType expectedType) {
 		SymbolType type = expn.getExpnType(Symbol);
 		if (type != expectedType) {
-			errors.add("Expression is not of type " + expectedType);
+			errors.add(expn.getSourceCoord(), "Expression is not of type " + expectedType);
 		}
 	}
 
 	// S30: check that type of expression is boolean
-	private void s30check(Expn expn) {
+	private void assertIsBoolExpn(Expn expn) {
 		checkExpnType(expn, SymbolType.BOOLEAN);
 	}
 
 	// S31: check that type of expression is integer
-	private void s31check(Expn expn) {
+	private void assertIsIntExpn(Expn expn) {
 		checkExpnType(expn, SymbolType.INTEGER);
 	}
 
@@ -733,10 +625,13 @@ public class Semantics implements ASTVisitor {
 		Iterator<ScalarDecl> paramsIter  = paramList.iterator();
 		int count = 1;
 		while (argExpnIter.hasNext()) {
-			SymbolType aType = argExpnIter.next().getExpnType(Symbol);
+			Expn nextArg = argExpnIter.next();
+			SymbolType aType = nextArg.getExpnType(Symbol);
 			SymbolType pType = paramsIter.next().getSTEntry().getType();
 			if ( aType != pType ) {
-				errors.add("Arg expression " + count + "'s type (" + aType + ") does not match expected param type (" + pType + ")");
+				errors.add(
+					nextArg.getSourceCoord(),
+					"Arg expression " + count + "'s type (" + aType + ") does not match expected param type (" + pType + ")");
 			}
 			count++;
 		}
