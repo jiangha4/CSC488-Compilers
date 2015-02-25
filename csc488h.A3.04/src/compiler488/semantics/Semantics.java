@@ -421,6 +421,12 @@ public class Semantics implements ASTVisitor {
 		else if (symbolTable.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
 			errors.add(subsExpn.getSourceCoord(), "Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + symbolTable.searchGlobal(arrayName).getKind() + ".");
 		}
+
+		// S31: check that subscripts are int expressions
+		assertIsIntExpn(subsExpn.getSubscript1());
+		if (subsExpn.isTwoDimensional()) {
+			assertIsIntExpn(subsExpn.getSubscript2());
+		}
 	}
 
 	@Override
