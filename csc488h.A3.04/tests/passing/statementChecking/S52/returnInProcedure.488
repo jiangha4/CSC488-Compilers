@@ -1,0 +1,5 @@
+begin
+	procedure a begin
+		return
+	end
+end

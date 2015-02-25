@@ -1,0 +1,7 @@
+begin
+	procedure a begin
+		if true then
+			return
+		end
+	end
+end

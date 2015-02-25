@@ -1,0 +1,7 @@
+begin
+	procedure a begin
+		put "a"
+		return
+	end
+	return
+end
