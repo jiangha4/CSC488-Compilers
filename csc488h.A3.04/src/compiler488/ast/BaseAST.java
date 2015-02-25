@@ -39,7 +39,6 @@ public abstract class BaseAST implements AST {
 
 	public void setParentAttribute(attribute parentAttribute) {
 		this.parentAttribute = parentAttribute;
-		System.out.println(this.parentAttribute);
 	}
 
 	public enum attribute {

@@ -515,11 +515,10 @@ public class Semantics implements ASTVisitor {
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		System.out.println(exitStmt.getControlStatement());
 		if ((exitStmt.getControlStatement() != controlStatement.LOOP) &&
 			(exitStmt.getControlStatement() != controlStatement.WHILE))
 		{
-			errors.add(exitStmt.getSourceCoord() + "EXIT not contained in LOOP or WHILE statements");
+			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
 		}
 		// TODO check if exit statement is immediately contained in a loop
 		
@@ -616,13 +615,12 @@ public class Semantics implements ASTVisitor {
 		
 		// S51-52 Must check that return statements are in procedure 
 		// or function scope
-		/*if (returnStmt.getParentAttribute() != attribute.METHOD)
+		if (returnStmt.getParentAttribute() != attribute.METHOD)
 		{
 			System.out.println(returnStmt.getParentNode());
 			System.out.println(returnStmt.getParentAttribute());
 			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
-		}*/
-//			errors.add(returnStmt.getSourceCoord() + "Return statement is in the scope of a function or procedure");
+		}
 	}
 
 	@Override
