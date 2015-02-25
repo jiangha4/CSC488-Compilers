@@ -1,0 +1,10 @@
+begin
+    integer a
+    a <= 1
+    loop
+        put a, " "
+        if a = 10 then
+            exit
+        end
+        a <= a + 1
+end
