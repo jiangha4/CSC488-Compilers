@@ -145,15 +145,7 @@ public class Semantics implements ASTVisitor {
 						}
 					}
 				}
-				if (hasReturn) {
-					// S35: Check that expression type matches the return type of enclosing function
-					SymbolType returnStatementType = rs.getValue().getExpnType(Symbol);
-					if ( routineType != returnStatementType ) {
-						errors.add(
-							rs.getSourceCoord(),
-							"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
-					}
-				} else {
+				if (!hasReturn) {
 					// S53
 					errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must have at least one return statement.");
 				}
@@ -542,26 +534,36 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ReturnStmt returnStmt) {
-		// TODO Auto-generated method stub
 		System.out.println("Visiting ReturnStmt");
 
 		// S51-52 Must check that return statements are in procedure
 		// or function scope
 
 		BaseAST currNode = returnStmt;
-		boolean foundMethod = false;
+		RoutineDecl parentRoutine = null;
 		while(currNode != null)
 		{
 			if (currNode instanceof RoutineDecl){
-				foundMethod = true;
+				parentRoutine = (RoutineDecl)currNode;
 				break;
 			}
 			currNode = currNode.getParentNode();
 		}
 
-		if (!foundMethod){
+		if (parentRoutine == null){
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
+		} 
+		else {
+			// S35: Check that expression type matches the return type of enclosing function
+			SymbolType returnStatementType = returnStmt.getValue().getExpnType(Symbol);
+			SymbolType routineType = parentRoutine.getType().toSymbolType();
+			if ( routineType != returnStatementType ) {
+				errors.add(
+					returnStmt.getSourceCoord(),
+					"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
+			}
 		}
+		
 	}
 
 	@Override
