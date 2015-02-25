@@ -213,15 +213,7 @@ public class Semantics implements ASTVisitor {
 				errors.add(nextElem.getSourceCoord() + ": Re-declaration of identifier " + elemId + " not allowed in same scope.");
 			}
 			else {
-				SymbolKind kind = nextElem.getKind();
-				
-				// S37: Check that identifier has been declared as a scalar variable
-				// TODO: check if this is right?
-				if (kind != SymbolKind.VARIABLE) {
-					errors.add("Identifier has not been declared as scalar");
-				}
-				
-				boolean success = Symbol.insert(nextElem.getName(), declType, kind, "", nextElem);
+				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
 				if (success) {
 					nextElem.setSTEntry(Symbol.search(elemId));
 				} else {
