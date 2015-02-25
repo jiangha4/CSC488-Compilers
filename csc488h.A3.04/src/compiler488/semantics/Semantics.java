@@ -58,7 +58,7 @@ import compiler488.symbol.SymbolTable.SymbolKind;
 import compiler488.symbol.SymbolTable.SymbolType;
 import compiler488.symbol.SymbolTableEntry;
 
-/** Implement semantic analysis for compiler 488 
+/** Implement semantic analysis for compiler 488
  *  @author  <B> Haohan Jiang (g3jiangh)
  *               Maria Yancheva (c2yanche)
  *               Timo Vink (c4vinkti)
@@ -66,21 +66,21 @@ import compiler488.symbol.SymbolTableEntry;
  *           </B>
  */
 public class Semantics implements ASTVisitor {
-	
+
 	/** flag for tracing semantic analysis */
 	private boolean traceSemantics = false;
-	
+
 	/** file sink for semantic analysis trace */
 	private String traceFile = new String();
 	public FileWriter Tracer;
 	public File f;
-	
+
 	/** Construct symbol table concurrently with semantic checking */
-	private SymbolTable Symbol; 
-	
+	private SymbolTable Symbol;
+
 	/** Accummulate errors and raise an exception after all semantic rules have */
     private SemanticErrorCollector errors;
-    
+
     /** SemanticAnalyzer constructor */
 	public Semantics (){
 		Symbol = new SymbolTable();
@@ -90,37 +90,37 @@ public class Semantics implements ASTVisitor {
 	/**  semanticsInitialize - called once by the parser at the      */
 	/*                        start of  compilation                 */
 	void Initialize() {
-	
+
 	   /*   Initialize the symbol table             */
-	
+
 	   //Symbol.Initialize();
-	   
+
 	   /*********************************************/
 	   /*  Additional initialization code for the   */
 	   /*  semantic analysis module                 */
 	   /*  GOES HERE                                */
 	   /*********************************************/
-	   
+
 	}
 
 	/**  semanticsFinalize - called by the parser once at the        */
 	/*                      end of compilation                      */
 	public void Finalize() throws SemanticErrorException {
-	
+
 		/*  Finalize the symbol table                 */
 		// Symbol.Finalize();
-  
+
 		/*********************************************/
 		/*  Additional finalization code for the      */
 		/*  semantics analysis module                 */
 		/*  GOES here.                                */
 		/**********************************************/
-	  
+
 		if (errors.getCount() > 0) {
 			errors.raiseException();
 		}
 	}
-	
+
 	/**
 	 *  Perform one semantic analysis action
          *  @param  actionNumber  semantic analysis action number
@@ -133,13 +133,13 @@ public class Semantics implements ASTVisitor {
 	 		try{
 	 			//open the file for writing and append to it
 	 			Tracer = new FileWriter(traceFile, true);
-	 				          
+
 	 		    Tracer.write("Sematics: S" + actionNumber + "\n");
 	 		    //always be sure to close the file
 	 		    Tracer.close();
 	 		}
 	 		catch (IOException e) {
-	 		  System.out.println(traceFile + 
+	 		  System.out.println(traceFile +
 				" could be opened/created.  It may be in use.");
 	 	  	}
 	 	}
@@ -147,39 +147,39 @@ public class Semantics implements ASTVisitor {
 	 		//output the trace to standard out.
 	 		System.out.println("Sematics: S" + actionNumber );
 	 	}
-	 
+
 	}
-	                     
+
 	   /*************************************************************/
 	   /*  Code to implement each semantic action GOES HERE         */
-	   /*  This stub semantic analyzer just prints the actionNumber */   
+	   /*  This stub semantic analyzer just prints the actionNumber */
 	   /*                                                           */
            /*  FEEL FREE TO ignore or replace this procedure            */
 	   /*************************************************************/
-	                     
+
 	   System.out.println("Semantic Action: S" + actionNumber  );
 	   return ;
 	}
 
-	
+
 	// ADDITIONAL FUNCTIONS TO IMPLEMENT SEMANTIC ANALYSIS GO HERE
 
 	public SymbolTable getSymbolTable() {
 		return Symbol;
 	}
-	
+
 	public SemanticErrorCollector getErrors() {
 		return errors;
 	}
-	
+
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
 		System.out.println("Visiting ArrayDeclPart");
-		
+
 		if (!(arrayDeclPart.getLowerBoundary1() <= arrayDeclPart.getUpperBoundary1())) {
 			errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 1: lower bound must be less than or equal to upper bound.");
 		};
-		
+
 		if (arrayDeclPart.isTwoDimensional()) {
 			if (!(arrayDeclPart.getLowerBoundary2() <= arrayDeclPart.getUpperBoundary2())) {
 				errors.add(arrayDeclPart.getSourceCoord() + ": Array '" + arrayDeclPart.getName() + "', dimension 2: lower bound must be less than or equal to upper bound.");
@@ -202,13 +202,13 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(MultiDeclarations multiDeclarations) {
 		System.out.println("Visiting MultiDeclarations");
-		
+
 		// Add a symbol for every element in the declaration (into current scope)
 		// (The value for the newly inserted elements is blank: in the project
 		// language assignment cannot happen simultaneously with declaration)
 		SymbolType declType = multiDeclarations.getType().toSymbolType();
 		for (DeclarationPart nextElem : multiDeclarations.getParts()) {
-			
+
 			// Check if identifier already exists in current scope
 			String elemId = nextElem.getName();
 			if (Symbol.search(elemId) != null) {
@@ -224,13 +224,13 @@ public class Semantics implements ASTVisitor {
 				}
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void visit(RoutineDecl routineDecl) {
 		System.out.println("Visiting RoutineDecl");
-	
+
 		if (!routineDecl.isVisited()) {
 			/**
 			 * S11/S12: Declare function with/without parameters and with specified type
@@ -240,12 +240,12 @@ public class Semantics implements ASTVisitor {
 			String routineName = routineDecl.getName();
 			SymbolType routineType = null;
 			SymbolKind routineKind = SymbolKind.PROCEDURE;
-			
+
 			// If the routine has a return value then it is a function; otherwise a procedure
 			if (routineDecl.getType() != null) {
 				routineType = routineDecl.getType().toSymbolType();
 				routineKind = SymbolKind.FUNCTION;
-				
+
 				// S53: check that a function body contains at least one return statement
 				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
 				boolean hasReturn = false;
@@ -269,7 +269,7 @@ public class Semantics implements ASTVisitor {
 					errors.add(routineDecl.getSourceCoord() + ": Function '" + routineName + "' must have at least one return statement.");
 				}
 			}
-			
+
 			// Check for existing declaration
 			if (Symbol.search(routineName) != null) {
 				// Detected a re-declaration in same scope
@@ -283,29 +283,29 @@ public class Semantics implements ASTVisitor {
 					errors.add(routineDecl.getSourceCoord() + ": Unable to declare identifier " + routineName);
 				}
 			}
-		
+
 			// Begin new scope
 			Symbol.enterScope();
-			
+
 			// Mark as visited
 			routineDecl.setVisited(true);
 		} else {
 			// Exit the scope
 			Symbol.exitScope();
-			
+
 			// Clear the flag
 			routineDecl.setVisited(false);
 		}
-		
+
 	}
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
 		System.out.println("Visiting ScalarDecl");
-		
+
 		String declId = scalarDecl.getName();
 		SymbolType declType = scalarDecl.getType().toSymbolType();
-		
+
 		// Check if identifier already exists in current scope
 		if (Symbol.search(declId) != null) {
 			// Detected a re-declaration in same scope
@@ -319,7 +319,7 @@ public class Semantics implements ASTVisitor {
 				errors.add(scalarDecl.getSourceCoord() + ": Unable to declare identifier " + declId);
 			}
 		}
-	
+
 	}
 
 	@Override
@@ -340,7 +340,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ArithExpn");
 		System.out.println("Type: " + arithExpn.getExpnType(Symbol));
-		
+
 		s31check(arithExpn);
 	}
 
@@ -363,7 +363,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting BoolExpn");
 		System.out.println("Type: " + boolExpn.getExpnType(Symbol));
-		
+
 		s30check(boolExpn);
 	}
 
@@ -372,7 +372,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting CompareExpn");
 		System.out.println("Type: " + compareExpn.getExpnType(Symbol));
-		
+
 		s31check(compareExpn);
 	}
 
@@ -388,7 +388,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting EqualsExpn");
 		System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
-		
+
 		s31check(equalsExpn);
 	}
 
@@ -403,7 +403,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(FunctionCallExpn functionCallExpn) {
 		System.out.println("Visiting FunctionCallExpn");
 		System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
-		
+
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
 		if (Symbol.searchGlobal(functionName) == null) {
@@ -412,8 +412,8 @@ public class Semantics implements ASTVisitor {
 		else if (Symbol.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
 			errors.add(functionCallExpn.getSourceCoord() + ": Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
 		}
-		
-		// S42/S43: check that the number of parameters declared in the function declaration is the same as the 
+
+		// S42/S43: check that the number of parameters declared in the function declaration is the same as the
     	// number of arguments passed to the function call expression
 		SymbolTableEntry declaredFunc = Symbol.searchGlobal(functionName);
 		RoutineDecl declaredFuncASTNode = (RoutineDecl)declaredFunc.getNode();
@@ -422,7 +422,7 @@ public class Semantics implements ASTVisitor {
 		if (numArgs != numParams) {
 			errors.add(functionCallExpn.getSourceCoord() + ": Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
-		
+
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
 		s36check(functionCallExpn.getArguments(), declaredFuncASTNode.getParameters());
 	}
@@ -431,7 +431,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(IdentExpn identExpn) {
 		System.out.println("Visiting IdentExpn");
 		System.out.println("Type: " + identExpn.getExpnType(Symbol));
-		
+
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
 		// S40: check that identifier has been declared as a function
@@ -439,12 +439,12 @@ public class Semantics implements ASTVisitor {
 		if (Symbol.searchGlobal(identName) == null) {
 			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
-		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE && 
-				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER && 
+		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE &&
+				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER &&
 				 Symbol.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
 			errors.add(identExpn.getSourceCoord() + ": Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
 		}
-		
+
 	}
 
 	@Override
@@ -459,7 +459,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting NotExpn");
 		System.out.println("Type: " + notExpn.getExpnType(Symbol));
-		
+
 		s30check(notExpn);
 	}
 
@@ -474,7 +474,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(SubsExpn subsExpn) {
 		System.out.println("Visiting SubsExpn");
 		System.out.println("Type: " + subsExpn.getExpnType(Symbol));
-		
+
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
 		if (Symbol.searchGlobal(arrayName) == null) {
@@ -504,7 +504,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting UnaryMinusExpn");
 		System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
-		
+
 		s31check(unaryMinusExpn);
 	}
 
@@ -512,7 +512,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(AssignStmt assignStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting AssignStmt");
-		
+
 		// S34: Check that variable and expression in assignment are the same type
 		SymbolType lType = assignStmt.getLval().getExpnType(Symbol);
 		SymbolType rType = assignStmt.getRval().getExpnType(Symbol);
@@ -525,31 +525,33 @@ public class Semantics implements ASTVisitor {
 	public void visit(ExitStmt exitStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ExitStmt");
-		
+
 		// Only do S30 check if "exit when"
 		if (exitStmt.getExpn() != null) {
 			s30check(exitStmt.getExpn());
 		}
-		
+
 		/**S50 Check that exit statement is directly inside a loop
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		
+
 		BaseAST currNode = exitStmt;
 		boolean foundLoop = false;
 		while(currNode != null)
 		{
-			if ((currNode.getParentNode() instanceof LoopStmt) ||
-				(currNode.getParentNode() instanceof WhileDoStmt)){
+			if (currNode instanceof LoopStmt || currNode instanceof WhileDoStmt) {
 				foundLoop = true;
+				break;
+			}
+			if (currNode instanceof RoutineDecl || currNode instanceof AnonFuncExpn) {
+				break;
 			}
 			currNode = currNode.getParentNode();
 		}
-		
+
 		if (!foundLoop){
 			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
-			
 		}
 	}
 
@@ -557,7 +559,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(GetStmt getStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting GetStmt");
-		
+
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
 			s31check(expn);
@@ -568,7 +570,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(IfStmt ifStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting IfStmt");
-		
+
 		s30check(ifStmt.getCondition());
 	}
 
@@ -587,7 +589,7 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
 		System.out.println("Visiting ProcedureCallStmt");
-		
+
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
 		if (Symbol.searchGlobal(procName) == null) {
@@ -596,8 +598,8 @@ public class Semantics implements ASTVisitor {
 		else if (Symbol.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
 			errors.add(procedureCallStmt.getSourceCoord() + ": Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
 		}
-		
-		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the 
+
+		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the
     	// number of arguments passed to the procedure call statement
 		SymbolTableEntry declaredProc = Symbol.searchGlobal(procName);
 		RoutineDecl declaredProcASTNode = (RoutineDecl)declaredProc.getNode();
@@ -606,7 +608,7 @@ public class Semantics implements ASTVisitor {
 		if (numArgs != numParams) {
 			errors.add(procedureCallStmt.getSourceCoord() + ": Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
 		}
-		
+
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
 		s36check(procedureCallStmt.getArguments(), declaredProcASTNode.getParameters());
 	}
@@ -614,17 +616,17 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void visit(Program program) {
 		System.out.println("Visiting Program");
-		
+
 		if (!program.isVisited()) {
 			// Begin new scope
 			Symbol.enterScope();
-			
+
 			// Mark as visited
 			program.setVisited(true);
 		} else {
 			// Exit the scope
 			Symbol.exitScope();
-			
+
 			// Clear the flag
 			program.setVisited(false);
 		}
@@ -634,7 +636,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(PutStmt putStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting PutStmt");
-		
+
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
 		for (Printable e : putStmt.getOutputs()) {
@@ -651,8 +653,8 @@ public class Semantics implements ASTVisitor {
 	public void visit(ReturnStmt returnStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting ReturnStmt");
-		
-		// S51-52 Must check that return statements are in procedure 
+
+		// S51-52 Must check that return statements are in procedure
 		// or function scope
 		if (returnStmt.getParentAttribute() != attribute.METHOD)
 		{
@@ -675,7 +677,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(WhileDoStmt whileDoStmt) {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting WhileDoStmt");
-		
+
 		s30check(whileDoStmt.getExpn());
 	}
 
@@ -696,7 +698,7 @@ public class Semantics implements ASTVisitor {
 		// TODO Auto-generated method stub
 		System.out.println("Visiting Type");
 	}
-	
+
 	// compare expn type to expectedType, and error if not the same
 	private void checkExpnType(Expn expn, SymbolType expectedType) {
 		SymbolType type = expn.getExpnType(Symbol);
@@ -704,17 +706,17 @@ public class Semantics implements ASTVisitor {
 			errors.add("Expression is not of type " + expectedType);
 		}
 	}
-	
+
 	// S30: check that type of expression is boolean
 	private void s30check(Expn expn) {
 		checkExpnType(expn, SymbolType.BOOLEAN);
 	}
-	
+
 	// S31: check that type of expression is integer
 	private void s31check(Expn expn) {
 		checkExpnType(expn, SymbolType.INTEGER);
 	}
-	
+
 	// S36: Check that type of argument expression matches type of corresponding formal parameter
 	private void s36check(ASTList<Expn> argList, ASTList<ScalarDecl> paramList) {
 		Iterator<Expn> argExpnIter = argList.iterator();
@@ -729,7 +731,7 @@ public class Semantics implements ASTVisitor {
 			count++;
 		}
 	}
-	
-	
+
+
 
 }
