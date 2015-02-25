@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 import compiler488.ast.BaseAST.attribute;
 import compiler488.ast.BaseAST.controlStatement;
+import compiler488.ast.stmt.Scope;
+import compiler488.semantics.Semantics;
 
 /**
  * A list of AST nodes.
@@ -164,7 +166,18 @@ public class ASTList<E extends AST> extends LinkedList<E> implements AST {
 	@Override
 	public void accept(ASTVisitor visitor) {
 		for (ASTVisitable node : this) {
+			
+			if (node instanceof Scope) {
+				// S06: start ordinary scope
+				((Semantics)visitor).getSymbolTable().enterScope();
+			}
+			
 			node.accept(visitor);
+			
+			if (node instanceof Scope) {
+				// S07: end ordinary scope
+				((Semantics)visitor).getSymbolTable().exitScope();
+			}
 		}
 	}
 
