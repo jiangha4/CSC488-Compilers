@@ -140,7 +140,7 @@ public class Semantics implements ASTVisitor {
 			}
 			else {
 				boolean success = symbolTable.insert(elemName, declType, elemKind, "", elem);
-				if (!success) {
+				if (success) {
 					elem.setSTEntry(symbolTable.search(elemName));
 				} else {
 					throw new IllegalStateException("Insertion in symbol table failed.");
@@ -625,10 +625,10 @@ public class Semantics implements ASTVisitor {
 
 		if (parentRoutine == null){
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
-		} 
+		}
 		else {
 			// S35: Check that expression type matches the return type of enclosing function
-			SymbolType returnStatementType = returnStmt.getValue().getExpnType(Symbol);
+			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
 			SymbolType routineType = parentRoutine.getType().toSymbolType();
 			if ( routineType != returnStatementType ) {
 				errors.add(
@@ -636,7 +636,7 @@ public class Semantics implements ASTVisitor {
 					"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
 			}
 		}
-		
+
 	}
 
 	@Override
