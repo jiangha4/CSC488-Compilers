@@ -1,0 +1,7 @@
+begin
+	integer function foo begin
+		boolean x
+		x <= true
+		return(x)
+	end
+end
