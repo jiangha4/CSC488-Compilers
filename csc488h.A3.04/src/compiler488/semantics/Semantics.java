@@ -13,49 +13,58 @@ import compiler488.ast.type.*;
 import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.*;
 
-/** Implement semantic analysis for compiler 488
- *  @author  <B> Haohan Jiang (g3jiangh)
- *               Maria Yancheva (c2yanche)
- *               Timo Vink (c4vinkti)
- *               Chandeep Singh (g2singh)
- *           </B>
+
+/*
+ * Implement semantic analysis for compiler 488
+ * @author <B> Haohan Jiang (g3jiangh)
+ *						 Maria Yancheva (c2yanche)
+ *						 Timo Vink (c4vinkti)
+ *						 Chandeep Singh (g2singh)
+ *				 </B>
  */
 public class Semantics implements ASTVisitor {
-	/** flag for tracing semantic analysis */
+	/*
+	 * Flag for tracing semantic analysis.
+	 */
 	private boolean trace = false;
 
-	/** file sink for semantic analysis trace */
+	/*
+	 * File sink for semantic analysis trace.
+	 */
 	private String traceFile = new String();
-	public FileWriter Tracer;
+	public FileWriter tracer;
 	public File f;
 
-	/** Construct symbol table concurrently with semantic checking */
-	private SymbolTable Symbol;
+	/*
+	 * Construct symbol table concurrently with semantic checking
+	 */
+	private SymbolTable symbolTable;
 
-	/** Accummulate errors and raise an exception after all semantic rules have */
-    private SemanticErrorCollector errors;
+	/*
+	 * Accummulate errors and raise an exception after all semantic rules have
+	 */
+	private SemanticErrorCollector errors;
 
-    /** SemanticAnalyzer constructor */
+	/*
+	 * SemanticAnalyzer constructor
+	 */
 	public Semantics (boolean trace) {
 		this.trace = trace;
-		Symbol = new SymbolTable();
+		symbolTable = new SymbolTable();
 		errors = new SemanticErrorCollector();
 	}
 
-	/**  semanticsFinalize - called by the parser once at the        */
-	/*                      end of compilation                      */
+	/*
+	 * Called once by the parser at the end of compilation.
+	 */
 	public void Finalize() throws SemanticErrorException {
-		if (errors.getCount() > 0) {
+		if (errors.any()) {
 			errors.raiseException();
 		}
 	}
 
 	public SymbolTable getSymbolTable() {
-		return Symbol;
-	}
-
-	public SemanticErrorCollector getErrors() {
-		return errors;
+		return symbolTable;
 	}
 
 	@Override
@@ -96,14 +105,14 @@ public class Semantics implements ASTVisitor {
 
 			// Check if identifier already exists in current scope
 			String elemId = nextElem.getName();
-			if (Symbol.search(elemId) != null) {
+			if (symbolTable.search(elemId) != null) {
 				// Detected a re-declaration in same scope
 				errors.add(nextElem.getSourceCoord(), "Re-declaration of identifier " + elemId + " not allowed in same scope.");
 			}
 			else {
-				boolean success = Symbol.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
+				boolean success = symbolTable.insert(nextElem.getName(), declType, nextElem.getKind(), "", nextElem);
 				if (success) {
-					nextElem.setSTEntry(Symbol.search(elemId));
+					nextElem.setSTEntry(symbolTable.search(elemId));
 				} else {
 					errors.add(nextElem.getSourceCoord(), "Unable to declare identifier " + elemId);
 				}
@@ -146,7 +155,7 @@ public class Semantics implements ASTVisitor {
 				}
 				if (hasReturn) {
 					// S35: Check that expression type matches the return type of enclosing function
-					SymbolType returnStatementType = rs.getValue().getExpnType(Symbol);
+					SymbolType returnStatementType = rs.getValue().getExpnType(symbolTable);
 					if ( routineType != returnStatementType ) {
 						errors.add(
 							rs.getSourceCoord(),
@@ -159,27 +168,27 @@ public class Semantics implements ASTVisitor {
 			}
 
 			// Check for existing declaration
-			if (Symbol.search(routineName) != null) {
+			if (symbolTable.search(routineName) != null) {
 				// Detected a re-declaration in same scope
 				errors.add(routineDecl.getSourceCoord(), "Re-declaration of identifier " + routineName + " not allowed in same scope.");
 			}
 			else {
-				boolean success = Symbol.insert(routineName, routineType, routineKind, "", routineDecl);
+				boolean success = symbolTable.insert(routineName, routineType, routineKind, "", routineDecl);
 				if (success) {
-					routineDecl.setSTEntry(Symbol.search(routineName));
+					routineDecl.setSTEntry(symbolTable.search(routineName));
 				} else {
 					errors.add(routineDecl.getSourceCoord(), "Unable to declare identifier " + routineName);
 				}
 			}
 
 			// Begin new scope
-			Symbol.enterScope();
+			symbolTable.enterScope();
 
 			// Mark as visited
 			routineDecl.setVisited(true);
 		} else {
 			// Exit the scope
-			Symbol.exitScope();
+			symbolTable.exitScope();
 
 			// Clear the flag
 			routineDecl.setVisited(false);
@@ -195,14 +204,14 @@ public class Semantics implements ASTVisitor {
 		SymbolType declType = scalarDecl.getType().toSymbolType();
 
 		// Check if identifier already exists in current scope
-		if (Symbol.search(declId) != null) {
+		if (symbolTable.search(declId) != null) {
 			// Detected a re-declaration in same scope
 			errors.add(scalarDecl.getSourceCoord(), "Re-declaration of identifier " + declId + " not allowed in same scope.");
 		}
 		else {
-			boolean success = Symbol.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
+			boolean success = symbolTable.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
-				scalarDecl.setSTEntry(Symbol.search(declId));
+				scalarDecl.setSTEntry(symbolTable.search(declId));
 			} else {
 				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declId);
 			}
@@ -218,7 +227,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(AnonFuncExpn anonFuncExpn) {
 		if (this.trace) {
 			System.out.println("Visiting AnonFuncExpn");
-			System.out.println("Type: " + anonFuncExpn.getExpnType(Symbol));
+			System.out.println("Type: " + anonFuncExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -226,7 +235,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(ArithExpn arithExpn) {
 		if (this.trace) {
 			System.out.println("Visiting ArithExpn");
-			System.out.println("Type: " + arithExpn.getExpnType(Symbol));
+			System.out.println("Type: " + arithExpn.getExpnType(symbolTable));
 		}
 
 		assertIsIntExpn(arithExpn);
@@ -236,7 +245,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(BinaryExpn binaryExpn) {
 		if (this.trace) {
 			System.out.println("Visiting BinaryExpn");
-			System.out.println("Type: " + binaryExpn.getExpnType(Symbol));
+			System.out.println("Type: " + binaryExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -244,7 +253,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(BoolConstExpn boolConstExpn) {
 		if (this.trace) {
 			System.out.println("Visiting BoolConstExpn");
-			System.out.println("Type: " + boolConstExpn.getExpnType(Symbol));
+			System.out.println("Type: " + boolConstExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -252,7 +261,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(BoolExpn boolExpn) {
 		if (this.trace) {
 			System.out.println("Visiting BoolExpn");
-			System.out.println("Type: " + boolExpn.getExpnType(Symbol));
+			System.out.println("Type: " + boolExpn.getExpnType(symbolTable));
 		}
 
 		assertIsBoolExpn(boolExpn);
@@ -262,7 +271,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(CompareExpn compareExpn) {
 		if (this.trace) {
 			System.out.println("Visiting CompareExpn");
-			System.out.println("Type: " + compareExpn.getExpnType(Symbol));
+			System.out.println("Type: " + compareExpn.getExpnType(symbolTable));
 		}
 
 		assertIsIntExpn(compareExpn);
@@ -272,7 +281,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(ConstExpn constExpn) {
 		if (this.trace) {
 			System.out.println("Visiting ConstExpn");
-			System.out.println("Type: " + constExpn.getExpnType(Symbol));
+			System.out.println("Type: " + constExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -280,7 +289,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(EqualsExpn equalsExpn) {
 		if (this.trace) {
 			System.out.println("Visiting EqualsExpn");
-			System.out.println("Type: " + equalsExpn.getExpnType(Symbol));
+			System.out.println("Type: " + equalsExpn.getExpnType(symbolTable));
 		}
 
 		assertIsIntExpn(equalsExpn);
@@ -290,7 +299,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(Expn expn) {
 		if (this.trace) {
 			System.out.println("Visiting Expn");
-			System.out.println("Type: " + expn.getExpnType(Symbol));
+			System.out.println("Type: " + expn.getExpnType(symbolTable));
 		}
 	}
 
@@ -298,21 +307,21 @@ public class Semantics implements ASTVisitor {
 	public void visit(FunctionCallExpn functionCallExpn) {
 		if (this.trace) {
 			System.out.println("Visiting FunctionCallExpn");
-			System.out.println("Type: " + functionCallExpn.getExpnType(Symbol));
+			System.out.println("Type: " + functionCallExpn.getExpnType(symbolTable));
 		}
 
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
-		if (Symbol.searchGlobal(functionName) == null) {
+		if (symbolTable.searchGlobal(functionName) == null) {
 			errors.add(functionCallExpn.getSourceCoord(), "Function '" + functionName + "' cannot be used before it has been declared.");
 		}
-		else if (Symbol.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
-			errors.add(functionCallExpn.getSourceCoord(), "Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + Symbol.searchGlobal(functionName).getKind() + ".");
+		else if (symbolTable.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
+			errors.add(functionCallExpn.getSourceCoord(), "Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + symbolTable.searchGlobal(functionName).getKind() + ".");
 		}
 
 		// S42/S43: check that the number of parameters declared in the function declaration is the same as the
-    	// number of arguments passed to the function call expression
-		SymbolTableEntry declaredFunc = Symbol.searchGlobal(functionName);
+			// number of arguments passed to the function call expression
+		SymbolTableEntry declaredFunc = symbolTable.searchGlobal(functionName);
 		RoutineDecl declaredFuncASTNode = (RoutineDecl)declaredFunc.getNode();
 		int numArgs = functionCallExpn.getArguments().size();
 		int numParams = declaredFuncASTNode.getParameters().size();
@@ -328,20 +337,20 @@ public class Semantics implements ASTVisitor {
 	public void visit(IdentExpn identExpn) {
 		if (this.trace) {
 			System.out.println("Visiting IdentExpn");
-			System.out.println("Type: " + identExpn.getExpnType(Symbol));
+			System.out.println("Type: " + identExpn.getExpnType(symbolTable));
 		}
 
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
 		// S40: check that identifier has been declared as a function
 		String identName = identExpn.getIdent();
-		if (Symbol.searchGlobal(identName) == null) {
+		if (symbolTable.searchGlobal(identName) == null) {
 			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used before it has been declared.");
 		}
-		else if (Symbol.searchGlobal(identName).getKind() != SymbolKind.VARIABLE &&
-				 Symbol.searchGlobal(identName).getKind() != SymbolKind.PARAMETER &&
-				 Symbol.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
-			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used in this context because it has been declared as " + Symbol.searchGlobal(identName).getKind() + ".");
+		else if (symbolTable.searchGlobal(identName).getKind() != SymbolKind.VARIABLE &&
+				 symbolTable.searchGlobal(identName).getKind() != SymbolKind.PARAMETER &&
+				 symbolTable.searchGlobal(identName).getKind() != SymbolKind.FUNCTION ) {
+			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used in this context because it has been declared as " + symbolTable.searchGlobal(identName).getKind() + ".");
 		}
 
 	}
@@ -350,7 +359,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(IntConstExpn intConstExpn) {
 		if (this.trace) {
 			System.out.println("Visiting IntConstExpn");
-			System.out.println("Type: " + intConstExpn.getExpnType(Symbol));
+			System.out.println("Type: " + intConstExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -358,7 +367,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(NotExpn notExpn) {
 		if (this.trace) {
 			System.out.println("Visiting NotExpn");
-			System.out.println("Type: " + notExpn.getExpnType(Symbol));
+			System.out.println("Type: " + notExpn.getExpnType(symbolTable));
 		}
 
 		assertIsBoolExpn(notExpn);
@@ -368,7 +377,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(SkipConstExpn skipConstExpn) {
 		if (this.trace) {
 			System.out.println("Visiting SkipConstExpn");
-			System.out.println("Type: " + skipConstExpn.getExpnType(Symbol));
+			System.out.println("Type: " + skipConstExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -376,16 +385,16 @@ public class Semantics implements ASTVisitor {
 	public void visit(SubsExpn subsExpn) {
 		if (this.trace) {
 			System.out.println("Visiting SubsExpn");
-			System.out.println("Type: " + subsExpn.getExpnType(Symbol));
+			System.out.println("Type: " + subsExpn.getExpnType(symbolTable));
 		}
 
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
-		if (Symbol.searchGlobal(arrayName) == null) {
+		if (symbolTable.searchGlobal(arrayName) == null) {
 			errors.add(subsExpn.getSourceCoord(), "Array '" + arrayName + "' cannot be used before it has been declared.");
 		}
-		else if (Symbol.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
-			errors.add(subsExpn.getSourceCoord(), "Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + Symbol.searchGlobal(arrayName).getKind() + ".");
+		else if (symbolTable.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
+			errors.add(subsExpn.getSourceCoord(), "Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + symbolTable.searchGlobal(arrayName).getKind() + ".");
 		}
 	}
 
@@ -393,7 +402,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(TextConstExpn textConstExpn) {
 		if (this.trace) {
 			System.out.println("Visiting TextConstExpn");
-			System.out.println("Type: " + textConstExpn.getExpnType(Symbol));
+			System.out.println("Type: " + textConstExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -401,7 +410,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(UnaryExpn unaryExpn) {
 		if (this.trace) {
 			System.out.println("Visiting UnaryExpn");
-			System.out.println("Type: " + unaryExpn.getExpnType(Symbol));
+			System.out.println("Type: " + unaryExpn.getExpnType(symbolTable));
 		}
 	}
 
@@ -409,7 +418,7 @@ public class Semantics implements ASTVisitor {
 	public void visit(UnaryMinusExpn unaryMinusExpn) {
 		if (this.trace) {
 			System.out.println("Visiting UnaryMinusExpn");
-			System.out.println("Type: " + unaryMinusExpn.getExpnType(Symbol));
+			System.out.println("Type: " + unaryMinusExpn.getExpnType(symbolTable));
 		}
 
 		assertIsIntExpn(unaryMinusExpn);
@@ -420,8 +429,8 @@ public class Semantics implements ASTVisitor {
 		if (this.trace) { System.out.println("Visiting AssignStmt"); }
 
 		// S34: Check that variable and expression in assignment are the same type
-		SymbolType lType = assignStmt.getLval().getExpnType(Symbol);
-		SymbolType rType = assignStmt.getRval().getExpnType(Symbol);
+		SymbolType lType = assignStmt.getLval().getExpnType(symbolTable);
+		SymbolType rType = assignStmt.getRval().getExpnType(symbolTable);
 		if (lType != rType) {
 			errors.add
 				(assignStmt.getRval().getSourceCoord(),
@@ -439,8 +448,8 @@ public class Semantics implements ASTVisitor {
 		}
 
 		/**S50 Check that exit statement is directly inside a loop
-		*  Checks if symbols "loop" or "while" have been declared in the scope
-		*  If not, throws an error
+		*	Checks if symbols "loop" or "while" have been declared in the scope
+		*	If not, throws an error
 		*/
 
 		BaseAST currNode = exitStmt;
@@ -495,16 +504,16 @@ public class Semantics implements ASTVisitor {
 
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
-		if (Symbol.searchGlobal(procName) == null) {
+		if (symbolTable.searchGlobal(procName) == null) {
 			errors.add(procedureCallStmt.getSourceCoord(), "Procedure '" + procName + "' cannot be used before it has been declared.");
 		}
-		else if (Symbol.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
-			errors.add(procedureCallStmt.getSourceCoord(), "Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + Symbol.searchGlobal(procName).getKind() + ".");
+		else if (symbolTable.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
+			errors.add(procedureCallStmt.getSourceCoord(), "Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + symbolTable.searchGlobal(procName).getKind() + ".");
 		}
 
 		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the
-    	// number of arguments passed to the procedure call statement
-		SymbolTableEntry declaredProc = Symbol.searchGlobal(procName);
+			// number of arguments passed to the procedure call statement
+		SymbolTableEntry declaredProc = symbolTable.searchGlobal(procName);
 		RoutineDecl declaredProcASTNode = (RoutineDecl)declaredProc.getNode();
 		int numArgs = procedureCallStmt.getArguments().size();
 		int numParams = declaredProcASTNode.getParameters().size();
@@ -522,13 +531,13 @@ public class Semantics implements ASTVisitor {
 
 		if (!program.isVisited()) {
 			// Begin new scope
-			Symbol.enterScope();
+			symbolTable.enterScope();
 
 			// Mark as visited
 			program.setVisited(true);
 		} else {
 			// Exit the scope
-			Symbol.exitScope();
+			symbolTable.exitScope();
 
 			// Clear the flag
 			program.setVisited(false);
@@ -542,7 +551,7 @@ public class Semantics implements ASTVisitor {
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
 		for (Printable e : putStmt.getOutputs()) {
-			SymbolType type = ((Expn)e).getExpnType(Symbol);
+			SymbolType type = ((Expn)e).getExpnType(symbolTable);
 			if (type != SymbolType.INTEGER &&
 				type != SymbolType.TEXT &&
 				type != SymbolType.SKIP) {
@@ -608,7 +617,7 @@ public class Semantics implements ASTVisitor {
 
 	// compare expn type to expectedType, and error if not the same
 	private void checkExpnType(Expn expn, SymbolType expectedType) {
-		SymbolType type = expn.getExpnType(Symbol);
+		SymbolType type = expn.getExpnType(symbolTable);
 		if (type != expectedType) {
 			errors.add(expn.getSourceCoord(), "Expression is not of type " + expectedType);
 		}
@@ -627,11 +636,11 @@ public class Semantics implements ASTVisitor {
 	// S36: Check that type of argument expression matches type of corresponding formal parameter
 	private void s36check(ASTList<Expn> argList, ASTList<ScalarDecl> paramList) {
 		Iterator<Expn> argExpnIter = argList.iterator();
-		Iterator<ScalarDecl> paramsIter  = paramList.iterator();
+		Iterator<ScalarDecl> paramsIter	= paramList.iterator();
 		int count = 1;
 		while (argExpnIter.hasNext()) {
 			Expn nextArg = argExpnIter.next();
-			SymbolType aType = nextArg.getExpnType(Symbol);
+			SymbolType aType = nextArg.getExpnType(symbolTable);
 			SymbolType pType = paramsIter.next().getSTEntry().getType();
 			if (aType != pType) {
 				errors.add(

@@ -16,8 +16,8 @@ public class SemanticErrorCollector {
 		errors.add(location + ": " + error);
 	}
 
-	public int getCount() {
-		return errors.size();
+	public boolean any() {
+		return errors.size() > 0;
 	}
 
 	public void raiseException() throws SemanticErrorException {
