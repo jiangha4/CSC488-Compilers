@@ -1,0 +1,7 @@
+begin
+	loop
+		procedure a begin
+			exit when true
+		end
+	end
+end
