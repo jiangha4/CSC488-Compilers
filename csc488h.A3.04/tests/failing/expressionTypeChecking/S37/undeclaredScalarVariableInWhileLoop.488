@@ -1,0 +1,5 @@
+begin
+	while x < 10 do
+		put x, skip
+	end
+end
