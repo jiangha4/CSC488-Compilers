@@ -553,13 +553,15 @@ public class Semantics implements ASTVisitor {
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
 		} 
 		else {
-			// S35: Check that expression type matches the return type of enclosing function
-			SymbolType returnStatementType = returnStmt.getValue().getExpnType(Symbol);
-			SymbolType routineType = parentRoutine.getType().toSymbolType();
-			if ( routineType != returnStatementType ) {
-				errors.add(
-					returnStmt.getSourceCoord(),
-					"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
+			if (returnStmt.getValue() != null) {
+				// S35: Check that expression type matches the return type of enclosing function
+				SymbolType returnStatementType = returnStmt.getValue().getExpnType(Symbol);
+				SymbolType routineType = parentRoutine.getType().toSymbolType();
+				if ( routineType != returnStatementType ) {
+					errors.add(
+						returnStmt.getSourceCoord(),
+						"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
+				}
 			}
 		}
 		
