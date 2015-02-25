@@ -13,16 +13,16 @@ public abstract class Stmt extends BaseAST {
 	
 	/**
 	 * containsReturn - find whether a statement is or contains (within its body) a ReturnStmt 
-	 * By default, return true of the statement being searched is of the desired type; otherwise return false (no recursion). 
+	 * By default, return the ReturnStmt object if of correct type; otherwise return null (no recursion). 
 	 * Specific subclasses of Stmt will override this method to provide required behaviour of searching the bodies of 
 	 * nested ordinary scopes, if statements and loops (while and loop).
 	 * 
-	 * @return boolean : true if self is a ReturnStmt; false otherwise
+	 * @return ReturnStmt : 'this' if self is a ReturnStmt; 'null' otherwise
 	 */
-	public boolean containsReturn() {
+	public ReturnStmt containsReturn() {
 		if (this instanceof ReturnStmt) {
-			return true;
+			return (ReturnStmt)this;
 		}
-		return false;
+		return null;
 	}
 }

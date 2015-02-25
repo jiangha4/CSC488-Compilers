@@ -249,15 +249,23 @@ public class Semantics implements ASTVisitor {
 				// S53: check that a function body contains at least one return statement
 				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
 				boolean hasReturn = false;
+				ReturnStmt rs = null;
 				if (routineBody != null){
 					for (Stmt routineStmt : routineBody) {
-						if (routineStmt.containsReturn()) {
+						rs = routineStmt.containsReturn();
+						if (rs != null) {
 							hasReturn = true;
 							break;
 						}
 					}
 				}
-				if (!hasReturn) {
+				if (hasReturn) {
+					// S35: Check that expression type matches the return type of enclosing function
+					if ( routineType != rs.getValue().getExpnType(Symbol) ) {
+						errors.add(rs.getSourceCoord() + ": Return statement type does not match function type.");
+					}
+				} else {
+					// S53
 					errors.add(routineDecl.getSourceCoord() + ": Function '" + routineName + "' must have at least one return statement.");
 				}
 			}

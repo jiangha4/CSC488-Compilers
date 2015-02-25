@@ -37,13 +37,14 @@ public abstract class LoopingStmt extends Stmt {
      * containsReturn - the looping statement will recursively check each of its child statements for a return statement
      */
     @Override
-    public boolean containsReturn() {
+    public ReturnStmt containsReturn() {
     	
     	for (Stmt child : body) {
-			if (child.containsReturn()) {
-				return true;
+    		ReturnStmt rs = child.containsReturn();
+			if (rs != null) {
+				return rs;
 			}
 		}
-		return false;
+		return null;
     }
 }

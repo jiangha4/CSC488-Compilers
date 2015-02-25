@@ -47,19 +47,21 @@ public class IfStmt extends Stmt {
      * containsReturn - the if statement will recursively check each of its child statements for a return statement
      */
     @Override
-    public boolean containsReturn() {
+    public ReturnStmt containsReturn() {
     	
     	for (Stmt child : whenTrue) {
-			if (child.containsReturn()) {
-				return true;
+    		ReturnStmt rs = child.containsReturn();
+			if (rs != null) {
+				return rs;
 			}
 		}
 		for (Stmt child : whenFalse) {
-			if (child.containsReturn()) {
-				return true;
+			ReturnStmt rs = child.containsReturn();
+			if (rs != null) {
+				return rs;
 			}
 		}
-		return false;
+		return null;
     }
     
     /**
