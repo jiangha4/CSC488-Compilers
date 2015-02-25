@@ -110,6 +110,7 @@ public class RoutineDecl extends Declaration {
 			type.accept(visitor);
 		}
 		if (parameters.size() > 0) {
+			parameters.setParentNode(this);
 			parameters.setParentAttribute(attribute.METHOD);
 			parameters.accept(visitor);
 		}

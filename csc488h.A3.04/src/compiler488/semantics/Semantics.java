@@ -528,13 +528,23 @@ public class Semantics implements ASTVisitor {
 		*  Checks if symbols "loop" or "while" have been declared in the scope
 		*  If not, throws an error
 		*/
-		if ((exitStmt.getControlStatement() != controlStatement.LOOP) &&
-			(exitStmt.getControlStatement() != controlStatement.WHILE))
-		{
-			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
-		}
-		// TODO check if exit statement is immediately contained in a loop
 		
+		BaseAST currNode = exitStmt;
+		boolean foundLoop = false;
+		while(currNode != null)
+		{
+			System.out.println(currNode + " " + currNode.getParentNode());
+			if ((currNode.getParentNode() instanceof LoopStmt) ||
+				(currNode.getParentNode() instanceof WhileDoStmt)){
+				foundLoop = true;
+			}
+			currNode = currNode.getParentNode();
+		}
+		
+		if (!foundLoop){
+			errors.add(exitStmt.getSourceCoord() + " EXIT not contained in LOOP or WHILE statements");
+			
+		}
 	}
 
 	@Override

@@ -22,14 +22,6 @@ public abstract class BaseAST implements AST {
 	/* Keep track if the AST node has been visited */
 	boolean isVisited = false;
 	
-	/* Keeps track of the control statement of the parent node and stored in the child node 
-	 * This is going to be used to check rules S50-S53 
-	 */
-	controlStatement parentControlType = null;
-	
-	public enum controlStatement {
-		LOOP, WHILE
-	}
 	
 	attribute parentAttribute = null;
 	
@@ -106,23 +98,6 @@ public abstract class BaseAST implements AST {
 	 */
 	public void setVisited(boolean isVisited) {
 		this.isVisited = isVisited;
-	}
-	
-	/**
-	 * 
-	 * @param statement : sets the control type of the parent for the node
-	 */
-	public void setControlStatement(controlStatement statement){
-		this.parentControlType = statement;
-	}
-	
-	/**
-	 * 
-	 * @param node : Current AST node
-	 * @return : the control type of the parent node
-	 */
-	public controlStatement getControlStatement(){
-		return this.parentControlType;
 	}
 	
 	/**

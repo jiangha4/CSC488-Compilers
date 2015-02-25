@@ -26,7 +26,7 @@ public class LoopStmt extends LoopingStmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this); //Current node
-		body.setListControlStatement(controlStatement.LOOP);
+		body.setParentNode(this); 
 		body.accept(visitor); //Child node
 	}
 }

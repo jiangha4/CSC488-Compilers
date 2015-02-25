@@ -26,9 +26,9 @@ public class WhileDoStmt extends LoopingStmt {
     @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.visit(this);
-		expn.setControlStatement(controlStatement.WHILE);
+		expn.setParentNode(this);
 		expn.accept(visitor);
-		body.setListControlStatement(controlStatement.WHILE);
+		body.setParentNode(this);
 		body.accept(visitor);
 	}
 }
