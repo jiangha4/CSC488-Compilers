@@ -61,10 +61,10 @@ def run_test(test_path, compiler_path, should_pass):
 
     # Return result
     if not parsing_succeeded(parser_output):
-        details = str.join("\n", parser_output.split(sep='\n')[2:-2])
+        details = str.join("\n", parser_output.split('\n')[2:-2])
         return TestResult(test_path, ResultType.test_fail, details)
     elif not test_success:
-        details = str.join("\n", parser_output.split(sep='\n')[1:-2])
+        details = str.join("\n", parser_output.split('\n')[1:-2])
         return TestResult(test_path, ResultType.failed, details)
     else:
         return TestResult(test_path, ResultType.passed)
@@ -111,7 +111,7 @@ def run_tests(test_dir_path, compiler_path, should_pass):
     for err_result in errors:
         if should_pass:
             print ("  \033[91m" + err_result.test_name + "\033[0m:")
-            indented = "    " + str.join("\n    ", err_result.details.split(sep='\n'))
+            indented = "    " + str.join("\n    ", err_result.details.split('\n'))
             print(indented + "\n")
         else:
             print ("  \033[91m" + err_result.test_name + "\033[0m")
