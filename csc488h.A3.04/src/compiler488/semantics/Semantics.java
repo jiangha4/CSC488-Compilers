@@ -69,7 +69,6 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ArrayDeclPart arrayDeclPart) {
-		if (this.trace) { System.out.println("Visiting ArrayDeclPart"); }
 		if (this.trace) {
 			System.out.println("Visiting ArrayDeclPart");
 		}
@@ -102,17 +101,23 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Declaration declaration) {
-		if (this.trace) { System.out.println("Visiting Declaration"); }
+		if (this.trace) {
+			System.out.println("Visiting Declaration");
+		}
 	}
 
 	@Override
 	public void visit(DeclarationPart declarationPart) {
-		if (this.trace) { System.out.println("Visiting DeclarationPart"); }
+		if (this.trace) {
+			System.out.println("Visiting DeclarationPart");
+		}
 	}
 
 	@Override
 	public void visit(MultiDeclarations multiDeclarations) {
-		if (this.trace) { System.out.println("Visiting MultiDeclarations"); }
+		if (this.trace) {
+			System.out.println("Visiting MultiDeclarations");
+		}
 
 		// Add a symbol for every element in the declaration (into current scope)
 		// (The value for the newly inserted elements is blank: in the project
@@ -140,7 +145,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(RoutineDecl routineDecl) {
-		if (this.trace) { System.out.println("Visiting RoutineDecl"); }
+		if (this.trace) {
+			System.out.println("Visiting RoutineDecl");
+		}
 
 		if (!routineDecl.isVisited()) {
 			/**
@@ -215,7 +222,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ScalarDecl scalarDecl) {
-		if (this.trace) { System.out.println("Visiting ScalarDecl"); }
+		if (this.trace) {
+			System.out.println("Visiting ScalarDecl");
+		}
 
 		String declId = scalarDecl.getName();
 		SymbolType declType = scalarDecl.getType().toSymbolType();
@@ -237,7 +246,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ScalarDeclPart scalarDeclPart) {
-		if (this.trace) { System.out.println("Visiting ScalarDeclPart"); }
+		if (this.trace) {
+			System.out.println("Visiting ScalarDeclPart");
+		}
 	}
 
 	@Override
@@ -443,7 +454,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(AssignStmt assignStmt) {
-		if (this.trace) { System.out.println("Visiting AssignStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting AssignStmt");
+		}
 
 		// S34: Check that variable and expression in assignment are the same type
 		SymbolType lType = assignStmt.getLval().getExpnType(symbolTable);
@@ -457,18 +470,20 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ExitStmt exitStmt) {
-		if (this.trace) { System.out.println("Visiting ExitStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting ExitStmt");
+		}
 
 		// Only do S30 check if "exit when"
 		if (exitStmt.getExpn() != null) {
 			assertIsBoolExpn(exitStmt.getExpn());
 		}
 
-		/**S50 Check that exit statement is directly inside a loop
-		*	Checks if symbols "loop" or "while" have been declared in the scope
-		*	If not, throws an error
-		*/
-
+		/**
+		 * S50 Check that exit statement is directly inside a loop
+		 *	Checks if symbols "loop" or "while" have been declared in the scope
+		 *	If not, throws an error
+		 */
 		BaseAST currNode = exitStmt;
 		boolean foundLoop = false;
 		while(currNode != null)
@@ -490,7 +505,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(GetStmt getStmt) {
-		if (this.trace) { System.out.println("Visiting GetStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting GetStmt");
+		}
 
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
@@ -500,24 +517,32 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(IfStmt ifStmt) {
-		if (this.trace) { System.out.println("Visiting IfStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting IfStmt");
+		}
 
 		assertIsBoolExpn(ifStmt.getCondition());
 	}
 
 	@Override
 	public void visit(LoopingStmt loopingStmt) {
-		if (this.trace) { System.out.println("Visiting LoopingStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting LoopingStmt");
+		}
 	}
 
 	@Override
 	public void visit(LoopStmt loopStmt) {
-		if (this.trace) { System.out.println("Visiting LoopStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting LoopStmt");
+		}
 	}
 
 	@Override
 	public void visit(ProcedureCallStmt procedureCallStmt) {
-		if (this.trace) { System.out.println("Visiting ProcedureCallStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting ProcedureCallStmt");
+		}
 
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
@@ -544,7 +569,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Program program) {
-		if (this.trace) { System.out.println("Visiting Program"); }
+		if (this.trace) {
+			System.out.println("Visiting Program");
+		}
 
 		if (!program.isVisited()) {
 			// Begin new scope
@@ -563,7 +590,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(PutStmt putStmt) {
-		if (this.trace) { System.out.println("Visiting PutStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting PutStmt");
+		}
 
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
@@ -579,7 +608,9 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(ReturnStmt returnStmt) {
-		if (this.trace) { System.out.println("Visiting ReturnStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting ReturnStmt");
+		}
 
 		// S51-52 Must check that return statements are in procedure
 		// or function scope
@@ -602,34 +633,46 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void visit(Scope scope) {
-		if (this.trace) { System.out.println("Visiting Scope"); }
+		if (this.trace) {
+			System.out.println("Visiting Scope");
+		}
 	}
 
 	@Override
 	public void visit(Stmt stmt) {
-		if (this.trace) { System.out.println("Visiting Stmt"); }
+		if (this.trace) {
+			System.out.println("Visiting Stmt");
+		}
 	}
 
 	@Override
 	public void visit(WhileDoStmt whileDoStmt) {
-		if (this.trace) { System.out.println("Visiting WhileDoStmt"); }
+		if (this.trace) {
+			System.out.println("Visiting WhileDoStmt");
+		}
 
 		assertIsBoolExpn(whileDoStmt.getExpn());
 	}
 
 	@Override
 	public void visit(BooleanType booleanType) {
-		if (this.trace) { System.out.println("Visiting BooleanType"); }
+		if (this.trace) {
+			System.out.println("Visiting BooleanType");
+		}
 	}
 
 	@Override
 	public void visit(IntegerType integerType) {
-		if (this.trace) { System.out.println("Visiting IntegerType"); }
+		if (this.trace) {
+			System.out.println("Visiting IntegerType");
+		}
 	}
 
 	@Override
 	public void visit(Type type) {
-		if (this.trace) { System.out.println("Visiting Type"); }
+		if (this.trace) {
+			System.out.println("Visiting Type");
+		}
 	}
 
 	// compare expn type to expectedType, and error if not the same
