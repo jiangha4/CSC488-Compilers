@@ -246,9 +246,19 @@ public class Semantics implements ASTVisitor {
 				// S53: check that a function body contains at least one return statement
 				ASTList<Stmt> routineBody = routineDecl.getBody().getBody();
 				boolean hasReturn = false;
-				for (Stmt routineStmt : routineBody) {
-					if (routineStmt instanceof ReturnStmt) {
-						hasReturn = true;
+				if (routineBody != null){
+					/* for (Stmt routineStmt : routineBody) {
+						System.out.println("LOOP" + routineBody);
+						if (routineStmt instanceof ReturnStmt) {
+							hasReturn = true;
+						}
+					}*/
+					for(int i = 0; i < routineBody.size(); i++){
+						
+						if(routineBody.get(i) instanceof ReturnStmt){
+							System.out.println("LOOP" + routineBody);
+							hasReturn = true;
+						}
 					}
 				}
 				if (!hasReturn) {
@@ -622,9 +632,7 @@ public class Semantics implements ASTVisitor {
 		// or function scope
 		if (returnStmt.getParentAttribute() != attribute.METHOD)
 		{
-			System.out.println(returnStmt.getParentNode());
-			System.out.println(returnStmt.getParentAttribute());
-			errors.add(returnStmt.getSourceCoord() + "Return statement is not in the scope of a function or procedure");
+			errors.add(returnStmt.getSourceCoord() + " Return statement is not in the scope of a function or procedure");
 		}
 	}
 
