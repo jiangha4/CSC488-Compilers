@@ -20,14 +20,19 @@ Haohan Jiang (g3jiangh)
 Chandeep Singh (g2singh)
 - SymbolTable implementation
 - Semantic Analysis
+- AST node type tracking
 - Testing cases
 
 Maria Yancheva (c2yanche)
 - AST traversal using visitor pattern
 - SymbolTable implementation
 - Majority of the Semantic Analysis
+- AST node source coordinates
+- Testing cases
 
 Timo Vink (c4vinkti)	
 - AST construction in cup (grammar) file
+- Testrunner script
 - Testing cases
-- Improved code readability and fixed multiple errors i
+- Semantic Analysis - fixed expression typing and majority of issues
+- Improved code readability and design

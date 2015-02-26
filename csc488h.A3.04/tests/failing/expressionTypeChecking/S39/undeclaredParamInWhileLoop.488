@@ -1,0 +1,7 @@
+begin
+	procedure foo begin
+		while param1 < 10 do
+			put "a", skip
+		end
+	end
+end

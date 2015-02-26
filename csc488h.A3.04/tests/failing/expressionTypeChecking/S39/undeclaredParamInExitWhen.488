@@ -1,0 +1,7 @@
+begin
+	procedure foo begin
+		loop
+			exit when param1 > 10
+		end
+	end
+end
