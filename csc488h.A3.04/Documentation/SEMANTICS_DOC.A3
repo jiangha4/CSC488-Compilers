@@ -13,21 +13,48 @@ Semantic Analysis Design
 
 Processing of ASTs:
     
-    For traversal and processing of ASTs, we used the Visitor/Visitable pattern and slightly modified it to have an "enterVisit" and "exitVisit" methods. The first is called when visiting the node, and the second is called when all sub-nodes (ie. children and all their children recursively) have been visited. Having these separate methods makes handling scenarios such as enter/exiting scopes at the right time very simple since we can create a scope on visit, process all containing statements/expressions, and then exit the scope when finished with all of those.
+    For traversal and processing of ASTs, we used the Visitor/Visitable pattern and
+    slightly modified it to have an "enterVisit" and "exitVisit" methods. The first is
+    called when visiting the node, and the second is called when all sub-nodes
+    (ie. children and all their children recursively) have been visited. Having these
+    separate methods makes handling scenarios such as enter/exiting scopes at the right
+    time very simple since we can create a scope on visit, process all containing
+    statements/expressions, and then exit the scope when finished with all of those.
 
 Scope Entering/Exiting:
     
-    For the Program Scope (Program node) we simply create a scope when enterVisit is called, and exit scope when exitVisit is called. For Function/Procedure declarations (RoutineDecl node), we do the same (enter/exit scope on enter/exitVisit) because we visit parameter declaration notes before the function/procedure scope itself, so in order to have those in the proper scope, we must do this. For ordinary scopes, we check through the body of a Scope ASTNode while accepting visitors, and if a node in the body is a Scope, then we enter a new scope.
+    For the Program Scope (Program node) we simply create a scope when enterVisit is
+    called, and exit scope when exitVisit is called. For Function/Procedure declarations 
+    (RoutineDecl node), we do the same (enter/exit scope on enter/exitVisit) because
+    we visit parameter declaration notes before the function/procedure scope itself, so
+    in order to have those in the proper scope, we must do this. For ordinary scopes,
+    we check through the body of a Scope ASTNode while accepting visitors, and if a
+    node in the body is a Scope, then we enter a new scope.
 
 Type Tracking/Checking:
 
-    For this, we implemented a "getExpnType" method for each Expn subclass that would return its type, and for particular statements which required type checking (e.g. AssignStmt), we could just call this method on the statement's sub-expressions and easily compare types. For more details on how getExpnType is implemented, please see the "Type Tracking" section of the AST doc. 
+    For this, we implemented a "getExpnType" method for each Expn subclass that would
+    return its type, and for particular statements which required type checking
+    (e.g. AssignStmt), we could just call this method on the statement's sub-expressions 
+    and easily compare types. For more details on how getExpnType is implemented, please 
+    see the "Type Tracking" section of the AST doc. 
 
 Existance of Return Statements:
 
-    Since routines can have nested if statements, loops, and other routines, we needed to a way to resursively search all sub AST Nodes of a Routine, and search for a return statement. For this, we added a containsReturn method to the Stmt class which will return itself if it is of instance ReturnStmt. Then, we overloaded the containsReturn method in IfStmt, LoopingStmt, and Scope which will resurively call the method on all their children, and bubble-up the containing return if any, or null if none is found.
+    Since routines can have nested if statements, loops, and other routines, we needed to
+    a way to resursively search all sub AST Nodes of a Routine, and search for a return
+    statement. For this, we added a containsReturn method to the Stmt class which will
+    return itself if it is of instance ReturnStmt. Then, we overloaded the containsReturn 
+    method in IfStmt, LoopingStmt, and Scope which will resurively call the method on all 
+    their children, and bubble-up the containing return if any, or null if none is found.
 
 Proper Placement of Return/Exit Statements:
 
-    We added a parent attribute + getParentNode method to the BaseAST class which returns a link to the AST node's parent node in the tree. This allows us to easily check whether or not return/exit statements are in the right spot. For return statements, we recursively travel up to the parent until we find a RoutineDecl node, and if found then the return statement is in a valid location. If nothing found, it is not. Similarly for exit statements, we recursively search parents until we find a Loop/While statement node.
+    We added a parent attribute + getParentNode method to the BaseAST class which returns
+    a link to the AST node's parent node in the tree. This allows us to easily check
+    whether or not return/exit statements are in the right spot. For return statements,
+    we recursively travel up to the parent until we find a RoutineDecl node, and if found
+    then the return statement is in a valid location. If nothing found, it is not.
+    Similarly for exit statements, we recursively search parents until we find a 
+    Loop/While statement node.
 
