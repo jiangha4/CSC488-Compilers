@@ -170,7 +170,7 @@ public class Semantics implements ASTVisitor {
 			if (success) {
 				routineDecl.setSTEntry(symbolTable.search(routineName));
 			} else {
-				errors.add(routineDecl.getSourceCoord(), "Unable to declare identifier " + routineName);
+				throw new IllegalStateException("Insertion in symbol table failed.");
 			}
 		}
 
@@ -198,7 +198,7 @@ public class Semantics implements ASTVisitor {
 			if (success) {
 				scalarDecl.setSTEntry(symbolTable.search(declName));
 			} else {
-				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declName);
+				throw new IllegalStateException("Insertion in symbol table failed.");
 			}
 		}
 	}
