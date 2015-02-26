@@ -406,23 +406,13 @@ public class Main {
 	  Semantics visitor = new Semantics(traceSemantics);
 	  try {
 		  programAST.accept(visitor);
+          visitor.Finalize();
 	  }
-	  catch( Exception e) {
+	  catch(Exception e) {
 	    System.err.println("Exception during Semantic Analysis");
-	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	    e.printStackTrace ();
+	    e.printStackTrace();
 	    errorOccurred = true ;
-	  }
-
-	  // Check for any semantic errors that were found during semantic analysis
-	  try {
-		  visitor.Finalize();
-	  }
-	  catch (SemanticErrorException e) {
-		  System.err.println("Exception during Semantic Analysis");
-		  e.printStackTrace ();
-		  errorOccurred = true;
-	  }
+    }
 
 	  if (dumpSymbolTable) {
 		  String stDump = visitor.getSymbolTable().fullTraversal();
