@@ -225,23 +225,40 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void exitVisit(FunctionCallExpn functionCallExpn) {
-		// S40: check that identifier has been declared as a function
+		// S40: check that identifier has been declared
 		String functionName = functionCallExpn.getIdent();
-		if (symbolTable.searchGlobal(functionName) == null) {
-			errors.add(functionCallExpn.getSourceCoord(), "Function '" + functionName + "' cannot be used before it has been declared.");
+		SymbolTableEntry identEntry = symbolTable.searchGlobal(functionName);
+		if (identEntry == null) {
+			String msg = String.format("Unknown identifier '%s'.", functionName);
+			errors.add(functionCallExpn.getSourceCoord(), msg);
+			return;
 		}
-		else if (symbolTable.searchGlobal(functionName).getKind() != SymbolKind.FUNCTION) {
-			errors.add(functionCallExpn.getSourceCoord(), "Identifier '" + functionName + "' cannot be used as a function because it has been declared as " + symbolTable.searchGlobal(functionName).getKind() + ".");
+
+		// S40: check that identifier has been declared as a function
+		SymbolKind identEntryKind = identEntry.getKind();
+		BaseAST astNode = identEntry.getNode();
+		SourceCoord originalDeclCoords = astNode.getSourceCoord();
+		if (identEntryKind != SymbolKind.FUNCTION) {
+			String msg = String.format(
+				"Attempting to use '%s' as a function but it has been declared as a %s on %s.",
+				functionName, identEntryKind, originalDeclCoords
+			);
+			errors.add(functionCallExpn.getSourceCoord(), msg);
+			return;
 		}
 
 		// S42/S43: check that the number of parameters declared in the function declaration is the same as the
 		// number of arguments passed to the function call expression
-		SymbolTableEntry declaredFunc = symbolTable.searchGlobal(functionName);
-		RoutineDecl declaredFuncASTNode = (RoutineDecl)declaredFunc.getNode();
 		int numArgs = functionCallExpn.getArguments().size();
+		RoutineDecl declaredFuncASTNode = (RoutineDecl)astNode;
 		int numParams = declaredFuncASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add(functionCallExpn.getSourceCoord(), "Function '" + functionName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			String msg = String.format(
+				"Calling function '%s' with %d arguments, but declared with %d parameters on %s.",
+				functionName, numArgs, numParams, originalDeclCoords
+			);
+			errors.add(functionCallExpn.getSourceCoord(), msg);
+			return;
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
@@ -250,24 +267,40 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void exitVisit(IdentExpn identExpn) {
-		// S37: check that identifier has been declared as a scalar variable
-		// S39: check that identifier has been declared as a parameter
-		// S40: check that identifier has been declared as a function
+		// S37/S39/S40: check that identifier has been declared
 		String identName = identExpn.getIdent();
 		SymbolTableEntry identSymbol = symbolTable.searchGlobal(identName);
 		if (identSymbol == null) {
-			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used before it has been declared.");
+			String msg = String.format("Unknown identifier '%s'.", identName);
+			errors.add(identExpn.getSourceCoord(), msg);
+			return;
 		}
-		else if (identSymbol.getKind() != SymbolKind.VARIABLE &&
-				 identSymbol.getKind() != SymbolKind.PARAMETER &&
-				 identSymbol.getKind() != SymbolKind.FUNCTION ) {
-			errors.add(identExpn.getSourceCoord(), "Identifier '" + identName + "' cannot be used in this context because it has been declared as " + symbolTable.searchGlobal(identName).getKind() + ".");
+
+		// Check if symbol is of appropriate kind
+		SymbolKind identKind = identSymbol.getKind();
+		if (identKind != SymbolKind.VARIABLE &&
+		    identKind != SymbolKind.PARAMETER &&
+		    identKind != SymbolKind.FUNCTION ) {
+
+			String msg = String.format(
+				"Only variables, parameters and functions are valid here, but '%s' is a %s",
+				identName, identKind
+			);
+			errors.add(identExpn.getSourceCoord(), msg);
+			return;
 		}
-		else if (identSymbol.getKind() == SymbolKind.FUNCTION) {
-			// S42: check that the function has no parameters
-			int numParams = ((RoutineDecl)identSymbol.getNode()).getParameters().size();
-			if ( numParams > 0 ) {
-				errors.add(identExpn.getSourceCoord(), "Function '" + identName + "' is called with no arguments, but requires " + numParams + " parameters.");
+
+		// S42: check that the function has no parameters
+		if (identKind == SymbolKind.FUNCTION) {
+			RoutineDecl routineDecl = (RoutineDecl)identSymbol.getNode();
+			SourceCoord originalDecl = routineDecl.getSourceCoord();
+			Integer numParams = routineDecl.getParameters().size();
+			if (numParams > 0) {
+				String msg = String.format(
+					"Calling function '%s' without arguments, but it was declared with %d parameters on %s.",
+					identName, numParams, originalDecl
+				);
+				errors.add(identExpn.getSourceCoord(), msg);
 			}
 		}
 	}
@@ -342,7 +375,7 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void exitVisit(GetStmt getStmt) {
-		// S31: check that variables are integers
+		// S31: check that variables are integer variables
 		for (Expn expn : getStmt.getInputs()) {
 			assertIsIntExpn(expn);
 		}
@@ -355,23 +388,41 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void exitVisit(ProcedureCallStmt procedureCallStmt) {
-		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
-		if (symbolTable.searchGlobal(procName) == null) {
-			errors.add(procedureCallStmt.getSourceCoord(), "Procedure '" + procName + "' cannot be used before it has been declared.");
+		SymbolTableEntry identEntry = symbolTable.searchGlobal(procName);
+
+		// S41: Check if identifier has been declared
+		if (identEntry == null) {
+			String msg = String.format("Unknown identifier '%s'.", procName);
+			errors.add(procedureCallStmt.getSourceCoord(), msg);
+			return;
 		}
-		else if (symbolTable.searchGlobal(procName).getKind() != SymbolKind.PROCEDURE) {
-			errors.add(procedureCallStmt.getSourceCoord(), "Identifier '" + procName + "' cannot be used as a procedure because it has been declared as " + symbolTable.searchGlobal(procName).getKind() + ".");
+
+		// S41: Check if identifier has been declared as a procedure
+		SymbolKind identEntryKind = identEntry.getKind();
+		BaseAST astNode = identEntry.getNode();
+		SourceCoord originalDeclCoords = astNode.getSourceCoord();
+		if (identEntryKind != SymbolKind.PROCEDURE) {
+			String msg = String.format(
+				"Attempting to use '%s' as a procedure but it has been declared as a %s on %s.",
+				procName, identEntryKind, originalDeclCoords
+			);
+			errors.add(procedureCallStmt.getSourceCoord(), msg);
+			return;
 		}
 
 		// S42/S43: check that the number of parameters declared in the procedure declaration is the same as the
-			// number of arguments passed to the procedure call statement
-		SymbolTableEntry declaredProc = symbolTable.searchGlobal(procName);
-		RoutineDecl declaredProcASTNode = (RoutineDecl)declaredProc.getNode();
+		// number of arguments passed to the procedure call statement
 		int numArgs = procedureCallStmt.getArguments().size();
+		RoutineDecl declaredProcASTNode = (RoutineDecl)astNode;
 		int numParams = declaredProcASTNode.getParameters().size();
 		if (numArgs != numParams) {
-			errors.add(procedureCallStmt.getSourceCoord(), "Procedure '" + procName + "' is called with " + numArgs + " arguments, but requires " + numParams + " parameters.");
+			String msg = String.format(
+				"Calling procedure '%s' with %d arguments, but it has been declared with %d parameters on %s.",
+				procName, numArgs, numParams, originalDeclCoords
+			);
+			errors.add(procedureCallStmt.getSourceCoord(), msg);
+			return;
 		}
 
 		// S36: Check that type of argument expression matches type of corresponding formal parameter
