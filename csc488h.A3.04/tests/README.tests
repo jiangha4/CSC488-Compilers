@@ -1,0 +1,416 @@
+failing:
+	declarations:
+		 s46:
+			lower bound greater than upper
+			lower bound greater than upper mixed
+			lower bound greater than upper negative
+
+
+	expression type checking:
+		 s30:
+			and comparision with integers
+			and comparision with one integer
+			loop exit integer
+			loop exit integer variable
+			not integer used as boolean
+			not integer used as integer
+			or comparision with integers
+			or comparision with one integer
+			while expr integer
+			while expr integer variable
+
+		 s31:
+			addition bool expn both
+			addition bool expn left
+			addition bool expn right
+			array acc first bound bool expn
+			array acc second bound bool expn
+			array acc single bound bool expn
+			division bool expn both
+			division bool expn left
+			division bool expn right
+			get multiple vars incl bool var
+			get single bool var
+			greater than bool expn both
+			greater than bool expn left
+			greater than bool expn right
+			greater than or equal bool expn both
+			greater than or equal bool expn left
+			greater than or equal bool expn right
+			less than bool expn both
+			less than bool expn left
+			less than bool expn right
+			less than or equal bool expn both
+			less than or equal bool expn left
+			less than or equal bool expn right
+			multiply bool expn both
+			multiply bool expn left
+			multiply bool expn right
+			put bool expn
+			subtraction bool expn both
+			subtraction bool expn left
+			subtraction bool expn right
+			unary minus bool expn
+
+		 s32:
+			equals expn compare diff types1
+			equals expn compare diff types2
+			equals expn compare diff types with vars1
+			equals expn compare diff types with vars2
+			nested equals expn compare diff types1
+			nested equals expn compare diff types2
+			nested not equals expn compare diff types1
+			nested not equals expn compare diff types2
+			not equals expn compare diff types1
+			not equals expn compare diff types2
+
+		 s34:
+			assign bool const expn to int
+			assign bool const to int
+			assign bool var expn to int
+			assign bool var to int
+			assign int const expn to bool
+			assign int const to bool
+			assign int var expn to bool
+			assign int var to bool
+
+		 s35:
+			boolean function with boolean return array
+			boolean function with integer return
+			boolean function with integer return array
+			boolean function with integer return complex
+			boolean function with params with integer return
+			integer function with boolean return
+			integer function with boolean return array
+			integer function with boolean return complex
+			integer function with integer return array
+			integer function with params with boolean return
+
+		 s36:
+			function bool params1
+			function bool params2
+			function int params1
+			function int params2
+			function mixed params
+			function mixed params expn args
+			procedure bool params1
+			procedure bool params2
+			procedure int params1
+			procedure int params2
+			procedure mixed params
+			procedure mixed params expn args
+
+		 s37:
+			undeclared scalar variable in assign stmt
+			undeclared scalar variable in exit when
+			undeclared scalar variable in func call
+			undeclared scalar variable in get
+			undeclared scalar variable in if stmt
+			undeclared scalar variable in proc call
+			undeclared scalar variable in put
+			undeclared scalar variable in return
+			undeclared scalar variable in while loop
+
+		 s38:
+			undeclared array in assign stmt
+			undeclared array in exit when
+			undeclared array in func call
+			undeclared array in get
+			undeclared array in if stmt
+			undeclared array in proc call
+			undeclared array in put
+			undeclared array in return
+			undeclared array in while loop
+
+		 s39:
+			undeclared param in assign stmt
+			undeclared param in exit when
+			undeclared param in func call
+			undeclared param in if stmt
+			undeclared param in proc call
+			undeclared param in put
+			undeclared param in return
+			undeclared param in while loop
+
+
+	functions procedures and args:
+		 s40:
+			call bool ident
+			call int ident
+			later declared function call no params
+			later declared function call with params
+			undeclared function call no params
+			undeclared function call with params
+
+		 s41:
+			call bool ident
+			call int ident
+			later declared procedure call no params
+			later declared procedure call with params
+			undeclared procedure call no params
+			undeclared procedure call with params
+
+		 s42:
+			function call with params with no args
+			procedure call with params with no args
+
+		 s43:
+			function call with multiple params incorrect args
+			function call with one param incorrect args
+			procedure call with multiple params incorrect args
+			procedure call with one param incorrect args
+
+
+	statement checking:
+		 s50:
+			exit in anon function
+			exit in function in loop
+			exit in procedure in loop
+			exit no loop
+			exit not in loop
+			exit when in anon function
+			exit when in function in loop
+			exit when in procedure in loop
+			exit when no loop
+			exit when not in loop
+
+		 s51:
+			return in anon function
+			return in anon function in function
+			return no function
+			return not in function
+
+		 s52:
+			return in anon function in procedure
+			return no procedure
+			return not in procedure
+
+		 s53:
+			no return in function
+			no return in function with params
+			return in nested function
+			return in nested function with params
+
+
+
+passing:
+	declarations:
+		declare boolean function no params
+		declare boolean function with params
+		declare boolean function with params with body
+		declare integer function no params
+		declare integer function with params
+		declare integer function with params with body
+		declare one dim array boolean
+		declare one dim array boolean bounds
+		declare one dim array boolean bounds equal
+		declare one dim array boolean bounds equal zero
+		declare one dim array integer
+		declare one dim array integer bounds
+		declare one dim array integer bounds equal
+		declare one dim array integer bounds equal zero
+		declare procedure no params
+		declare procedure with params
+		declare procedure with params with body
+		declare scalar var boolean
+		declare scalar var boolean multiple
+		declare scalar var integer
+		declare scalar var integer multiple
+		declare scalar var mixed multiple
+		declare two dim array boolean
+		declare two dim array boolean bounds
+		declare two dim array boolean bounds equal
+		declare two dim array boolean bounds equal zero
+		declare two dim array boolean bounds mixed
+		declare two dim array integer
+		declare two dim array integer bounds
+		declare two dim array integer bounds equal
+		declare two dim array integer bounds equal zero
+		declare two dim array integer bounds mixed
+
+	expression type checking:
+		 s30:
+			if expression check
+			if expression check variables
+			loop exit when false
+			loop exit when false variable
+			loop exit when true
+			loop exit when true variable
+			simple and expression
+			simple and expression declared variables
+			simple and expression declared variables mixed
+			simple and expression false
+			simple and expression mixed
+			simple no expression false
+			simple not expression
+			simple or expression
+			simple or expression declared variables
+			simple or expression declared variables mixed
+			simple or expression false
+			simple or expression mixed
+			while expression check
+			while expression check variables
+			while expression check variables false
+			while false expression check
+
+		 s31:
+			addition int expn both
+			array acc first bound int expn
+			array acc second bound int expn
+			array acc single bound int expn
+			division int expn both
+			get multiple int vars
+			get single int var
+			greater than int expn both
+			greater than or equal int expn both
+			less than int expn both
+			less than or equal int expn both
+			multiply int expn both
+			put int expn
+			subtraction int expn both
+			unary minus int expn
+
+		 s32:
+			equals expn booleans
+			equals expn integers
+			equals expn mixed
+			equals expn mixed with vars
+			not equals expn booleans
+			not equals expn integers
+			not equals expn mixed
+			not equals expn mixed with vars
+
+		 s34:
+			assign bool const expn to bool
+			assign bool const to bool
+			assign bool var expn to bool
+			assign bool var to bool
+			assign int const expn to int
+			assign int const to int
+			assign int var expn to int
+			assign int var to int
+
+		 s35:
+			boolean function with boolean return
+			boolean function with boolean return array
+			boolean function with boolean return complex
+			boolean function with params with boolean return
+			integer function with integer return
+			integer function with integer return array
+			integer function with integer return complex
+			integer function with params with integer return
+
+		 s36:
+			function bool params
+			function bool params expn arg
+			function bool params with vars
+			function int params
+			function int params expn arg
+			function int params with vars
+			function mixed params
+			function mixed params expn args
+			function mixed params with vars
+			procedure bool params
+			procedure bool params expn arg
+			procedure bool params with vars
+			procedure int params
+			procedure int params expn arg
+			procedure int params with vars
+			procedure mixed params
+			procedure mixed params expn args
+			procedure mixed params with vars
+
+		 s37:
+			boolean scalar variable
+			integer scalar variable
+
+		 s38:
+			boolean array
+			integer array
+
+		 s39:
+			boolean param
+			integer param
+
+
+	functions procedures and args:
+		 s40:
+			function call no params
+			function call with params
+
+		 s41:
+			procedure call no params
+			procedure call with params
+
+		 s42:
+			function call no params
+			procedure call no params
+
+		 s43:
+			function call with multiple params
+			function call with one param
+			procedure call with multiple params
+			procedure call with one param
+
+
+	scope:
+		empty scope
+		function scope no params
+		function scope with params
+		function scope with params and redeclaration
+		nested empty scope
+		nested scope with declaration
+		nested scope with redeclaration
+		procedure scope no params
+		procedure scope with params
+		procedure scope with params and redeclaration
+		scope with declaration
+
+	statement checking:
+		 s50:
+			basic loop
+			basic while
+			basic while without exit
+			exit in loop
+			exit in minor scope
+			exit in nested scope
+			exit when in loop
+			exit when in minor scope
+			exit when in nested scope
+			loop while nested exit
+			loop with nested if exit
+			loop with when exit
+
+		 s51:
+			return in function
+			return in function in anon function
+			return in minor scope
+			return in nested scope
+
+		 s52:
+			return in minor scope
+			return in nested scope
+			return in procedure
+			return in procedure in anon function
+
+		 s53:
+			multiple return in function
+			multiple return in function with params
+			multiple return with nested if stmt
+			multiple return with nested loop
+			multiple return with nested ordinary scope
+			multiple return with nested while loop
+			multiple return with nesting and params
+			single return in function
+			single return in function with params
+			single return in nested if stmt
+			single return in nested if stmt not executed
+			single return in nested loop
+			single return in nested ordinary scope
+			single return in nested while loop
+			single return not last statement
+			single return not last statement with params
+
+
+
+
