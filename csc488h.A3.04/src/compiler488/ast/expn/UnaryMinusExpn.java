@@ -23,6 +23,9 @@ public class UnaryMinusExpn extends UnaryExpn {
 		visitor.exitVisit(this);
 	}
 	
+	/**
+	 * getExpnType : recursively checks if the operand is of type INTEGER and if yes, returns INTEGER; otherwise returns UNKNOWN
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

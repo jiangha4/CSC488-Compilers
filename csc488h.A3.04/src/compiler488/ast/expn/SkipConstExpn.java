@@ -27,6 +27,9 @@ public class SkipConstExpn extends ConstExpn implements Printable {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : always return a SKIP type.
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		return SymbolType.SKIP;

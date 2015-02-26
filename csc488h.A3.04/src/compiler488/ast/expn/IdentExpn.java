@@ -39,6 +39,10 @@ public class IdentExpn extends Expn implements Readable {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : look up identifier in symbol table and if found return the symbol table entry type; 
+	 * otherwise return UNKNOWN.
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

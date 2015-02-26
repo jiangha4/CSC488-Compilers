@@ -33,6 +33,9 @@ public class BoolConstExpn extends ConstExpn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : always return a BOOLEAN type.
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		return SymbolType.BOOLEAN;

@@ -37,7 +37,7 @@ AST Design
 	
 	ArithExpn: recursively checks if both operands are of type INTEGER and if yes, returns INTEGER; otherwise returns UNKNOWN
 	BoolExpn: recursively checks if both operands are of type BOOLEAN and if yes, returns BOOLEAN; otherwise returns UNKNOWN
-	EqualsExpn: recursively checks if both operands are of the same type and if yes, returns BOOLEAN; otherwise returns UNKNOWN
+	EqualsExpn: recursively checks if both operands are of the same type *and* that the type is either INTEGER or BOOLEAN. If both conditions hold, returns BOOLEAN; otherwise returns UNKNOWN
 	CompareExpn: recursively checks if both operands are of type INTEGER and if yes, returns BOOLEAN; otherwise returns UNKNOWN
 	
 	BoolConstExpn: always returns a BOOLEAN type

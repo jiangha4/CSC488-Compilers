@@ -35,6 +35,9 @@ public class CompareExpn extends BinaryExpn {
 		visitor.exitVisit(this);
 	}
 
+  /**
+   * getExpnType : recursively checks if both operands are of type INTEGER and if yes, returns BOOLEAN; otherwise returns UNKNOWN
+   */
   @Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

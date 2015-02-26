@@ -31,6 +31,10 @@ public class EqualsExpn extends BinaryExpn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : recursively checks if both operands are of the same type AND that the type is either 
+	 * INTEGER or BOOLEAN. If both conditions hold, returns BOOLEAN; otherwise returns UNKNOWN
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

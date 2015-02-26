@@ -60,6 +60,9 @@ public class AnonFuncExpn extends Expn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : recursively returns the type of the expression of the anon func
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

@@ -54,6 +54,10 @@ public class FunctionCallExpn extends Expn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : look up function identifier in symbol table and if found return the symbol table entry type; 
+	 * otherwise return UNKNOWN.
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

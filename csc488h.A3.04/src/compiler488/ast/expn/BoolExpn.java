@@ -30,6 +30,9 @@ public class BoolExpn extends BinaryExpn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : recursively checks if both operands are of type BOOLEAN and if yes, returns BOOLEAN; otherwise returns UNKNOWN
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {

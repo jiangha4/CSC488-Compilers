@@ -36,6 +36,9 @@ public class IntConstExpn extends ConstExpn {
 		visitor.exitVisit(this);
 	}
 
+	/**
+	 * getExpnType : always return an INTEGER type.
+	 */
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		return SymbolType.INTEGER;
