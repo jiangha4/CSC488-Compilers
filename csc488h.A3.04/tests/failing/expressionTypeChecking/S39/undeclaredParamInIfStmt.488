@@ -1,0 +1,7 @@
+begin
+	procedure foo begin
+		if param1 = 1 then
+			put "param is equal to 1", skip
+		end
+	end
+end
