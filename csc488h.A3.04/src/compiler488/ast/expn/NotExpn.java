@@ -2,6 +2,8 @@ package compiler488.ast.expn;
 
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.SourceCoord;
+import compiler488.symbol.SymbolTable;
+import compiler488.symbol.SymbolTable.SymbolType;
 
 
 /**
@@ -19,5 +21,19 @@ public class NotExpn extends UnaryExpn {
 		operand.accept(visitor);
 
 		visitor.exitVisit(this);
+	}
+	
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		if (this.expnType == null) {
+			if (this.operand.getExpnType(st) == SymbolType.BOOLEAN) {
+				this.expnType = SymbolType.BOOLEAN;
+			}
+			else {
+				this.expnType = SymbolType.UNKNOWN;
+			}
+		}
+
+		return this.expnType;
 	}
 }
