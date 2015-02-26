@@ -63,9 +63,11 @@ def run_test(test_path, compiler_path, should_pass):
     if not parsing_succeeded(parser_output):
         details = str.join("\n", parser_output.split('\n')[2:-2])
         return TestResult(test_path, ResultType.test_fail, details)
-    elif not test_success:
+    elif not test_success and (should_pass or not sem_success):
         details = str.join("\n", parser_output.split('\n')[1:-2])
         return TestResult(test_path, ResultType.failed, details)
+    elif not test_success:
+        return TestResult(test_path, ResultType.failed)
     else:
         return TestResult(test_path, ResultType.passed)
 
@@ -110,7 +112,7 @@ def run_tests(test_dir_path, compiler_path, should_pass):
     errors = [r for r in results if r.type != ResultType.passed]
     add_newline = False
     for err_result in errors:
-        if should_pass or err_result.type == ResultType.test_fail:
+        if err_result.details:
             print ("  \033[91m" + err_result.test_name + "\033[0m:")
             indented = "    " + str.join("\n    ", err_result.details.split('\n'))
             print(indented + "\n")

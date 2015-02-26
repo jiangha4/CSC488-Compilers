@@ -34,7 +34,10 @@ public class EqualsExpn extends BinaryExpn {
 	@Override
 	public SymbolType getExpnType(SymbolTable st) {
 		if (this.expnType == null) {
-			if (this.left.getExpnType(st) == this.right.getExpnType(st)) {
+			SymbolType leftType = this.left.getExpnType(st);
+			boolean typesMatch = (leftType == this.right.getExpnType(st));
+			boolean intOrBool = (leftType == SymbolType.INTEGER || leftType == SymbolType.BOOLEAN);
+			if (typesMatch && intOrBool) {
 				this.expnType = SymbolType.BOOLEAN;
 			} else {
 				this.expnType = SymbolType.UNKNOWN;
