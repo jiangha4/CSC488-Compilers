@@ -8,13 +8,16 @@ import compiler488.ast.SourceCoord;
  * Represents the boolean negation of an expression.
  */
 public class NotExpn extends UnaryExpn {
-    public NotExpn(Expn operand, SourceCoord sourceCoord) {
-        super(UnaryExpn.OP_NOT, operand, sourceCoord);
-    }
+	public NotExpn(Expn operand, SourceCoord sourceCoord) {
+		super(UnaryExpn.OP_NOT, operand, sourceCoord);
+	}
 
-    @Override
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+
 		operand.accept(visitor);
+
+		visitor.exitVisit(this);
 	}
 }

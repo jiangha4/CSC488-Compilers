@@ -1,7 +1,7 @@
 package compiler488.ast;
 
-public class SourceCoord {
 
+public class SourceCoord {
 	private int line;
 	private int col;
 
@@ -14,7 +14,6 @@ public class SourceCoord {
 	}
 
 	/**
-	 *
 	 * @return int : the line number in the source program
 	 */
 	public int getLine() {
@@ -22,7 +21,6 @@ public class SourceCoord {
 	}
 
 	/**
-	 *
 	 * @return int : the column number in the source program
 	 */
 	public int getCol() {
@@ -30,7 +28,6 @@ public class SourceCoord {
 	}
 
 	/**
-	 *
 	 * @param line : the line number in the source program
 	 */
 	public void setLine(int line) {
@@ -38,7 +35,6 @@ public class SourceCoord {
 	}
 
 	/**
-	 *
 	 * @param col : the column number in the source program
 	 */
 	public void setCol(int col) {

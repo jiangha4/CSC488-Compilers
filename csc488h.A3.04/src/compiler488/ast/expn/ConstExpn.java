@@ -10,5 +10,4 @@ public abstract class ConstExpn extends Expn {
 	public ConstExpn(SourceCoord sourceCoord) {
 		super(sourceCoord);
 	}
-
 }

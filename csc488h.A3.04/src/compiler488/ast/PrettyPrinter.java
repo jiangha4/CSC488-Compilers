@@ -1,5 +1,6 @@
 package compiler488.ast;
 
+
 /**
  * A pretty-printing destination.
  *
@@ -11,11 +12,10 @@ package compiler488.ast;
  *  @author Peter McCormick
  *  @see compiler488.ast.BasePrettyPrinter
  */
-
 public interface PrettyPrinter {
-    public void print(String str);
-    public void newline();
-    public void println(String str);
-    public void enterBlock();
-    public void exitBlock();
+	public void print(String str);
+	public void newline();
+	public void println(String str);
+	public void enterBlock();
+	public void exitBlock();
 }

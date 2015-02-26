@@ -6,23 +6,25 @@ import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTable.SymbolType;
 import compiler488.ast.SourceCoord;
 
+
 /**
  * Represents the special literal constant associated with writing a new-line
  * character on the output device.
  */
 public class SkipConstExpn extends ConstExpn implements Printable {
-    public SkipConstExpn(SourceCoord sourceCoord) {
-        super(sourceCoord);
-    }
+	public SkipConstExpn(SourceCoord sourceCoord) {
+		super(sourceCoord);
+	}
 
-    @Override
-    public String toString() {
-        return "skip";
-    }
+	@Override
+	public String toString() {
+		return "skip";
+	}
 
-    @Override
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+		visitor.exitVisit(this);
 	}
 
 	@Override

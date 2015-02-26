@@ -6,34 +6,36 @@ import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTable.SymbolType;
 import compiler488.ast.SourceCoord;
 
+
 /**
  * Represents a literal text constant.
  */
 public class TextConstExpn extends ConstExpn implements Printable {
-    /** The value of this literal. */
-    private String value;
+	/** The value of this literal. */
+	private String value;
 
-    public TextConstExpn(String value, SourceCoord sourceCoord) {
-        super(sourceCoord);
+	public TextConstExpn(String value, SourceCoord sourceCoord) {
+		super(sourceCoord);
 
-        this.value = value;
-    }
+		this.value = value;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    /**
-     * Returns a description of the literal text constant.
-     */
-    @Override
-    public String toString() {
-        return "\"" + value + "\"";
-    }
+	/**
+	 * Returns a description of the literal text constant.
+	 */
+	@Override
+	public String toString() {
+		return "\"" + value + "\"";
+	}
 
-    @Override
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+		visitor.exitVisit(this);
 	}
 
 	@Override

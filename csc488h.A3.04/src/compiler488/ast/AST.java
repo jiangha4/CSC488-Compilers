@@ -1,7 +1,6 @@
 package compiler488.ast;
 
 
-
 /**
  * Common interface for all Abstract Syntax Tree nodes.
  *
@@ -14,6 +13,6 @@ package compiler488.ast;
  * @see compiler488.ast.BaseAST
  */
 public interface AST extends PrettyPrintable, ASTVisitable {
-    public void prettyPrint(PrettyPrinter p);
-    public void accept(ASTVisitor visitor);
+	public void prettyPrint(PrettyPrinter p);
+	public void accept(ASTVisitor visitor);
 }

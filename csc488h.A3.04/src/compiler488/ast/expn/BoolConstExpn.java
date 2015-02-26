@@ -9,27 +9,28 @@ import compiler488.ast.SourceCoord;
  * Boolean literal constants.
  */
 public class BoolConstExpn extends ConstExpn {
-    /** The value of the constant */
-    private boolean value;
+	/** The value of the constant */
+	private boolean value;
 
-    public BoolConstExpn(boolean value, SourceCoord sourceCoord) {
-        super(sourceCoord);
+	public BoolConstExpn(boolean value, SourceCoord sourceCoord) {
+		super(sourceCoord);
 
-        this.value = value;
-    }
+		this.value = value;
+	}
 
-    public boolean getValue() {
-        return value;
-    }
+	public boolean getValue() {
+		return value;
+	}
 
-    @Override
-    public String toString () {
-        return value ? "true" : "false";
-    }
+	@Override
+	public String toString () {
+		return value ? "true" : "false";
+	}
 
-    @Override
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+		visitor.exitVisit(this);
 	}
 
 	@Override

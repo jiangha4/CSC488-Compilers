@@ -11,34 +11,36 @@ import compiler488.symbol.SymbolTable.SymbolType;
  * expressions.
  */
 public class BoolExpn extends BinaryExpn {
-  public final static String OP_OR 	= "|";
-  public final static String OP_AND	= "&";
+	public final static String OP_OR 	= "|";
+	public final static String OP_AND	= "&";
 
-  public BoolExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
-    super(opSymbol, left, right, sourceCoord);
+	public BoolExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
+		super(opSymbol, left, right, sourceCoord);
 
-    assert ((opSymbol == OP_OR) ||
-            (opSymbol == OP_AND));
-  }
-
-  @Override
-	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
-		left.accept(visitor);
-		right.accept(visitor);
+		assert ((opSymbol == OP_OR) || (opSymbol == OP_AND));
 	}
 
-  @Override
-  public SymbolType getExpnType(SymbolTable st) {
-    if (this.expnType == null) {
-      if (this.left.getExpnType(st) == SymbolType.BOOLEAN &&
-          this.right.getExpnType(st) == SymbolType.BOOLEAN) {
-        this.expnType = SymbolType.BOOLEAN;
-      } else {
-        this.expnType = SymbolType.UNKNOWN;
-      }
-    }
+	@Override
+	public void accept(ASTVisitor visitor) {
+		visitor.enterVisit(this);
 
-    return this.expnType;
-  }
+		left.accept(visitor);
+		right.accept(visitor);
+
+		visitor.exitVisit(this);
+	}
+
+	@Override
+	public SymbolType getExpnType(SymbolTable st) {
+		if (this.expnType == null) {
+			if (this.left.getExpnType(st) == SymbolType.BOOLEAN &&
+				this.right.getExpnType(st) == SymbolType.BOOLEAN) {
+				this.expnType = SymbolType.BOOLEAN;
+			} else {
+				this.expnType = SymbolType.UNKNOWN;
+			}
+		}
+
+		return this.expnType;
+	}
 }

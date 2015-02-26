@@ -1,5 +1,6 @@
 package compiler488.ast;
 
+
 /**
  * Any AST node that can be an argument in a GET statement or variable
  * assignment.

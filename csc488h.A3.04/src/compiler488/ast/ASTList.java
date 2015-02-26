@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import compiler488.ast.stmt.Scope;
 import compiler488.semantics.Semantics;
 
+
 /**
  * A list of AST nodes.
  *
@@ -20,147 +21,150 @@ import compiler488.semantics.Semantics;
  *  @author Peter McCormick
  */
 public class ASTList<E extends AST> extends LinkedList<E> implements AST {
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * Create an empty AST list
-     */
-    public ASTList() {
-        super();
-    }
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Create an AST list and add one element to begin with.
-     *
-     * @param elem the first element to add
-     */
-    public ASTList(E elem) {
-        this();
+	/**
+	 * Create an empty AST list
+	 */
+	public ASTList() {
+		super();
+	}
 
-        append(elem);
-    }
+	/**
+	 * Create an AST list and add one element to begin with.
+	 *
+	 * @param elem the first element to add
+	 */
+	public ASTList(E elem) {
+		this();
 
-    /**
-     * Append an element to the list, while return the list itself.
-     *
-     * <p>This is a pure-side-effect method, so it doesn't need to return
-     * anything.  However, we like the conciseness gained when such methods
-     * return the target object, as it allows you to chain calls together, such
-     * as {@code new ASTList<Expn>(first).append(second).append(third)}.
-     *
-     * @param elem the element to add at the end of the list
-     * @return the list itself
-     */
-    public ASTList<E> append(E elem) {
-        addLast(elem);
+		append(elem);
+	}
 
-        return this;
-    }
+	/**
+	 * Append an element to the list, while return the list itself.
+	 *
+	 * <p>This is a pure-side-effect method, so it doesn't need to return
+	 * anything.  However, we like the conciseness gained when such methods
+	 * return the target object, as it allows you to chain calls together, such
+	 * as {@code new ASTList<Expn>(first).append(second).append(third)}.
+	 *
+	 * @param elem the element to add at the end of the list
+	 * @return the list itself
+	 */
+	public ASTList<E> append(E elem) {
+		addLast(elem);
 
-    /**
-     * By default, pretty-print the list with one element per line.
-     *
-     * @param p the printer to use
-     */
-    public void prettyPrint(PrettyPrinter p) {
-        prettyPrintNewlines(p);
-    }
+		return this;
+	}
 
-    /**
-     * Pretty-print the list elements, separated by commas.
-     *
-     * @param p the printer to use
-     */
-    public void prettyPrintCommas(PrettyPrinter p) {
-        boolean first = true;
+	/**
+	 * By default, pretty-print the list with one element per line.
+	 *
+	 * @param p the printer to use
+	 */
+	public void prettyPrint(PrettyPrinter p) {
+		prettyPrintNewlines(p);
+	}
 
-        for (PrettyPrintable node : this) {
-            if (!first) {
-                p.print(", ");
-            }
+	/**
+	 * Pretty-print the list elements, separated by commas.
+	 *
+	 * @param p the printer to use
+	 */
+	public void prettyPrintCommas(PrettyPrinter p) {
+		boolean first = true;
 
-            node.prettyPrint(p);
+		for (PrettyPrintable node : this) {
+			if (!first) {
+				p.print(", ");
+			}
 
-            first = false;
-        }
-    }
+			node.prettyPrint(p);
 
-    /**
-     * Pretty-print the list with one element per line.
-     *
-     * @param p the printer to use
-     */
-    public void prettyPrintNewlines(PrettyPrinter p) {
-        for (PrettyPrintable node : this) {
-            node.prettyPrint(p);
-            p.newline();
-        }
-    }
+			first = false;
+		}
+	}
 
-    /**
-     * Pretty-print the list in a new block, with one element per line.
-     *
-     * @param p the printer to use
-     */
-    public void prettyPrintBlock(PrettyPrinter p) {
-        p.enterBlock();
-        prettyPrintNewlines(p);
-        p.exitBlock();
-    }
+	/**
+	 * Pretty-print the list with one element per line.
+	 *
+	 * @param p the printer to use
+	 */
+	public void prettyPrintNewlines(PrettyPrinter p) {
+		for (PrettyPrintable node : this) {
+			node.prettyPrint(p);
+			p.newline();
+		}
+	}
 
-    /**
-     * Return a comma separated list of the stringified list elements.
-     *
-     * @return a string of comma-separated list elements
-     */
-    public String toString() {
-        if (size() == 0) {
-            return "";
-        }
+	/**
+	 * Pretty-print the list in a new block, with one element per line.
+	 *
+	 * @param p the printer to use
+	 */
+	public void prettyPrintBlock(PrettyPrinter p) {
+		p.enterBlock();
+		prettyPrintNewlines(p);
+		p.exitBlock();
+	}
 
-        boolean first = true;
-        StringBuffer buf = new StringBuffer();
+	public boolean any() {
+		return size() > 0;
+	}
 
-        for (PrettyPrintable node : this) {
-            if (!first) {
-                buf.append(", ");
-            }
+	/**
+	 * Return a comma separated list of the stringified list elements.
+	 *
+	 * @return a string of comma-separated list elements
+	 */
+	public String toString() {
+		if (size() == 0) {
+			return "";
+		}
 
-            buf.append(node.toString());
+		boolean first = true;
+		StringBuffer buf = new StringBuffer();
 
-            first = false;
-        }
+		for (PrettyPrintable node : this) {
+			if (!first) {
+				buf.append(", ");
+			}
 
-        return buf.toString();
-    }
-    
-    /**
-     * Sets the parent node 
-     * @param node
-     */
-    public void setParentNode(BaseAST node)
-    {
-    	for (int i = 0; i < this.size(); i++){
-    		((BaseAST) this.get(i)).setParentNode(node);
-    	}
-    }
-    
+			buf.append(node.toString());
+
+			first = false;
+		}
+
+		return buf.toString();
+	}
+
+	/**
+	 * Sets the parent node
+	 * @param node
+	 */
+	public void setParentNode(BaseAST node)
+	{
+		for (int i = 0; i < this.size(); i++){
+			((BaseAST) this.get(i)).setParentNode(node);
+		}
+	}
+
 	@Override
 	public void accept(ASTVisitor visitor) {
 		for (ASTVisitable node : this) {
-			
+
 			if (node instanceof Scope) {
 				// S06: start ordinary scope
 				((Semantics)visitor).getSymbolTable().enterScope();
 			}
-			
+
 			node.accept(visitor);
-			
+
 			if (node instanceof Scope) {
 				// S07: end ordinary scope
 				((Semantics)visitor).getSymbolTable().exitScope();
 			}
 		}
 	}
-
 }

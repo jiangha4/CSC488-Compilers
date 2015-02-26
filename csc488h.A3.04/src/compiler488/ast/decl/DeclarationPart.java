@@ -10,23 +10,24 @@ import compiler488.symbol.SymbolTable.SymbolKind;
  * The common features of declarations' parts.
  */
 public abstract class DeclarationPart extends BaseAST implements ASTVisitable {
-    /** The name of the thing being declared. */
-    protected String name;
+	/** The name of the thing being declared. */
+	protected String name;
 
-    public DeclarationPart(String name, SourceCoord sourceCoord) {
-        super(sourceCoord);
+	public DeclarationPart(String name, SourceCoord sourceCoord) {
+		super(sourceCoord);
 
-        this.name = name;
-    }
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
-    
-    public abstract SymbolKind getKind();
-    
-    @Override
+	public String getName() {
+		return name;
+	}
+
+	public abstract SymbolKind getKind();
+
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+		visitor.exitVisit(this);
 	}
 }

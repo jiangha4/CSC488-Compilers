@@ -10,29 +10,30 @@ import compiler488.ast.SourceCoord;
  * Represents a literal integer constant.
  */
 public class IntConstExpn extends ConstExpn {
-    /**
-     * The value of this literal.
-     */
-    private Integer value;
+	/**
+	 * The value of this literal.
+	 */
+	private Integer value;
 
-    public IntConstExpn(Integer value, SourceCoord sourceCoord) {
-        super(sourceCoord);
+	public IntConstExpn(Integer value, SourceCoord sourceCoord) {
+		super(sourceCoord);
 
-        this.value = value;
-    }
+		this.value = value;
+	}
 
-    public Integer getValue() {
-        return value;
-    }
+	public Integer getValue() {
+		return value;
+	}
 
-    @Override
-    public String toString () {
-        return value.toString();
-    }
+	@Override
+	public String toString () {
+		return value.toString();
+	}
 
-    @Override
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
+		visitor.enterVisit(this);
+		visitor.exitVisit(this);
 	}
 
 	@Override

@@ -52,9 +52,12 @@ public class AnonFuncExpn extends Expn {
 
 	@Override
 	public void accept(ASTVisitor visitor) {
+		visitor.enterVisit(this);
+
 		body.accept(visitor);
 		expn.accept(visitor);
-    	visitor.visit(this);
+
+		visitor.exitVisit(this);
 	}
 
 	@Override
@@ -64,5 +67,4 @@ public class AnonFuncExpn extends Expn {
 		}
 		return this.expnType;
 	}
-
 }
