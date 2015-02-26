@@ -14,7 +14,7 @@ public class SymbolTableEntry {
 	public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, BaseAST node) {
 		this(id, type, kind, "", node);
 	}
-	
+
 	public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
 		this.id = id;
 		this.type = type;
@@ -26,20 +26,11 @@ public class SymbolTableEntry {
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public SymbolType getType() {
 		return type;
 	}
-	public void setType(SymbolType type) {
-		this.type = type;
-	}
 	public SymbolKind getKind() {
 		return kind;
-	}
-	public void setKind(SymbolKind kind) {
-		this.kind = kind;
 	}
 	public String getValue() {
 		return value;
@@ -49,9 +40,6 @@ public class SymbolTableEntry {
 	}
 	public BaseAST getNode() {
 		return node;
-	}
-	public void setNode(BaseAST node) {
-		this.node = node;
 	}
 
 	@Override
