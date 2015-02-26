@@ -11,13 +11,17 @@ Group Members:
 List of code we added:
 ----------------------
 
-src/compiler488/ast/* - Updated all AST node classes to implement ASTVisitable interface
-src/compiler488/ast/ASTVisitable.java - Added interface for Visitable node (for AST traversal)
-src/compiler488/ast/ASTVisitor.java - Added interface for Visitor (for AST traversal)
+-src/compiler488/ast/* - Updated all AST node classes with an implementation of ASTVisitable and with source coordinates; all AST nodes representing identifiers have a reference to a SymbolTableEntry that was created when they were declared; all Expn nodes have a SymbolType field.
+-src/compiler488/ast/ASTVisitable.java - Added interface for Visitable node (for AST traversal)
+-src/compiler488/ast/ASTVisitor.java - Added interface for Visitor (for AST traversal)
+-src/compiler488/ast/SourceCoord.java - Added class representing the line and col number in the source program
 
-src/compiler488/parser/csc488.cup - Added AST construction during parsing of grammar rules
+-src/compiler488/parser/csc488.cup - Added AST construction during parsing of grammar rules. Used *left and *right variables to access line and column number for each nonterminal, and passed them into the constructor of each AST node so they can be accessible for error reporting
 
-src/compiler488/semantics/SemanticErrorException.java - Added class for throwing semantic errors
-src/compiler488/semantics/Semantics.java - Added semantic rule analysis
+-src/compiler488/semantics/SemanticErrorCollector.java - Added class for accummulating semantic errors (each error consisting of a SourceCoord object and a string describing the error), so that all semantic errors can be collected before they are reported all at once when semantic analysis finishes
+-src/compiler488/semantics/SemanticErrorException.java - Added class for throwing semantic errors
+-src/compiler488/semantics/Semantics.java - Added symbol table building operations (opening and closing of scopes, inserting of new symbols into the table and searching of the table) and semantic rule analysis into the visit method for each type of AST node
 
-src/compiler488/symbol/SymbolTable.java - Added implementation based on linked list of hashmaps
+-src/compiler488/symbol/SymbolTable.java - Added implementation of a symbol table as a tree of scopes, where each scope contains a hashmap of identifier names and symbol table entries. Each scope keeps a reference to its parent and its children. A 'current' pointer keeps track of the current scope, and a 'first' pointer keeps track of the first scope.
+-src/compiler488/symbol/SymbolTableEntry.java - Added a class representing a single symbol table entry in a given scope (it contains the ID, type, kind, value and a reference to the AST node that it was created from)
+
