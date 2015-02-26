@@ -18,9 +18,10 @@ Haohan Jiang (g3jiangh)
 - Testing cases for S30, S50-S52
 
 Chandeep Singh (g2singh)
-- SymbolTable implementation
+- SymbolTable implementation, design
 - Semantic Analysis
 - AST node type tracking
+- Semantic Rules S20-S39
 - Testing cases
 
 Maria Yancheva (c2yanche)
