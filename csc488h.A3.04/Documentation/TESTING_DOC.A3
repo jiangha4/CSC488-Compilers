@@ -158,41 +158,45 @@ tests/failing/expressionTypeChecking:
     S32: Tests that check for equality expressions with different operand types 
 	on the left and right hand side of '=' and '!='.
 
-    S34: We created tests that had faulty assignment statements such as assigning
+    S34: Tests that have faulty assignment statements such as assigning
     a boolean constant to an integer and vice versa.
 
-    S35: We created tests that had faulty return values where the return types did
-    not match the function type.
+    S35: Tests that have faulty return values where the return expression types did
+    not match the function return type.
 
-    S36: We created tests that had faulty function and procedure calls in where the
-    argument types did not match the declared argument types.
+    S36: Tests that have faulty function and procedure calls where the
+    argument types did not match the declared parameter types.
 
-    S37-S38: We created tests that assigned both boolean and integer values to
-    undeclared variables. We created tests that tested these in different
+    S37-S38: Tests that attempt using scalar variables before they are 
+	declared. We created tests that tested these in different
     statements such as in gets, exits, function calls, procedure calls, loops, returns,
     arrays, puts.
 
-    S39: We created tests that had undeclared parameters being used in different
-    statements such as in gets, exits, function calls, procedure calls, loops, returns,
-    arrays, puts.
+    S39: Tests that have undeclared parameters being used in different
+    statements within the function or procedure body, such as in gets, exits, 
+	function calls, procedure calls, loops, returns, arrays, puts.
 
 
 tests/failing/functionsProceduresAndArgs:
-    S40, S41: We created tests that had incorrect declarations such as calling
-    a variable indentifier, calling undeclared functions and procedures, and
-    calling later declared functions and procedures.
 
-    S42, S43: We created tests that had function and procedure calls that had
-    the incorrect amount of arguments.
+    S40, S41: Tests that contain use of undeclared functions and procedures (or 
+	ones declared at a later point in the program, after the call), 
+	as well as calls to identifiers which have not been declared as a function 
+	or a procedure. 
+
+    S42, S43: Tests that contain function and procedure calls with an incorrect 
+	number of arguments (not equal to the number of parameters in the declaration).
 
 tests/failing/statementChecking:
 
-    S50: We created tests that had faulty exit statements such as exit statements
-    without loops, in functions, and in procedures.
+    S50: Tests of invalid exit statements, such as exit statements that are not 
+	located within a loop, or are located within a procedure/function nested inside
+	a loop.
+    
+    S51-S52: Tests of invalid return statements, such as return
+    statements outside of a function or procedure, or directly inside the statement part
+	of an anon function (which is invalid as detailed in the revision posted by Prof. Wortman).
 
-    S51-S52: We created tests that had invalid return statements such as return
-    statements that was not in the scope of a function or procedure.
-
-    S53: We created invalid functions that did not have returns. Test functions
-    had were declared with both parameters and no parameter. Nested functions were
-    also written to ensure valid return checking.
+    S53: Tests of invalid functions (both with and without parameters) that do 
+	not have returns in their bodies, including functions containing nested functions 
+	with return statement in the nested function. 
