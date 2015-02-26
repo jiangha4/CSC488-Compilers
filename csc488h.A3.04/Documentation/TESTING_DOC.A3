@@ -10,17 +10,167 @@ Group Members:
 
 Testing
 -------
-How to run all tests: 
+How to run all tests:
+
+> ./RUNALLTESTS.sh
 
 Tests' folder structure:
-All tests can be found under the tests/passing and tests/failing folders. 
+All tests can be found under the tests/passing and tests/failing folders.
 
-Our strategy was 
+Our testing strategy relies exclusively on test cases written in the CSC488
+language (as opposed to JUnit or similar) as these tests are fast to write and
+allowed us to change the internals of the compiler/semantic analysis without
+having to update/rewrite all of our test cases. This allowed us to develop in
+an agile manner.
 
-Below is an overview of the tests from each folder:
+Similar to the way we approached A2, we went over each of the semantic rules and
+thought of as many unique scenarios (passing and failing) as we could, writing a
+test case for each one.
 
-tests/passing
-    
+We are reusing our python test runner from A2 (with minor modifications) to run
+our compiler on each test case, and check if the test case passes or fails as
+predicted. The test runner can distinguish between parsing, semantic, and
+internal compiler exceptions to ensure there are no false positives or
+negatives.
+
+
+Test Overview
+-------------
+Below is an overview of the tests from each folder. They are split up in
+'failing' and 'passing' as they were in A2.
+
+tests/passing:
+Tests contained in the passing directory are all syntactically and semantically valid.
+
+declarations:
+In this folder are tests for all declarations of functions, procedures, arrays,
+and variables. Both functions and procedures have tests for declarations with
+and without parameters and bodies. For arrays, both one dimensional and two
+dimensional array declarations were tested along with different integer bounds.
+Different types of variable declarations were tested such as multi and single
+declarations of different types.
+
+expressionTypeChecking:
+As the name suggests, this folder contains tests for expression type checking. As
+there are many semantic rules involved with type checking, this folder is further
+divided into which semantic rules are being tested.
+
+    S30: This directory contains tests to ensure that expressions in 'while' and
+    'exit when' statements were boolean values. All expressions involving comparions
+    such as '&' and '|' were also checked. A mixture of true and false values were
+    used along with ensuring that boolean variables were type checked correctly.
+
+    S31: This directory contains tests to ensure an integer type. Array bounds,
+    mathematical expressions, and mathematical comparisons were all tested.
+
+    S32: This directory contains tests to ensure that left and right operands
+    of expression were the same type. We tested both boolean and integer values
+    and variables with equal and not equal expressions.
+
+    S34: This directory contains tests to ensure that variable and expression
+    assignments were the same type. We tested assignment of variables to both
+    values and to other variables.
+
+    S35: This directory contains tests to ensure that the expression type matches
+    the return type of the enclosing function. We tested both boolean and integer
+    functions returning values and arrays.
+
+    S36: This directory contains tests to ensure that the type of the arguments
+    match the type of the formal parameter. We have tests for both functions and
+    procedures with strictly boolean  parameters, strictly integer parameters,
+    and mixed parameters.
+
+    S37, S38: These two directories contain tests to ensure that a identifier
+    has been properly declared as a scalar or array variable. Tests include both
+    boolean and integer variables.
+
+functionsProceduresAndArgs:
+This directory contains tests for semantic rules 40-43.
+
+    S40, S41: These directories contains tests for checking if an identifier
+    has been declared as a function or procedure. It includes tests of function
+    and procedure calls with and without parameters.
+
+    S42, S43: These directories contains test for checking to ensure that functions
+    and procedures are called with the correct amount of arguments. S42 contains
+    tests that test function and procedures declared without arguments while
+    S43 contains tests that test functions and procedures declared with arguments.
+
+scope:
+This directory contains tests for scoping. We tested empty scope, function and
+procedure scopes with and without parameters, nested scopes, and scopes with
+declarations.
+
+statementChecking:
+This directory contains tests for testing correctness conditions for statements.
+
+    S50: This directory contains tests to ensure that a exit statement is
+    inside of a loop. It contains tests with 'loop' and 'while' statements in
+    both major and minor scopes, nested loops, and conditional 'exit' statements.
+
+    S51, S52: These two directories contain tests to ensure that a return is inside
+    a function or a procedure. We tested declared and anonymous functions and
+    procedures in major, minor, and nested scopes.
+
+    S53: This directory contains testes to ensure that a function body contains
+    at least one return statement. We tested declared functions with and without
+    parameters for multiple and singlar return statements, along with condition
+    'if' statement returns and nested returns.
 
 tests/failing
-    
+Tests contained in the failing directory are all syntactically valid, but are not
+semantically valid.
+
+declarations:
+
+    S46: We created tests that had lower bounds greater than the upper bounds.
+
+expressionTypeChecking:
+
+    S30: We created tests that had integers and integer variables as boolean
+    expression checks in both 'loop' and 'while' constructs. We also created
+    invalid logical comparisons.
+
+    S31: We created tests that had boolean values in mathematical expressions.
+
+    S32: We created tests that had different types on the left and right
+    hand side of '=' and '!=".
+
+    S34: We created tests that had faulty assignment statements such as assigning
+    a boolean constant to an integer and vice versa.
+
+    S35: We created tests that had faulty return values where the return types did
+    not match the function type.
+
+    S36: We created tests that had faulty function and procedure calls in where the
+    argument types did not match the declared argument types.
+
+    S37-S38: We created tests that assigned both boolean and integer values to
+    undeclared variables. We created tests that tested these in different
+    statements such as in gets, exits, function calls, procedure calls, loops, returns,
+    arrays, puts.
+
+    S39: We created tests that had undeclared parameters being used in different
+    statements such as in gets, exits, function calls, procedure calls, loops, returns,
+    arrays, puts.
+
+
+functionsProceduresAndArgs:
+    S40, S41: We created tests that had incorrect declarations such as calling
+    a variable indentifier, calling undeclared functions and procedures, and
+    calling later declared functions and procedures.
+
+    S42, S43: We created tests that had function and procedure calls that had
+    the incorrect amount of arguments.
+
+statementChecking:
+
+    S50: We created tests that had faulty exit statements such as exit statements
+    without loops, in functions, and in procedures.
+
+    S51-S52: We created tests that had invalid return statements such as return
+    statements that was not in the scope of a function or procedure.
+
+    S53: We created invalid functions that did not have returns. Test functions
+    had were declared with both parameters and no parameter. Nested functions were
+    also written to ensure valid return checking.
