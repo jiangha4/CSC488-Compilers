@@ -76,7 +76,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(ArrayDeclPart arrayDeclPart) {
+	public void exitVisit(ArrayDeclPart arrayDeclPart) {
 		// Check first dimension
 		Integer lowerBound = arrayDeclPart.getLowerBoundary1();
 		Integer upperBound = arrayDeclPart.getUpperBoundary1();
@@ -104,7 +104,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(MultiDeclarations multiDeclarations) {
+	public void exitVisit(MultiDeclarations multiDeclarations) {
 		// Add a symbol for every element in the declaration (into current scope)
 		// (The value for the newly inserted elements is blank: in the project
 		// language assignment cannot happen simultaneously with declaration)
@@ -184,47 +184,47 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(ScalarDecl scalarDecl) {
+	public void exitVisit(ScalarDecl scalarDecl) {
 		String declName = scalarDecl.getName();
 		SymbolType declType = scalarDecl.getType().toSymbolType();
 
 		// Check if identifier already exists in current scope
 		if (symbolTable.search(declName) != null) {
 			String msg = String.format("Re-declaration of identifier '%s' not allowed in same scope.", declName);
-			errors.add(routineDecl.getSourceCoord(), msg);
+			errors.add(scalarDecl.getSourceCoord(), msg);
 		}
 		else {
-			boolean success = symbolTable.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
+			boolean success = symbolTable.insert(declName, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
-				scalarDecl.setSTEntry(symbolTable.search(declId));
+				scalarDecl.setSTEntry(symbolTable.search(declName));
 			} else {
-				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declId);
+				errors.add(scalarDecl.getSourceCoord(), "Unable to declare identifier " + declName);
 			}
 		}
 	}
 
 	@Override
-	public void enterVisit(ArithExpn arithExpn) {
+	public void exitVisit(ArithExpn arithExpn) {
 		assertIsIntExpn(arithExpn);
 	}
 
 	@Override
-	public void enterVisit(BoolExpn boolExpn) {
+	public void exitVisit(BoolExpn boolExpn) {
 		assertIsBoolExpn(boolExpn);
 	}
 
 	@Override
-	public void enterVisit(CompareExpn compareExpn) {
+	public void exitVisit(CompareExpn compareExpn) {
 		assertIsBoolExpn(compareExpn);
 	}
 
 	@Override
-	public void enterVisit(EqualsExpn equalsExpn) {
+	public void exitVisit(EqualsExpn equalsExpn) {
 		assertIsBoolExpn(equalsExpn);
 	}
 
 	@Override
-	public void enterVisit(FunctionCallExpn functionCallExpn) {
+	public void exitVisit(FunctionCallExpn functionCallExpn) {
 		// S40: check that identifier has been declared as a function
 		String functionName = functionCallExpn.getIdent();
 		if (symbolTable.searchGlobal(functionName) == null) {
@@ -249,7 +249,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(IdentExpn identExpn) {
+	public void exitVisit(IdentExpn identExpn) {
 		// S37: check that identifier has been declared as a scalar variable
 		// S39: check that identifier has been declared as a parameter
 		// S40: check that identifier has been declared as a function
@@ -273,12 +273,12 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(NotExpn notExpn) {
+	public void exitVisit(NotExpn notExpn) {
 		assertIsBoolExpn(notExpn);
 	}
 
 	@Override
-	public void enterVisit(SubsExpn subsExpn) {
+	public void exitVisit(SubsExpn subsExpn) {
 		// S38: check that identifier has been declared as an array
 		String arrayName = subsExpn.getVariable();
 		if (symbolTable.searchGlobal(arrayName) == null) {
@@ -296,7 +296,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(UnaryMinusExpn unaryMinusExpn) {
+	public void exitVisit(UnaryMinusExpn unaryMinusExpn) {
 		assertIsIntExpn(unaryMinusExpn);
 	}
 
@@ -314,12 +314,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(ExitStmt exitStmt) {
-		// Only do S30 check if "exit when"
-		if (exitStmt.getExpn() != null) {
-			assertIsBoolExpn(exitStmt.getExpn());
-		}
-
+	public void exitVisit(ExitStmt exitStmt) {
 		/**
 		 * S50 Check that exit statement is directly inside a loop
 		 *	Checks if symbols "loop" or "while" have been declared in the scope
@@ -327,25 +322,26 @@ public class Semantics implements ASTVisitor {
 		 */
 		BaseAST currNode = exitStmt;
 		boolean foundLoop = false;
-		while(currNode != null)
+		while(currNode != null && !(currNode instanceof RoutineDecl) && !(currNode instanceof AnonFuncExpn))
 		{
 			if (currNode instanceof LoopStmt || currNode instanceof WhileDoStmt) {
 				foundLoop = true;
 				break;
 			}
-			if (currNode instanceof RoutineDecl || currNode instanceof AnonFuncExpn) {
-				break;
-			}
 			currNode = currNode.getParentNode();
 		}
-
 		if (!foundLoop){
 			errors.add(exitStmt.getSourceCoord(), "EXIT not contained in LOOP or WHILE statements");
+		}
+
+		// Only do S30 check if "exit when"
+		if (exitStmt.getExpn() != null) {
+			assertIsBoolExpn(exitStmt.getExpn());
 		}
 	}
 
 	@Override
-	public void enterVisit(GetStmt getStmt) {
+	public void exitVisit(GetStmt getStmt) {
 		// S31: check that variables are integers
 		for (Expn expn : getStmt.getInputs()) {
 			assertIsIntExpn(expn);
@@ -353,12 +349,12 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(IfStmt ifStmt) {
+	public void exitVisit(IfStmt ifStmt) {
 		assertIsBoolExpn(ifStmt.getCondition());
 	}
 
 	@Override
-	public void enterVisit(ProcedureCallStmt procedureCallStmt) {
+	public void exitVisit(ProcedureCallStmt procedureCallStmt) {
 		// S41: check that identifier has been declared as a procedure
 		String procName = procedureCallStmt.getName();
 		if (symbolTable.searchGlobal(procName) == null) {
@@ -393,7 +389,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(PutStmt putStmt) {
+	public void exitVisit(PutStmt putStmt) {
 		// S31: Check that type of expression or variable is integer
 		// Also added in check for text/skip
 		for (Printable printable : putStmt.getOutputs()) {
@@ -409,7 +405,7 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(ReturnStmt returnStmt) {
+	public void exitVisit(ReturnStmt returnStmt) {
 		// S51-52: Ensure return is in a function or procedure
 		BaseAST currNode = returnStmt;
 		RoutineDecl parentRoutineDecl = null;
@@ -440,17 +436,8 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(WhileDoStmt whileDoStmt) {
+	public void exitVisit(WhileDoStmt whileDoStmt) {
 		assertIsBoolExpn(whileDoStmt.getExpn());
-	}
-
-	// compare expn type to expectedType, and error if not the same
-	private void checkExpnType(Expn expn, SymbolType expectedType) {
-		SymbolType type = expn.getExpnType(symbolTable);
-		if (type != expectedType) {
-			String msg = String.format("%s expression expected, but is %s.", expectedType, type);
-			errors.add(expn.getSourceCoord(), msg);
-		}
 	}
 
 	// S30: check that type of expression is boolean
@@ -461,6 +448,15 @@ public class Semantics implements ASTVisitor {
 	// S31: check that type of expression is integer
 	private void assertIsIntExpn(Expn expn) {
 		checkExpnType(expn, SymbolType.INTEGER);
+	}
+
+	// compare expn type to expectedType, and error if not the same
+	private void checkExpnType(Expn expn, SymbolType expectedType) {
+		SymbolType type = expn.getExpnType(symbolTable);
+		if (type != expectedType) {
+			String msg = String.format("%s expression expected, but is %s.", expectedType, type);
+			errors.add(expn.getSourceCoord(), msg);
+		}
 	}
 
 	// S36: Check that type of argument expression matches type of corresponding formal parameter

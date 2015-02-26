@@ -55,32 +55,32 @@ public interface ASTVisitor {
 	public void exitVisit(BaseAST baseAST);
 
 	/* Declarations */
-	public void enterVisit(ArrayDeclPart arrayDeclPart);
-	public void enterVisit(MultiDeclarations multiDeclarations);
+	public void exitVisit(ArrayDeclPart arrayDeclPart);
+	public void exitVisit(MultiDeclarations multiDeclarations);
 	public void enterVisit(RoutineDecl routineDecl);
 	public void exitVisit(RoutineDecl routineDecl);
-	public void enterVisit(ScalarDecl scalarDecl);
+	public void exitVisit(ScalarDecl scalarDecl);
 
 	/* Expressions */
-	public void enterVisit(ArithExpn arithExpn);
-	public void enterVisit(BoolExpn boolExpn);
-	public void enterVisit(CompareExpn compareExpn);
-	public void enterVisit(EqualsExpn equalsExpn);
-	public void enterVisit(FunctionCallExpn functionCallExpn);
-	public void enterVisit(IdentExpn identExpn);
-	public void enterVisit(NotExpn notExpn);
-	public void enterVisit(SubsExpn subsExpn);
-	public void enterVisit(UnaryMinusExpn unaryMinusExpn);
+	public void exitVisit(ArithExpn arithExpn);
+	public void exitVisit(BoolExpn boolExpn);
+	public void exitVisit(CompareExpn compareExpn);
+	public void exitVisit(EqualsExpn equalsExpn);
+	public void exitVisit(FunctionCallExpn functionCallExpn);
+	public void exitVisit(IdentExpn identExpn);
+	public void exitVisit(NotExpn notExpn);
+	public void exitVisit(SubsExpn subsExpn);
+	public void exitVisit(UnaryMinusExpn unaryMinusExpn);
 
 	/* Statements */
 	public void exitVisit(AssignStmt assignStmt);
-	public void enterVisit(ExitStmt exitStmt);
-	public void enterVisit(GetStmt getStmt);
-	public void enterVisit(IfStmt ifStmt);
-	public void enterVisit(ProcedureCallStmt procedureCallStmt);
+	public void exitVisit(ExitStmt exitStmt);
+	public void exitVisit(GetStmt getStmt);
+	public void exitVisit(IfStmt ifStmt);
+	public void exitVisit(ProcedureCallStmt procedureCallStmt);
 	public void enterVisit(Program program);
 	public void exitVisit(Program program);
-	public void enterVisit(PutStmt putStmt);
-	public void enterVisit(ReturnStmt returnStmt);
-	public void enterVisit(WhileDoStmt whileDoStmt);
+	public void exitVisit(PutStmt putStmt);
+	public void exitVisit(ReturnStmt returnStmt);
+	public void exitVisit(WhileDoStmt whileDoStmt);
 }
