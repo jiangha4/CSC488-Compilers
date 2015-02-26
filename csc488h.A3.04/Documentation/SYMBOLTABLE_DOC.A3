@@ -17,7 +17,8 @@ For the data structure of our symbol table, we decided to go for a tree structur
     -Each STScope can have a parent node, which is the scope that it is itself contained in (the global/program scope is the root of the tree and has a null parent node pointer)
     -Each STScope can have any number of children nodes, which link to all scopes declared 1 level within
     -Siblings in the tree are scopes all declared at the same level
-    -Each STScope contains a HashMap (called "symbols"), mapping a String to a SymbolTableEntry object
+    -Each STScope contains a HashMap (called "symbols"), mapping a String to a
+    SymbolTableEntry object
         -The string is the name of the identifier
         -The SymbolTableEntry object is a container with fields: identifier, type, kind, value, and node (pointer to corresponding AST node). The SymbolTableEntry is defined in a separate class. The 'type' is a SymbolType enum with possible values: { INTEGER, BOOLEAN, UNKNOWN, TEXT, SKIP }. The 'kind' is a SymbolType enum with possible values: { VARIABLE, ARRAY, FUNCTION, PROCEDURE, PARAMETER }.
 	-The symbol table keeps an "STScope currentScope" pointer which points to the current scope at the point of processing of the program (at the end of processing it is null because all scopes are exited)
@@ -26,7 +27,8 @@ For the data structure of our symbol table, we decided to go for a tree structur
 2. Operations:
 For the symbol table, the key features we needed were inserting identifiers from particular scopes, entering/exiting scopes, searching particular scope for an identifier, searching visibility of identifier within a scope, and useful toString and fullTraversal methods (for at-a-glance debugging that displays the full tree).
     -Inserting an Identifier (method name: "insert")
-        -The SymbolTable class keeps a pointer to the current scope's STScope object, and simply adds an entry into its "symbols" HashMap
+        -The SymbolTable class keeps a pointer to the current scope's STScope object, and
+        simply adds an entry into its "symbols" HashMap
     -Deleting an Identifier (method name: "delete")
         -Delete the given identifier from the current scope's HashMap
     -Entering a New Scope (method name: "enterScope")
