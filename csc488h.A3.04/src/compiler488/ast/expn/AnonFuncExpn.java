@@ -13,48 +13,48 @@ import compiler488.symbol.SymbolTable.SymbolType;
  * procedure.
  */
 public class AnonFuncExpn extends Expn {
-    /** Execute these statements. */
-    private ASTList<Stmt> body;
+	/** Execute these statements. */
+	private ASTList<Stmt> body;
 
-    /** The expression whose value is yielded. */
-    private Expn expn;
+	/** The expression whose value is yielded. */
+	private Expn expn;
 
-    public AnonFuncExpn(ASTList<Stmt> body, Expn expn, SourceCoord sourceCoord) {
-        super(sourceCoord);
+	public AnonFuncExpn(ASTList<Stmt> body, Expn expn, SourceCoord sourceCoord) {
+		super(sourceCoord);
 
-        body.setParentNode(this);
-        this.body = body;
-        expn.setParentNode(this);
-        this.expn = expn;
-    }
+		body.setParentNode(this);
+		this.body = body;
+		expn.setParentNode(this);
+		this.expn = expn;
+	}
 
-    public ASTList<Stmt> getBody() {
-        return body;
-    }
+	public ASTList<Stmt> getBody() {
+		return body;
+	}
 
-    public Expn getExpn() {
-        return expn;
-    }
+	public Expn getExpn() {
+		return expn;
+	}
 
-    public void prettyPrint(PrettyPrinter p) {
-        p.println("{");
-        p.enterBlock();
+	public void prettyPrint(PrettyPrinter p) {
+		p.println("{");
+		p.enterBlock();
 
-        body.prettyPrintNewlines(p);
+		body.prettyPrintNewlines(p);
 
-        p.print("yields ");
-        expn.prettyPrint(p);
-        p.newline();
+		p.print("yields ");
+		expn.prettyPrint(p);
+		p.newline();
 
-        p.exitBlock();
-        p.println("}");
-    }
-    
-    @Override
+		p.exitBlock();
+		p.println("}");
+	}
+
+	@Override
 	public void accept(ASTVisitor visitor) {
-		visitor.visit(this);
 		body.accept(visitor);
 		expn.accept(visitor);
+    	visitor.visit(this);
 	}
 
 	@Override

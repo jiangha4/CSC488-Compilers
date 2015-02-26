@@ -615,31 +615,31 @@ public class Semantics implements ASTVisitor {
 			System.out.println("Visiting ReturnStmt");
 		}
 
-		// S51-52 Must check that return statements are in procedure
-		// or function scope
-
+		// S51-52: Ensure return is in a function or procedure
 		BaseAST currNode = returnStmt;
-		RoutineDecl parentRoutine = null;
-		while(currNode != null)
+		RoutineDecl parentRoutineDecl = null;
+		while(currNode != null && !(currNode instanceof AnonFuncExpn))
 		{
-			if (currNode instanceof RoutineDecl){
-				parentRoutine = (RoutineDecl)currNode;
+			if (currNode instanceof RoutineDecl) {
+				parentRoutineDecl = (RoutineDecl)currNode;
 				break;
 			}
 			currNode = currNode.getParentNode();
 		}
 
-		if (parentRoutine == null){
-			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure");
+		if (parentRoutineDecl == null){
+			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure.");
 		}
-		else if (parentRoutine.isFunctionDecl()) {
+		else if (parentRoutineDecl.isFunctionDecl()) {
 			// S35: Check that expression type matches the return type of enclosing function
 			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
-			SymbolType routineType = parentRoutine.getType().toSymbolType();
-			if ( routineType != returnStatementType ) {
-				errors.add(
-					returnStmt.getSourceCoord(),
-					"Return statement type '" + returnStatementType + "' does not match function type '" + routineType + "'.");
+			SymbolType routineType = parentRoutineDecl.getType().toSymbolType();
+			if (routineType != returnStatementType) {
+				String msg = String.format(
+					"Return statement type '%s' does not match function type '%s'.",
+					returnStatementType, routineType
+				);
+				errors.add(returnStmt.getSourceCoord(), msg);
 			}
 		}
 	}
