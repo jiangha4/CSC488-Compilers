@@ -16,6 +16,7 @@ Haohan Jiang (g3jiangh)
 - Semantic Analysis
 - AST node additions
 - Testing cases for S30, S50-S52
+- Documentation
 
 Chandeep Singh (g2singh)
 - SymbolTable implementation, design
@@ -23,6 +24,7 @@ Chandeep Singh (g2singh)
 - AST node type tracking
 - Semantic Rules S20-S39
 - Testing cases
+- Documentation
 
 Maria Yancheva (c2yanche)
 - AST traversal using visitor pattern
@@ -30,6 +32,7 @@ Maria Yancheva (c2yanche)
 - Majority of the Semantic Analysis
 - AST node source coordinates
 - Testing cases
+- Documentation
 
 Timo Vink (c4vinkti)	
 - AST construction in cup (grammar) file
@@ -37,3 +40,4 @@ Timo Vink (c4vinkti)
 - Testing cases
 - Semantic Analysis - fixed expression typing and majority of issues
 - Improved code readability and design
+- Documentation
