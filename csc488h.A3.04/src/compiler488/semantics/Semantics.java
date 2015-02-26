@@ -161,11 +161,15 @@ public class Semantics implements ASTVisitor {
 		}
 
 		// Check for existing declaration
-		if (symbolTable.search(routineName) != null) {
-			String msg = String.format("Re-declaration of identifier '%s' not allowed in same scope.", routineName);
+		SymbolTableEntry searchResult = symbolTable.search(routineName);
+		if (searchResult != null) {
+			SourceCoord originalDeclCoord = searchResult.getNode().getSourceCoord();
+			String msg = String.format(
+				"Redeclaration of '%s' not allowed in same scope. Original declaration at %s.",
+				routineName, originalDeclCoord
+			);
 			errors.add(routineDecl.getSourceCoord(), msg);
-		}
-		else {
+		} else {
 			boolean success = symbolTable.insert(routineName, routineType, routineKind, "", routineDecl);
 			if (success) {
 				routineDecl.setSTEntry(symbolTable.search(routineName));
@@ -189,11 +193,15 @@ public class Semantics implements ASTVisitor {
 		SymbolType declType = scalarDecl.getType().toSymbolType();
 
 		// Check if identifier already exists in current scope
-		if (symbolTable.search(declName) != null) {
-			String msg = String.format("Re-declaration of identifier '%s' not allowed in same scope.", declName);
+		SymbolTableEntry searchResult = symbolTable.search(declName);
+		if (searchResult != null) {
+			SourceCoord originalDeclCoord = searchResult.getNode().getSourceCoord();
+			String msg = String.format(
+				"Redeclaration of '%s' not allowed in same scope. Original declaration at %s.",
+				declName, originalDeclCoord
+			);
 			errors.add(scalarDecl.getSourceCoord(), msg);
-		}
-		else {
+		} else {
 			boolean success = symbolTable.insert(declName, declType, SymbolKind.PARAMETER, "", scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(symbolTable.search(declName));
@@ -312,16 +320,27 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void exitVisit(SubsExpn subsExpn) {
-		// S38: check that identifier has been declared as an array
+		// S38: check that identifier has been declared
 		String arrayName = subsExpn.getVariable();
-		if (symbolTable.searchGlobal(arrayName) == null) {
-			errors.add(subsExpn.getSourceCoord(), "Array '" + arrayName + "' cannot be used before it has been declared.");
-		}
-		else if (symbolTable.searchGlobal(arrayName).getKind() != SymbolKind.ARRAY) {
-			errors.add(subsExpn.getSourceCoord(), "Identifier '" + arrayName + "' cannot be used as an array because it has been declared as " + symbolTable.searchGlobal(arrayName).getKind() + ".");
+		SymbolTableEntry searchResult = symbolTable.searchGlobal(arrayName);
+		if (searchResult == null) {
+			String msg = String.format("Unknown identifier '%s'.", arrayName);
+			errors.add(subsExpn.getSourceCoord(), msg);
+			return;
 		}
 
-		// S31: check that subscripts are int expressions
+		// S38: check that identifier has been declared as an array
+		SymbolKind identKind = searchResult.getKind();
+		if (identKind != SymbolKind.ARRAY) {
+			SourceCoord originalDeclCoords = searchResult.getNode().getSourceCoord();
+			String msg = String.format(
+				"Attempting to use '%s' as an array but it has been declared as a %s on %s.",
+				arrayName, identKind, originalDeclCoords
+			);
+			errors.add(subsExpn.getSourceCoord(), msg);
+		}
+
+		// S31: check that thesubscripts are int expressions
 		assertIsIntExpn(subsExpn.getSubscript1());
 		if (subsExpn.isTwoDimensional()) {
 			assertIsIntExpn(subsExpn.getSubscript2());
@@ -339,20 +358,17 @@ public class Semantics implements ASTVisitor {
 		SymbolType lType = assignStmt.getLval().getExpnType(symbolTable);
 		SymbolType rType = assignStmt.getRval().getExpnType(symbolTable);
 		if (lType != rType) {
-			errors.add(
-				assignStmt.getRval().getSourceCoord(),
-				"LHS type (" + lType + ") in assignment differs from RHS type (" + rType + ")"
+			String msg = String.format(
+				"Can't assign %s expression to %s variable.",
+				rType, lType
 			);
+			errors.add(assignStmt.getRval().getSourceCoord(), msg);
 		}
 	}
 
 	@Override
 	public void exitVisit(ExitStmt exitStmt) {
-		/**
-		 * S50 Check that exit statement is directly inside a loop
-		 *	Checks if symbols "loop" or "while" have been declared in the scope
-		 *	If not, throws an error
-		 */
+		// S50: Check that exit statement is directly inside a loop
 		BaseAST currNode = exitStmt;
 		boolean foundLoop = false;
 		while(currNode != null && !(currNode instanceof RoutineDecl) && !(currNode instanceof AnonFuncExpn))
@@ -364,10 +380,10 @@ public class Semantics implements ASTVisitor {
 			currNode = currNode.getParentNode();
 		}
 		if (!foundLoop){
-			errors.add(exitStmt.getSourceCoord(), "EXIT not contained in LOOP or WHILE statements");
+			errors.add(exitStmt.getSourceCoord(), "EXIT must be in a LOOP or WHILE statement.");
 		}
 
-		// Only do S30 check if "exit when"
+		// S30: Check if "exit when" condition is a bool expn if applicable
 		if (exitStmt.getExpn() != null) {
 			assertIsBoolExpn(exitStmt.getExpn());
 		}
@@ -449,7 +465,7 @@ public class Semantics implements ASTVisitor {
 			if (type != SymbolType.INTEGER &&
 				type != SymbolType.TEXT &&
 				type != SymbolType.SKIP) {
-				String msg = String.format("Can't 'put' %s expression. Can only 'put' integer expressions, text, and skips", type);
+				String msg = String.format("Can't 'put' %s expression. Can only 'put' integer expressions, text, and skips.", type);
 				errors.add(expn.getSourceCoord(), msg);
 			}
 		}
@@ -468,17 +484,18 @@ public class Semantics implements ASTVisitor {
 			}
 			currNode = currNode.getParentNode();
 		}
-
 		if (parentRoutineDecl == null){
 			errors.add(returnStmt.getSourceCoord(), "Return statement is not in the scope of a function or procedure.");
+			return;
 		}
-		else if (parentRoutineDecl.isFunctionDecl()) {
-			// S35: Check that expression type matches the return type of enclosing function
+
+		// S35: Check that expression type matches the return type of enclosing function if applicable
+		if (parentRoutineDecl.isFunctionDecl()) {
 			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
 			SymbolType routineType = parentRoutineDecl.getType().toSymbolType();
 			if (routineType != returnStatementType) {
 				String msg = String.format(
-					"Return statement type '%s' does not match function type '%s'.",
+					"Return statement expression type %s does not match function type %s.",
 					returnStatementType, routineType
 				);
 				errors.add(returnStmt.getSourceCoord(), msg);
@@ -520,9 +537,11 @@ public class Semantics implements ASTVisitor {
 			SymbolType aType = nextArg.getExpnType(symbolTable);
 			SymbolType pType = paramsIter.next().getSTEntry().getType();
 			if (aType != pType) {
-				errors.add(
-					nextArg.getSourceCoord(),
-					"Arg expression " + count + "'s type (" + aType + ") does not match expected param type (" + pType + ")");
+				String msg = String.format(
+					"Type mismatch for argument %d. %s expected, but %s found.",
+					count, pType, aType
+				);
+				errors.add(nextArg.getSourceCoord(), msg);
 			}
 			count++;
 		}
