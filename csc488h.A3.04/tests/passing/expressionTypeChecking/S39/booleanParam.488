@@ -1,0 +1,5 @@
+begin
+	boolean function foo(boolean param1) begin
+		return (param1)
+	end
+end
