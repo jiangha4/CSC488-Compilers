@@ -58,3 +58,8 @@ AST Design
 AST Traversal
 -------------
 
+We implemented the visitor pattern for AST traversal. An "ASTVisitor" interface was created for the purposes of visiting each AST node; it is implemented by the Semantics class which provides a visit method for each type of AST node. An "ASTVisitable" interface was created for each AST node that can be visited containing an 'accept' method that determines what happens when the visitor visits the node; it is extended by the AST interface and hence implemented by all AST node classes which implement AST. The 'accept' method of each node visits itself and also calls the accept method of any children.
+
+The AST traversal begins in the Main program, where the programAST node is returned by the parser, and its accept method is invoked with the Semantics visitor.
+
+The Semantics class uses the visit methods to perform all symbol table building operations (such as inserting new symbols when an identifier declaration is visited or opening/closing of scopes when a function declaration is visited), as well as all semantic analysis (e.g., checking for an ancestral function or procedure node when a return statement is visited).
