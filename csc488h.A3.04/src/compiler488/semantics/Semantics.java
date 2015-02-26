@@ -155,14 +155,15 @@ public class Semantics implements ASTVisitor {
 			Scope routineScope = routineDecl.getBody();
 			ReturnStmt returnStatement = routineScope.containsReturn();
 			if (returnStatement == null) {
-				errors.add(routineDecl.getSourceCoord(), "Function '" + routineName + "' must contain at least one return statement.");
+				String msg = String.format("Function '%s' must contain at least one return statement.", routineName);
+				errors.add(routineDecl.getSourceCoord(), msg);
 			}
 		}
 
 		// Check for existing declaration
 		if (symbolTable.search(routineName) != null) {
-			// Detected a re-declaration in same scope
-			errors.add(routineDecl.getSourceCoord(), "Re-declaration of identifier " + routineName + " not allowed in same scope.");
+			String msg = String.format("Re-declaration of identifier '%s' not allowed in same scope.", routineName);
+			errors.add(routineDecl.getSourceCoord(), msg);
 		}
 		else {
 			boolean success = symbolTable.insert(routineName, routineType, routineKind, "", routineDecl);
@@ -184,13 +185,13 @@ public class Semantics implements ASTVisitor {
 
 	@Override
 	public void enterVisit(ScalarDecl scalarDecl) {
-		String declId = scalarDecl.getName();
+		String declName = scalarDecl.getName();
 		SymbolType declType = scalarDecl.getType().toSymbolType();
 
 		// Check if identifier already exists in current scope
-		if (symbolTable.search(declId) != null) {
-			// Detected a re-declaration in same scope
-			errors.add(scalarDecl.getSourceCoord(), "Re-declaration of identifier " + declId + " not allowed in same scope.");
+		if (symbolTable.search(declName) != null) {
+			String msg = String.format("Re-declaration of identifier '%s' not allowed in same scope.", declName);
+			errors.add(routineDecl.getSourceCoord(), msg);
 		}
 		else {
 			boolean success = symbolTable.insert(declId, declType, SymbolKind.PARAMETER, "", scalarDecl);
