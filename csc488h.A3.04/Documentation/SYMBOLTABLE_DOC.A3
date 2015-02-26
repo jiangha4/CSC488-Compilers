@@ -13,31 +13,50 @@ Symbol Table Design
 
 Data Structure:
 For the data structure of our symbol table, we decided to go for a tree structure:
-    -Each node in the tree is called an "STScope", where each STScope corresponds to a scope in the program.
-    -Each STScope can have a parent node, which is the scope that it is itself contained in (the global/program scope is the root of the tree)
-    -Each STScope can have many children, which links to all scopes declared 1 level within
+    -Each node in the tree is called an "STScope", where each STScope corresponds to a
+    scope in the program.
+    -Each STScope can have a parent node, which is the scope that it is itself contained
+    in (the global/program scope is the root of the tree)
+    -Each STScope can have many children, which links to all scopes declared 1 levelwithin
     -Siblings in the tree are scopes all declared at the same level
-    -Each STScope contains a HashMap (called "symbols"), mapping a String to a SymbolTableEntry object
+    -Each STScope contains a HashMap (called "symbols"), mapping a String to a
+    SymbolTableEntry object
         -The string is the name of the identifier
-        -The SymbolTableEntry object is a container with fields such as identifier, type, kind, and value
+        -The SymbolTableEntry object is a container with fields such as identifier, type,
+        kind, and value
 
 Data Access:
-For the symbol table, the key features we needed were inserting/deleting identifiers from particular scopes, entering/exitingscopes, searching scopes, and useful toString (for at-a-glance debugging).
+For the symbol table, the key features we needed were inserting/deleting identifiers from
+particular scopes, entering/exitingscopes, searching scopes, and useful toString
+(for at-a-glance debugging).
     -Inserting an Identifier (method name: "insert")
-        -The SymbolTable class keeps a pointer to the current scope's STScope object, and simply adds an entry into its "symbols" HashMap
+        -The SymbolTable class keeps a pointer to the current scope's STScope object, and
+        simply adds an entry into its "symbols" HashMap
     -Deleting an Identifier (method name: "delete")
         -Delete the given identifier from the current scope's HashMap
     -Entering a New Scope (method name: "enterScope")
-        -Create a new STScope object, and add it as a child to the current scope. Update the "currentScope" pointer to point to the newly created STScope.
+        -Create a new STScope object, and add it as a child to the current scope.
+        Update the "currentScope" pointer to point to the newly created STScope.
     -Exiting a Scope (method name: "exitScope")
         -Simply update the "currentScope" pointer to currentScope's parent STScope.
     -Searching for an Identifier (method name: "searchGlobal")
-        -Search the currentScopes's HashMap for the identifier. If nothing found, go to parent STScope and search there. If identifier found, return it's SymbolTableEntry object, otherwise continue searching up the tree until we reach the root. If nothing found even in the root, return null.
+        -Search the currentScopes's HashMap for the identifier. If nothing found, go to
+        parent STScope and search there. If identifier found, return it's SymbolTableEntry
+        object, otherwise continue searching up the tree until we reach the root. If
+        nothing found even in the root, return null.
     -SymbolTable Printing for Debugging (method name: "toString"/"fullTraversal")
         -toString:
             -Print out current node and recursively travel to parent and print.
         -fullTraversal:
-            -SymbolTable keeps a pointer to the root node. This method performs a resursive travel down the tree to visit every node. Each time we enter a level deeper into the tree, the print is appended with more tabbing in the front. This makes it easy to see the tree structure at a glance. 
+            -SymbolTable keeps a pointer to the root node. This method performs a resursive
+            travel down the tree to visit every node. Each time we enter a level deeper
+            into the tree, the print is appended with more tabbing in the front. This
+            makes it easy to see the tree structure at a glance. 
 
 Comments:
-We had initially started with a stack structure, where entering a scope involved adding an STScope to the top of a stack, searching was done from the top level downwards, and exiting a scope popped off the top of the stack. However, we realized that since this method was destroying information (ie. once a scope was exited, we deleted all information from it), it might be smarter to switch to a structure which preserved all data, so we would be able to easily reuse it in future assignments (ie. code generation).
+We had initially started with a stack structure, where entering a scope involved adding an
+STScope to the top of a stack, searching was done from the top level downwards, and exiting
+a scope popped off the top of the stack. However, we realized that since this method was
+destroying information (ie. once a scope was exited, we deleted all information from it),
+it might be smarter to switch to a structure which preserved all data, so we would be able
+to easily reuse it in future assignments (ie. code generation).
