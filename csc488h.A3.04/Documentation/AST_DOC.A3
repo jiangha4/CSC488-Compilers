@@ -11,3 +11,8 @@ Group Members:
 AST Design
 ----------
 
+For each node, we decided to add a link back to the parent node. This 
+allowed us to easily check parent nodes and see if any conditions were 
+violated during semantic checking. For example, to check S50 and ensure 
+that and exit statement is contained a loop, we can simply trace the parent
+nodes back to find if a loop symbol was identified. 

@@ -1,0 +1,9 @@
+begin
+    procedure Hai2u(integer n1, integer n2) begin
+        n1 <= n1+n2
+    end
+    integer a, b
+    a <= 100
+    b <= 200
+    Hai2u(a,b)
+end

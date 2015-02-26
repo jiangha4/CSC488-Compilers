@@ -1,0 +1,9 @@
+begin
+    boolean function Hai2u(integer n, boolean b) begin
+        return(b | (n = n))
+    end
+    boolean b, t, f
+    integer i
+    b <= Hai2u(i, t = f)
+    b <= Hai2u(200+i, t != f)
+end

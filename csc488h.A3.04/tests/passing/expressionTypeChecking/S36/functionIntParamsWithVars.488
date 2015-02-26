@@ -1,0 +1,9 @@
+begin
+    integer function Hai2u(integer n1, integer n2) begin
+        return(n1+n2)
+    end
+    integer i, a, b
+    a <= 100
+    b <= 200
+    i <= Hai2u(a,b)
+end

@@ -1,0 +1,6 @@
+begin
+    procedure bruh(integer n1, integer n2) begin
+        n1<=(n1+n2)
+    end
+    bruh(false, 0)
+end

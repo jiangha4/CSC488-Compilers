@@ -1,0 +1,6 @@
+begin
+    procedure Hai2u(integer n1, integer n2) begin
+        n1 <= n1 + n2
+    end
+    Hai2u(1,2)
+end

@@ -1,0 +1,7 @@
+begin
+    boolean function bruh(integer n, boolean b) begin
+        return(n = n | b)
+    end
+    boolean b
+    b <= bruh(true = false, 200+5)
+end
