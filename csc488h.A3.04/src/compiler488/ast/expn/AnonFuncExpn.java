@@ -4,7 +4,9 @@ import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.SourceCoord;
+import compiler488.ast.stmt.Scope;
 import compiler488.ast.stmt.Stmt;
+import compiler488.semantics.Semantics;
 import compiler488.symbol.SymbolTable;
 import compiler488.symbol.SymbolTable.SymbolType;
 
@@ -54,9 +56,15 @@ public class AnonFuncExpn extends Expn {
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
 
+		// S04: start anonymous function scope
+		((Semantics)visitor).getSymbolTable().enterScope();
+		
 		body.accept(visitor);
 		expn.accept(visitor);
-
+		
+		// S05: end anonymous function scope
+		((Semantics)visitor).getSymbolTable().exitScope();
+		
 		visitor.exitVisit(this);
 	}
 
