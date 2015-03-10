@@ -1,0 +1,18 @@
+% A3-05c.488   
+% test undeclared identifiers
+ begin       integer X 
+ begin       integer A  
+ begin       integer B  
+ begin       integer C  
+ begin       integer D  
+ begin       integer E  
+ begin       integer F  
+ begin       integer G  X <= a+c+e+g + D - C
+ begin       integer H  
+ begin       integer I  
+ begin       integer J  
+ begin       integer K  
+ begin       integer L  
+ begin       integer M  X <= J + a+d+f+i+l+m - K
+ end   end    end    end    end    end    end    end    end    end    end    end    end    
+ end 

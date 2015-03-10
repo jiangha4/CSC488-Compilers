@@ -1,0 +1,18 @@
+% A3-03.488
+% test detection of multiple declaration
+ begin 
+    boolean function F  begin   integer i boolean i i <= 3  return ( false ) end  
+    integer function G ( boolean q  , integer j ) begin  integer q boolean  j j <= true  return ( 7 ) end 
+    procedure P begin  integer i,j,k,i boolean  p,q, p[10] j <= 7   end 
+    procedure Q ( integer m , boolean s , integer n )
+        begin   boolean m[ -10 .. 10 ] integer s , s boolean  m, n  m <= false  end 
+   integer i 
+   integer F, G, P, Q 
+   F
+   i <= G( false, 3 )
+   P
+   Q( 1, false, 2 )
+   procedure R( integer R ) begin
+      boolean R
+   end
+ end 

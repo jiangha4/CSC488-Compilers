@@ -1,0 +1,20 @@
+% A3-08a.488   ===========================================
+% test correct expressions
+ begin 
+   integer  i , j , k 
+   boolean  p , q , r 
+   i <= i + j
+   j <= j - i
+   i <= j * k
+   i <= j / k 
+   i <= { integer  s s <=  i - j + k  yields s + k }
+   p <= i < j
+   p <= i <= j
+   p <= i = j
+   p <= i! = j
+   p <= j > k
+   p <= j >= k
+   p <= q = r
+   p <= r!= q
+   p <= { boolean t  if i < j then t <=  i = 7 else t <=  j = k end yields t }
+ end 

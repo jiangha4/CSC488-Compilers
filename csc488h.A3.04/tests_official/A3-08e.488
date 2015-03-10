@@ -1,0 +1,12 @@
+% A3-08e.488   
+% test assignment  errors
+ begin 
+   integer  A[100] , B[ -100 .. 0 ] , i , j 
+   boolean  P[100] , Q[ -10 .. 10 ] , R , S 
+   integer function F( integer A ) begin   return(  A + 1 ) end 
+   A <= i
+   i <= A
+   P <= Q| R
+   R <= P
+   F <= 7
+ end 

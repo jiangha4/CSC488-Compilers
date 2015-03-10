@@ -1,0 +1,23 @@
+A3-00.488	test compiler initialization, finalization
+A3-01.488	test correct declarations and usage
+A3-02.488	test correct declarations
+A3-03.488	test detection of multiple declaration
+A3-04a.488	test errors in array declarations
+A3-04b.488	test detection of use before declaration
+A3-05a.488	test nesting in declarations
+A3-05b.488	test nesting in declarations
+A3-05c.488	test undeclared identifiers
+A3-06a.488	test correct recursive calls
+A3-06b.488	test nested  function/ procedure declarations
+A3-07a.488	test statement checks
+A3-07b.488	test statement checks
+A3-07c.488	test statement checks
+A3-07d.488	test correct uses of exit 
+A3-07e.488	test statement checks
+A3-08a.488	test correct expressions
+A3-08b.488	test invalid expressions
+A3-08c.488	test expressions
+A3-08d.488	test subscript expressions
+A3-08e.488	test assignment  errors
+A3-09.488	test read, write restrictions
+A3-10.488	test parameter errors

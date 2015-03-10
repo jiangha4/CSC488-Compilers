@@ -1,0 +1,5 @@
+% A3-00.488 
+% test compiler initialization, finalization
+ begin 
+% empty program
+ end 

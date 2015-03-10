@@ -1,0 +1,10 @@
+% A3-08d.488   
+% test subscript expressions
+ begin 
+   integer  A[100] , B[ -100 .. 0 ] , i , j 
+   boolean  P[100] , Q[ -10 .. 10 ] , R , S 
+   integer function F( integer A ) begin   return(  A + 1 ) end 
+   A[ i ] <= B[ j - 1 ] * A[ { integer i yields j +  7  } ]
+   P[ i - 1 ] <= Q[ j + 7 ] & P[ i ] | { R <= true yields !S }
+   B[F(-6)+F(-10)] <= A[ { integer t t <= F(50)+1 yields t } ]
+ end 

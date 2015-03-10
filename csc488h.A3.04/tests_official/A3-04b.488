@@ -1,0 +1,14 @@
+% A3-04b.488
+% test detection of use before declaration
+begin
+    integer j, k
+    i <= 2
+    boolean i
+    i <= F( 9 ) > 0
+    integer function F( integer k ) begin
+        i <= false
+        integer i
+        i <= k + 1
+        return ( i )
+    end %F
+end

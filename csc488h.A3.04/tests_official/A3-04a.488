@@ -1,0 +1,20 @@
+%A3-04a.488   
+% test errors in array declarations
+begin
+   integer  a1[ 0 ]  
+   a1[0] <= 0 
+   integer   a2[ -50 .. -100 ] 
+   a2[ -75 ] <= 0
+   integer  a3[ -32767 .. 32767 ] 
+   a3[ 0 ] < = 0
+   boolean  p3[ 32767 .. -32767 ] 
+   p3[ 0 ] <= false
+   integer  a4[ 10 , 0 ]  
+   a4[ 5, 0] <= 0 
+   integer   a5[ 12 .. 14 , -50 .. -100 ] 
+   a5[ 13 , -75 ] <= 0
+   integer  a6[ 32767 , -32767 .. 32767 ] 
+   a6[ 1 , 0  ] < = 0
+   boolean  p4[ 100 .. 1000 , 32767 .. -32767 ] 
+   p4[ 500, 0 ] <= false
+ end 

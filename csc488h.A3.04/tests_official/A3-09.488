@@ -1,0 +1,10 @@
+% A3-09.488   
+% test read, write restrictions
+ begin 
+	integer i, j[10] 
+        boolean p, q[10] 
+        get  i, j , p, q
+        put "Goodbye Cruel World", i , j , q[3], p, q , skip
+        put skip, " integer " , { integer i i <= 14 yields i } , skip ,
+            " boolean " , { integer i i <= 14 yields p & q[7] } , skip
+ end 

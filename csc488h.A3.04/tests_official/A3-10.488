@@ -1,0 +1,19 @@
+% A3-10.488   
+% test parameter errors
+ begin 
+     integer function F begin   return(   7  )  end 
+    integer  i  
+    i <= F( 3 )
+    boolean s 
+     boolean function G ( boolean P , integer K  ) 
+        begin    return(  ! P&  K < 7 )   end 
+    s <= G( s , 3 , true )
+     procedure P   begin  return  end 
+    P( 14, s )
+     procedure Q ( integer P , boolean K )  
+        begin   while K do  while K do  while K do   if K| P < 6 then return end end end end     end 
+    Q( i )
+    %  parameter type mismatches
+    s <= G( F , G( false , 7 ))
+    Q( { boolean t yields false } , { integer s yields 11 } )
+ end 

@@ -1,0 +1,11 @@
+% A3-08c.488   
+% test expressions
+ begin 
+   boolean p , q , r 
+   p <= p & { boolean t if q then  t <= p else t <= r end yields t }
+   p <= { integer i yields true } | 
+		{ integer i yields true } & ! { integer i yields false }
+   p <= { integer j yields { integer j yields { integer j yields p != r }}}
+   r <= !p & q | p & !q
+   r <= !!!p &  !!! ( p | q )
+ end 

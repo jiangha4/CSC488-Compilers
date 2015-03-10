@@ -1,0 +1,20 @@
+% A3-07b.488   ===========================================
+% test statement checks
+ begin 
+    integer i 
+     integer function F begin   return   end 
+    i <= F
+    procedure G   begin   return(  6 )  end 
+    G 
+    integer function P ( integer i ) begin
+ 	boolean p, q, r
+        return ( p & q |  r )
+    end % P
+    boolean function Q( integer i ) begin
+        return ( i + 7 )
+        return ( P( 7 ) )
+    end
+    i <= P( 4 )
+    boolean t
+    t <= Q( 5 )
+ end

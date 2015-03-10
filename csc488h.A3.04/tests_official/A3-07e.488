@@ -1,0 +1,18 @@
+% A3-07e.488   ===========================================
+% test statement checks
+ begin 
+	put "input = " ,
+	    { integer i  get i  yields i }
+        integer i
+        i <= 17
+         while  { boolean j j <= true yields i <= 0 | j} do
+            i <= { boolean j yields i - 1 }
+        end
+        boolean B[ 10 , 7 ]
+        boolean function F( boolean k ) 
+            begin
+               return ( { boolean A yields ! k } )
+            end
+        B[ { integer B yields i + 3 } , { integer k k <= i + 10 yields k -3 } ]
+             <=  F( { boolean B, k k <= true B <= k | !k yields B != k } )
+ end 

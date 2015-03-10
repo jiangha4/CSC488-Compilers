@@ -1,0 +1,11 @@
+% A3-08b.488   
+% test invalid expressions
+ begin 
+   integer  i , j , k 
+   boolean  p , q , r 
+   i <= j + p
+   i <= p * q
+   i <= { boolean t yields t }
+   i <= { j <= 3 yields j != 7 }
+   r <= { p <= !r yields i - j + 7 - k }
+ end 

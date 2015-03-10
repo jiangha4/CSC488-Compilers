@@ -1,0 +1,18 @@
+% A3-05b.488   
+% test nesting in declarations
+ begin       integer X 
+ begin       integer a  X <= a  
+ begin       integer b  X <= a+b  
+ begin       integer c  X <= a+b+c  
+ begin       integer d  X <= a+b+c+d
+ begin       integer e  X <= a+b+c+d+e
+ begin       integer f  X <= a+b+c+d+e+f
+ begin       integer g  X <= a+b+c+d+e+f+g
+ begin       integer h  X <= a+b+c+d+e+f+g+h
+ begin       integer i  X <= a+b+c+d+e+f+g+h+i
+ begin       integer j  X <= a+b+c+d+e+f+g+h+i+j
+ begin       integer k  X <= a+b+c+d+e+f+g+h+i+j+k
+ begin       integer l  X <= a+b+c+d+e+f+g+h+i+j+k+l
+ begin       integer m  X <= a+b+c+d+e+f+g+h+i+j+k+l+m
+ end   end    end    end    end    end    end    end    end    end    end    end    end    
+ end 

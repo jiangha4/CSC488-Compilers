@@ -1,0 +1,20 @@
+% A3-06a.488
+%  test correct recursive calls
+begin
+   procedure P( integer n , boolean m ) 
+      begin
+	integer k
+	if m then  P( n - 1 , !m ) end
+	integer function Q( integer i ) 
+	   begin
+		if i < n then
+		   P( i , m )
+		else
+		   k <= Q( n - 1 )
+                end
+	        return( n + k + i )
+            end  % Q
+        k <= Q( 19 )
+      end  %P
+   P( 13 , false ) 
+end

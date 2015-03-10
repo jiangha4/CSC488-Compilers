@@ -1,0 +1,36 @@
+% A3-06b.488   
+% test nested  function/ procedure declarations
+ begin 
+     procedure P   begin 
+         integer function Q begin 
+            procedure P   begin 
+               boolean function Q begin 
+		P
+		 return(  false | true )
+               end  % P.Q.P.Q
+              boolean I 
+              I <= Q
+              return
+            end   % P.Q.P
+	   P
+            return(  9  )
+        end  % P.Q 
+       boolean T 
+         boolean function R  begin 
+            procedure P   begin 
+               boolean function Q begin 
+                  P
+		   return(  false )
+               end   % P.R.P.Q
+	      boolean R 
+              R <= Q
+              return
+            end   % P.R.P
+	   T <= R
+            return(  true )
+        end  % P.R
+       boolean S 
+       S <= R | Q < 6
+     end   % P
+    P
+ end 

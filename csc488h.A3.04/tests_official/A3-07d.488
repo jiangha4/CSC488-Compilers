@@ -1,0 +1,22 @@
+% A3-07d.488   ===========================================
+% test correct uses of exit 
+ begin 
+    boolean p, q 
+    integer i 
+    while p& q do
+        while { p <= !p yields !q } do
+            while i ! = 3 do
+                 while i = 3 do  begin 
+                      exit  when p| q
+                      exit 
+		      if q then
+                         exit  when i > 7
+                      else
+                         exit  when i < 7
+		      end
+                  end 
+		end
+            end
+        end
+     end
+ end 

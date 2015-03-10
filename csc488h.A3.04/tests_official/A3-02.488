@@ -1,0 +1,13 @@
+% A3-02.488
+% test correct declarations
+ begin 
+    integer function F begin   integer i  boolean  p i <= 2  return ( i ) end  
+    boolean function G ( boolean q  , integer j ) begin  integer k  k <= j boolean  r return ( q & r ) end 
+    boolean T
+    T <= G( false, 3 )
+    procedure P begin integer  i i <= 2 boolean   p p <= false  end  
+    P
+    procedure Q ( integer m , boolean s , integer n )
+        begin   boolean t  integer  x , y  t <= s  x <= m + n  return end 
+    Q( 17 , T, F + 7 )
+ end 

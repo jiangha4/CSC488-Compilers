@@ -1,0 +1,14 @@
+% A3-05a.488   
+% test nesting in declarations
+ begin 
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ begin       integer i  i <= 1  
+ end   end    end    end    end    end    end    end    end    
+ end 

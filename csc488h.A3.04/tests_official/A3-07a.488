@@ -1,0 +1,17 @@
+% A3-07a.488
+% test statement checks
+ begin 
+    boolean p, q 
+    integer i , j 
+    exit when p
+    while true do  begin 
+        procedure P( integer i )  begin 
+          exit
+        end 
+       P( 17 )
+       integer K
+       K <= { i <= 3 exit when p yields 12 }
+       K <= { while p | q do  exit end yields 13 }
+     end 
+    end
+ end 

@@ -1,0 +1,24 @@
+% A3-07c.488   ===========================================
+% test statement checks
+ begin 
+    boolean p, q
+    q <= true
+    p <= ! false
+    while p& q do 
+         begin   begin   begin 
+           return
+         end   end   end 
+    end
+    integer i 
+    while p& q do
+        if p then 
+              return(  p )
+        else
+              return(  i )
+        end
+    end
+    i <= i + { return yields 0 }
+    p <= { return ( true ) yields false }
+    q <= { procedure H begin return end  H yields true }
+    p <= { boolean function J begin return( q ) end yields J }
+ end 
