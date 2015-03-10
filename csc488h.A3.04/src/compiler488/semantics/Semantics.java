@@ -491,13 +491,21 @@ public class Semantics implements ASTVisitor {
 
 		// S35: Check that expression type matches the return type of enclosing function if applicable
 		if (parentRoutineDecl.isFunctionDecl()) {
-			SymbolType returnStatementType = returnStmt.getValue().getExpnType(symbolTable);
+			Expn returnValue = returnStmt.getValue();
 			SymbolType routineType = parentRoutineDecl.getType().toSymbolType();
-			if (routineType != returnStatementType) {
-				String msg = String.format(
-					"Return statement expression type %s does not match function type %s.",
-					returnStatementType, routineType
-				);
+			
+			if (returnValue != null) {
+				SymbolType returnStatementType = returnValue.getExpnType(symbolTable);
+				if (routineType != returnStatementType) {
+					String msg = String.format(
+						"Return statement expression type %s does not match function type %s.",
+						returnStatementType, routineType
+					);
+					errors.add(returnStmt.getSourceCoord(), msg);
+				}
+			}
+			else {
+				String msg = String.format("Return statement is missing an expression; function '%s' must return %s.", parentRoutineDecl.getName(), routineType);
 				errors.add(returnStmt.getSourceCoord(), msg);
 			}
 		}
