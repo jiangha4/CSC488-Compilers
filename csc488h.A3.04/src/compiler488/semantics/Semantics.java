@@ -494,6 +494,7 @@ public class Semantics implements ASTVisitor {
 			Expn returnValue = returnStmt.getValue();
 			SymbolType routineType = parentRoutineDecl.getType().toSymbolType();
 			
+			// Check that a return expression exists, then check its type
 			if (returnValue != null) {
 				SymbolType returnStatementType = returnValue.getExpnType(symbolTable);
 				if (routineType != returnStatementType) {
@@ -506,6 +507,14 @@ public class Semantics implements ASTVisitor {
 			}
 			else {
 				String msg = String.format("Return statement is missing an expression; function '%s' must return %s.", parentRoutineDecl.getName(), routineType);
+				errors.add(returnStmt.getSourceCoord(), msg);
+			}
+		}
+		else {
+			// The routine is a procedure -> ensure that there is no return expression
+			Expn returnValue = returnStmt.getValue();
+			if (returnValue != null) {
+				String msg = String.format("Return statement contains an expression; procedure '%s' cannot return an expression.", parentRoutineDecl.getName());
 				errors.add(returnStmt.getSourceCoord(), msg);
 			}
 		}
