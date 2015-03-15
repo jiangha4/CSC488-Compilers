@@ -1,31 +1,31 @@
-%  Assignment 4 Sample Program 2			% 2-1
-begin							% 2-2
-   integer a, b , c					% 2-3
-   boolean p, q, r					% 2-4
-   if p | q  then  a <= 3 end				% 2-5
-   if ! q & ! q  then b <= 2 else b <= 0 end		% 2-6
-   while c < 7 do  c <= 8 end			 	% 2-7
-   loop  a <= 3 exit b <= 7 end				% 2-8
-   while q | r & ! p do  exit when !(b != 10) end	% 2-9
-   put "Value is " , a / b, " or  " , b * -c ,  skip	% 2-10
-   get  a, c, b						% 2-11
-   begin						% 2-12
-       integer m, n, c					% 2-13
-       m <= 7 - b +c 					% 2-14
-       begin						% 2-15
-          integer p, q, r				% 2-16
-          p <= { begin  p <= a end yields r-b }		% 2-17
-       end						% 2-18
-   end							% 2-18
-   while ! ( p | q )  do				% 2-20
-       exit when p & r 					% 2-21
-       loop						% 2-22
-          integer w, x					% 2-23
-          if w <= a then exit end			% 2-24
-          integer t, u					% 2-25
-          t <= { boolean m  m <= w < t 			% 2-26
-                       if m then t <= t + c end		% 2-27
-                           yields t }			% 2-28
-        end	% loop					% 2-29
-   end 	 % while					% 2-30
-end							% 2-31
+%  Assignment 4 Sample Program 2                      % 2-1
+begin                                                 % 2-2
+   integer a, b , c                                   % 2-3
+   boolean p, q, r                                    % 2-4
+   if p | q  then  a <= 3 end                         % 2-5
+   if ! q & ! q  then b <= 2 else b <= 0 end          % 2-6
+   while c < 7 do  c <= 8 end                         % 2-7
+   loop  a <= 3 exit b <= 7 end                       % 2-8
+   while q | r & ! p do  exit when !(b != 10) end     % 2-9
+   put "Value is " , a / b, " or  " , b * -c ,  skip  % 2-10
+   get  a, c, b                                       % 2-11
+   begin                                              % 2-12
+       integer m, n, c                                % 2-13
+       m <= 7 - b +c                                  % 2-14
+       begin                                          % 2-15
+          integer p, q, r                             % 2-16
+          p <= { begin  p <= a end yields r-b }       % 2-17
+       end                                            % 2-18
+   end                                                % 2-18
+   while ! ( p | q )  do                              % 2-20
+       exit when p & r                                % 2-21
+       loop                                           % 2-22
+          integer w, x                                % 2-23
+          if w <= a then exit end                     % 2-24
+          integer t, u                                % 2-25
+          t <= { boolean m  m <= w < t                % 2-26
+                       if m then t <= t + c end       % 2-27
+                           yields t }                 % 2-28
+        end % loop                                    % 2-29
+   end   % while                                      % 2-30
+end                                                   % 2-31

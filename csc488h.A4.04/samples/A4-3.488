@@ -1,31 +1,31 @@
-% Assignment 4 Sample Program 3				% 3-1
-begin							% 3-2
-   integer a, b, c, d					% 3-3
-   boolean p, q, r, s					% 3-4
-   procedure P 						% 3-5
-      begin						% 3-6
-         integer e, f					% 3-7
-         if p then  return  end				% 3-8
-         e <= a 					% 3-9
-	 return						% 3-10
-      end  % P						% 3-11
-  integer function F( integer m, boolean n )		% 3-12
-      begin						% 3-13
-         if n then  return ( m + b ) 			% 3-14
-         else  return ( c - m )   end			% 3-15
-      end  % F						% 3-16
-  procedure Q( boolean m , integer n , boolean p )	% 3-17
-    begin						% 3-18
-      integer t, u, v 					% 3-19
-      boolean  function G 				% 3-20
-          begin						% 3-21
-             integer w, x				% 3-22
-             return ( 					% 3-23
-                { boolean b integer d  d<= c P		% 3-24
-                      yields  d + w - v  < 12  } )	% 3-25
-          end  % G					% 3-26
-      put F( t - n + a  , ! G | r ) , skip 		% 3-27
-  end  %Q						% 3-28
-  Q( ! p | q , F( F( b, p ), !q ) , 			% 3-29
-        { P yields p != q } )				% 3-30
-end							% 3-31
+% Assignment 4 Sample Program 3                     % 3-1
+begin                                               % 3-2
+   integer a, b, c, d                               % 3-3
+   boolean p, q, r, s                               % 3-4
+   procedure P                                      % 3-5
+      begin                                         % 3-6
+         integer e, f                               % 3-7
+         if p then  return  end                     % 3-8
+         e <= a                                     % 3-9
+   return                                           % 3-10
+      end  % P                                      % 3-11
+  integer function F( integer m, boolean n )        % 3-12
+      begin                                         % 3-13
+         if n then  return ( m + b )                % 3-14
+         else  return ( c - m )   end               % 3-15
+      end  % F                                      % 3-16
+  procedure Q( boolean m , integer n , boolean p )  % 3-17
+    begin                                           % 3-18
+      integer t, u, v                               % 3-19
+      boolean  function G                           % 3-20
+          begin                                     % 3-21
+             integer w, x                           % 3-22
+             return (                               % 3-23
+                { boolean b integer d  d<= c P      % 3-24
+                      yields  d + w - v  < 12  } )  % 3-25
+          end  % G                                  % 3-26
+      put F( t - n + a  , ! G | r ) , skip          % 3-27
+  end  %Q                                           % 3-28
+  Q( ! p | q , F( F( b, p ), !q ) ,                 % 3-29
+        { P yields p != q } )                       % 3-30
+end                                                 % 3-31
