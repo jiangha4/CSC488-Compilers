@@ -1,0 +1,69 @@
+CSC488
+Assignment 3
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+    
+
+Semantic Analysis Design
+------------------------
+
+Processing of ASTs:
+    
+    For traversal and processing of ASTs, we used the Visitor/Visitable pattern (as 
+	described in the AST_DOC.A3) and slightly modified it to have an "enterVisit" 
+	and "exitVisit" methods. The first is called when visiting the node, and the 
+	second is called when all sub-nodes (i.e., children and all their children 
+	recursively) have been visited. Having these separate methods makes handling 
+	scenarios such as enter/exiting scopes at the right time very simple since we 
+	can create a scope on enterVisit, process all containing statements/expressions, 
+	and then exit the scope when finished with all of those.
+
+Scope Entering/Exiting:
+    
+    For the Program Scope (Program node) we simply create a scope when enterVisit is
+    called, and exit scope when exitVisit is called for the node. For Function/Procedure
+	declarations (RoutineDecl node), in enterVisit we first declare the function/procedure
+	and then invoke enterScope, then we visit all parameters and the body of the routine, 
+	and finally in exitVisit we invoke exitScope. For ordinary scopes, we check for Scope 
+	nodes in the body of a Scope while accepting visitors, and if we encounter one we 
+	surround it with enterScope and exitScope.
+
+Type Tracking/Checking:
+
+    For this, we implemented a "getExpnType" method for each Expn subclass that would
+    return its type, and for particular statements which required type checking
+    (e.g. AssignStmt), we could just call this method on the statement's sub-expressions 
+    and easily compare types. For more details on how getExpnType is implemented, please 
+    see the "Type Tracking" section of AST_DOC.A3. 
+
+Existence of Return Statements:
+
+    Since routines can have nested if statements, loops, and other routines, we needed
+    a way to recursively search all sub AST Nodes of a routine (excluding function and 
+	procedure nodes), and search for a return statement. For this, we added a 
+	containsReturn method to the Stmt class which will check if it itself is a ReturnStmt. 
+	Then, we overloaded the containsReturn method for IfStmt, LoopingStmt, and Scope which 
+	will recursively call the method on all of their children, such that return statements 
+	are detected even if they are nested within one of those statements. Note: RoutineDecl 
+	statements did not override the method, so that their bodies are *not* searched 
+	recursively for returns (this is to prevent a return in a nested routine being detected 
+	as a return for the parent routine).
+
+Proper Placement of Return/Exit Statements:
+
+    We added a parent attribute + getParentNode method to the BaseAST class which returns
+    a link to the AST node's parent node in the tree. This allows us to easily check
+    whether or not return/exit statements are in the right spot. For return statements,
+    we recursively travel up to the parent until we find a RoutineDecl node, and if found
+    then the return statement is in a valid location. If nothing found, it is not.
+    Similarly for exit statements, we recursively search parents until we find a 
+    Loop/While statement node.
+	
+	Special handling was required to make sure that return statements cannot be added
+	directly to the statements in an anonymous function: if an AnonFuncExpn was detected before 
+	a RoutineDecl node during the upward parent traversal from a ReturnStmt, then the check 
+	was terminated and a semantic error was raised. Similarly for exit statements.
