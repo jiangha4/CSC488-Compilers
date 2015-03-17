@@ -1,9 +1,7 @@
 package compiler488.ast.expn;
 
-import compiler488.ast.BaseAST;
-import compiler488.ast.Printable;
-import compiler488.symbol.SymbolTable;
-import compiler488.symbol.SymbolTableEntry;
+import compiler488.ast.*;
+import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.SymbolType;
 import compiler488.ast.SourceCoord;
 

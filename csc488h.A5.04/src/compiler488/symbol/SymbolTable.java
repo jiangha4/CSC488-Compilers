@@ -17,101 +17,8 @@ import compiler488.ast.BaseAST;
  *           </B>
  */
 public class SymbolTable {
-	STScope currentScope;
+	public STScope currentScope;
 	STScope rootScope;
-
-	public class STScope {
-		private STScope parent;
-		private List<STScope> children;
-		private HashMap<String,SymbolTableEntry> symbols;
-		final static String scopeSep = "=======================================================\n";
-		final static String scopeIndent = "    ";
-
-		public STScope () {
-			this.parent = null;
-			this.children = new ArrayList<STScope>();
-			this.symbols = new HashMap<String,SymbolTableEntry>();
-		}
-
-		public STScope getParent() {
-			return parent;
-		}
-
-		public void setParent(STScope parent) {
-			this.parent = parent;
-		}
-
-		public List<STScope> getChildren() {
-			return children;
-		}
-
-		public void addChild(STScope child) {
-			this.children.add(child);
-		}
-
-		public void setChildren(List<STScope> children) {
-			this.children = children;
-		}
-
-		public void removeChildren() {
-			this.children.clear();
-		}
-
-		public HashMap<String, SymbolTableEntry> getSymbols() {
-			return symbols;
-		}
-
-		public void setSymbols(HashMap<String, SymbolTableEntry> symbols) {
-			this.symbols = symbols;
-		}
-
-		@Override
-		public String toString() {
-			return toString(0);
-		}
-
-		public String toString(int depth) {
-			String s = "";
-
-			// Get all keys in symbols
-			for (Entry<String, SymbolTableEntry> id : this.symbols.entrySet()) {
-				s += getIndent(depth) + id.getKey() + " = " + id.getValue() + "\n";
-	    }
-
-			// If no symbols exist in this scope, display 'Empty'
-			if (symbols.entrySet().size() == 0) {
-				s += getIndent(depth) + "Empty scope" + "\n";
-			}
-
-			return s;
-		}
-
-		public String getIndent(int depth) {
-			String s = "";
-			for(int i = 0; i < depth; i++) {
-				s += scopeIndent;
-			}
-
-			return s;
-		}
-
-		/**
-		 * display - recursively display the scope and all of its children (using indentation for child nodes)
-		 *
-		 * @param depth
-		 * @return
-		 */
-		public String display(int depth) {
-			String s = "";
-			s += scopeSep;
-			s += toString(depth);
-			for(STScope child : children) {
-				s += child.display(depth + 1);
-			}
-
-			return s;
-		}
-	}
 
 	/**
 	 * Create and initialize a symbol table
@@ -140,10 +47,10 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
+	public boolean insert(String id, SymbolType type, SymbolKind kind, BaseAST node) {
 		// Make sure we have a current scope
 		if (this.currentScope != null) {
-			return insert(currentScope, id, type, kind, value, node);
+			return insert(currentScope, id, type, kind, node);
 		}
 		return false;
 	}
@@ -158,11 +65,11 @@ public class SymbolTable {
 	 * @param node : link to AST node
 	 * @return boolean: true if successful, false otherwise
 	 */
-	public boolean insert(STScope scope, String id, SymbolType type, SymbolKind kind, String value, BaseAST node) {
+	public boolean insert(STScope scope, String id, SymbolType type, SymbolKind kind, BaseAST node) {
 		// Create a new entry and add to designated scope
 		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
 		if (!symbols.containsKey(id)) {
-			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, value, node);
+			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
 			symbols.put(id, entry);
 			return true;
 		}
@@ -195,36 +102,6 @@ public class SymbolTable {
 		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
 		if (symbols.containsKey(id)) {
 			symbols.remove(id);
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * getValue - return the value of an identifier that exists in current scope
-	 *
-	 * @param id : identifier (name of variable)
-	 * @return String : if identifier exists in current scope return its value; return null otherwise
-	 */
-	public String getValue(String id) {
-		SymbolTableEntry entry = searchGlobal(id);
-		if (entry != null) {
-			return entry.getValue();
-		}
-		return null;
-	}
-
-	/**
-	 * setValue - set the value of an identifier that exists in current scope
-	 *
-	 * @param id : identifier (name of variable)
-	 * @param newValue : the new value to be assigned to the identifier
-	 * @return boolean : true if successful, false otherwise
-	 */
-	public boolean setValue(String id, String newValue) {
-		SymbolTableEntry entry = searchGlobal(id);
-		if (entry != null) {
-			entry.setValue(newValue);
 			return true;
 		}
 		return false;

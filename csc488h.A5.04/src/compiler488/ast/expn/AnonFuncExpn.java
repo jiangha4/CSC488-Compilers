@@ -1,13 +1,10 @@
 package compiler488.ast.expn;
 
-import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitor;
-import compiler488.ast.PrettyPrinter;
-import compiler488.ast.SourceCoord;
+import compiler488.ast.*;
 import compiler488.ast.stmt.Scope;
 import compiler488.ast.stmt.Stmt;
 import compiler488.semantics.Semantics;
-import compiler488.symbol.SymbolTable;
+import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.SymbolType;
 
 /**
