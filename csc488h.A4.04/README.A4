@@ -7,7 +7,7 @@ Group Members:
 	Maria Yancheva (c2yanche)
 	Timo Vink (c4vinkti)
 
-
+	
 Who Did What
 ------------
 
@@ -29,5 +29,4 @@ Maria Yancheva (c2yanche)
 
 Timo Vink (c4vinkti)
 - Sample program 1
-- Created program that can read in text files containing machine instructions
-  like "PUSH 1" and runs them on the target machine.
+- Tested executing generated code
