@@ -1,0 +1,5 @@
+begin
+    boolean b
+    b <= 1 != 1
+    b <= 1 != 0
+end

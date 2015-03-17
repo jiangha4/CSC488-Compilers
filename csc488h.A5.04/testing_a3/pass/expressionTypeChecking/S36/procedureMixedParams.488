@@ -1,0 +1,7 @@
+begin
+    procedure Hai2u(integer n, boolean b) begin
+        b <= (b | (n = n))
+    end
+    Hai2u(1, true)
+    Hai2u(0, false)
+end

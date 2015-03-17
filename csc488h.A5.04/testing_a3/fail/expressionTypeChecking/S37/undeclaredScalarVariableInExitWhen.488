@@ -1,0 +1,5 @@
+begin
+	loop
+		exit when x > 10
+	end
+end

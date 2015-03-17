@@ -1,0 +1,5 @@
+begin
+	integer a
+	boolean b
+	get a, b
+end

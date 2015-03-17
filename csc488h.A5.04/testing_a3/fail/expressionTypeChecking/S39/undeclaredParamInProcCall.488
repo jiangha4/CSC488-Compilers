@@ -1,0 +1,9 @@
+begin
+	procedure foo(integer x) begin
+		put x
+	end
+	
+	procedure bar begin
+		foo(param1)
+	end
+end

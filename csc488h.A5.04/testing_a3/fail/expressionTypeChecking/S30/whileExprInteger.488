@@ -1,0 +1,5 @@
+begin
+    while 3 do
+        put "lol"
+    end
+end

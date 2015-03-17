@@ -1,0 +1,10 @@
+begin
+	boolean a
+	a <= {
+		procedure b begin
+			return
+		end
+		yields
+		true
+	}
+end

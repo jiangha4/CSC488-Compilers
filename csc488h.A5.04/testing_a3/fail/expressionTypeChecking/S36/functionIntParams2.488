@@ -1,0 +1,7 @@
+begin
+    integer function bruh(integer n1, integer n2) begin
+        return(n1+n2)
+    end
+    integer i
+    i <= bruh(false, 0)
+end

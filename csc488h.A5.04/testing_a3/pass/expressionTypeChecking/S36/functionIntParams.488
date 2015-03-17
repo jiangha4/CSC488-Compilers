@@ -1,0 +1,7 @@
+begin
+    integer function Hai2u(integer n1, integer n2) begin
+        return(n1+n2)
+    end
+    integer i
+    i <= Hai2u(1,2)
+end

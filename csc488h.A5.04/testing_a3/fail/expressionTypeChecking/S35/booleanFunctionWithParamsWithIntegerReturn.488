@@ -1,0 +1,5 @@
+begin
+	boolean function foo(integer x) begin
+		return(x)
+	end
+end

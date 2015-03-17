@@ -1,0 +1,7 @@
+begin
+    procedure Hai2u(boolean a, boolean b) begin
+        a <= a | b
+    end
+    Hai2u(true, true)
+    Hai2u(false, true)
+end

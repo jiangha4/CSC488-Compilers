@@ -1,0 +1,8 @@
+begin 
+	boolean cond
+	cond <= true
+    
+	if cond then
+        put "lol"
+    end
+end

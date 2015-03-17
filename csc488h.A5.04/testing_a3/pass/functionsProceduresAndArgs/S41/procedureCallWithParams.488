@@ -1,0 +1,11 @@
+begin
+	procedure foo(integer x, integer y) begin
+		if x > y then
+			put "true"
+		else
+			put "false"
+		end
+	end
+	
+	foo(1,3)
+end

@@ -1,0 +1,10 @@
+begin
+	integer function foo(integer x) begin
+		return(x + 1)
+	end
+	
+	procedure bar begin
+		integer a
+		a <= foo(param1)
+	end
+end

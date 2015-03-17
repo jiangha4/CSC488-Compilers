@@ -1,0 +1,4 @@
+begin
+	integer a[5, 7]
+	a[4, 3 > 2] <= 10
+end

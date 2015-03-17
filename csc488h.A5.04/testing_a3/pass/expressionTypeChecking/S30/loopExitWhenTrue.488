@@ -1,0 +1,6 @@
+begin
+    loop
+        put "lol"
+        exit when true
+    end
+end

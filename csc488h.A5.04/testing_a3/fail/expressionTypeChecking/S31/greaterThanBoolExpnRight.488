@@ -1,0 +1,4 @@
+begin
+	boolean a
+	a <= 4 > true
+end

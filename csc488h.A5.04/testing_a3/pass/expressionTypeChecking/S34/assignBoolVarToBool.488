@@ -1,0 +1,4 @@
+begin
+	boolean a, b
+	a <= b
+end

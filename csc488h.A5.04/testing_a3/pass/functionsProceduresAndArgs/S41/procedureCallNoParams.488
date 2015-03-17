@@ -1,0 +1,7 @@
+begin
+	procedure foo begin
+		put "hello"
+	end
+	
+	foo
+end

@@ -1,0 +1,7 @@
+begin
+	procedure foo(integer x) begin
+		put x
+	end
+	
+	foo(x)
+end

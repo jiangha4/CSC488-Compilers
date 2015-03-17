@@ -1,0 +1,8 @@
+begin
+	boolean function a begin
+		loop
+			return (true)
+		end
+		return (false)
+	end
+end

@@ -1,0 +1,6 @@
+begin
+	boolean function a begin
+		return (true)
+		put "b"
+	end
+end

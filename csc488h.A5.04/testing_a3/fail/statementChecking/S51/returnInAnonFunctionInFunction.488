@@ -1,0 +1,7 @@
+begin
+	boolean function a begin
+		boolean b
+		b <= { return (true) yields true }
+		return (false)
+	end
+end

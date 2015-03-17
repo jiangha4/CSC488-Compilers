@@ -1,0 +1,9 @@
+begin
+    boolean b, t, f
+    t <= true
+    f <= false
+    b <= t != (t != f)
+    b <= (f != t) != f
+    b <= (t != f) != (1 != 2)
+    b <= (1 != 1) != t
+end

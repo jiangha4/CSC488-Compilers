@@ -1,0 +1,3 @@
+begin
+    integer x[3,5]
+end

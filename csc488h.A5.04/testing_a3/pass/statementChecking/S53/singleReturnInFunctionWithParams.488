@@ -1,0 +1,5 @@
+begin
+	boolean function a(integer a) begin
+		return (true)
+	end
+end

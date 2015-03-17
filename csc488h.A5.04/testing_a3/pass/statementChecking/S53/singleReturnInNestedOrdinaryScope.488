@@ -1,0 +1,7 @@
+begin
+	boolean function a begin
+		begin
+			return (true)
+		end
+	end
+end

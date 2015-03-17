@@ -1,0 +1,6 @@
+begin
+	procedure a begin
+		boolean b
+		b <= { return yields true }
+	end
+end

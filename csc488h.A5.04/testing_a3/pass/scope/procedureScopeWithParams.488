@@ -1,0 +1,8 @@
+begin
+    integer x, y
+    procedure foo(integer a, integer b) begin
+    end
+    
+    procedure bar(integer a, integer b) begin
+    end
+end

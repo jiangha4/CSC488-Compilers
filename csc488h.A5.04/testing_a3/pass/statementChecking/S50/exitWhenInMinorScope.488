@@ -1,0 +1,7 @@
+begin
+	loop
+		if true then
+			exit when true
+		end
+	end
+end

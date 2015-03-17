@@ -1,0 +1,4 @@
+begin
+	boolean a
+	a <= true | false
+end

@@ -1,0 +1,5 @@
+begin
+	boolean function a(integer b) begin
+		put "c"
+	end
+end

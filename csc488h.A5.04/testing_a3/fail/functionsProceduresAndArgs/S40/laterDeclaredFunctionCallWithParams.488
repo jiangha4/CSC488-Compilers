@@ -1,0 +1,12 @@
+begin
+	boolean x
+	x <= foo(1,3)
+	
+	boolean function foo(integer x, integer y) begin
+		if x > y then
+			return(true)
+		else
+			return(false)
+		end
+	end
+end

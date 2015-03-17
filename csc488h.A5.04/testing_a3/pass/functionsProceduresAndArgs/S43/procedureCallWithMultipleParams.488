@@ -1,0 +1,8 @@
+begin
+	procedure foo(integer x, integer y, boolean a, boolean b) begin
+		put x, skip
+		put y, skip
+	end
+	
+	foo(1,2,true,false)
+end
