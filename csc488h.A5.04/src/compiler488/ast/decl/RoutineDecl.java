@@ -8,16 +8,19 @@ import compiler488.symbol.*;
 /**
  * Represents the declaration of a function or procedure.
  */
-public class RoutineDecl extends Declaration {
+public class RoutineDecl extends Declaration implements ScopeCreator {
 	/** The formal parameters for this routine (if any.)
 	*
 	* <p>This value must be non-<code>null</code>. If absent, use an empty
 	* list instead.</p>
 	*/
-   private ASTList<ScalarDecl> parameters =  new ASTList<ScalarDecl>();
+	private ASTList<ScalarDecl> parameters =  new ASTList<ScalarDecl>();
 
-   /** The body of this routine (if any.) */
-   private Scope body = null;
+	/** The body of this routine (if any.) */
+	private Scope body = null;
+
+	/** The symbol table scope created by this expn **/
+	private STScope stScope;
 
 	/**
 	 * Construct a function with parameters, and a definition of the body.
@@ -81,6 +84,14 @@ public class RoutineDecl extends Declaration {
 
     public boolean isProcedureDecl() {
 		return !isFunctionDecl();
+	}
+
+	public void setSTScope(STScope scope) {
+		stScope = scope;
+	}
+
+	public STScope getSTScope() {
+		return stScope;
 	}
 
 	@Override

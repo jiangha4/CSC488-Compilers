@@ -147,9 +147,9 @@ public class SymbolTable {
 	/**
 	 * enterScope - enter a new scope
 	 *
-	 * @return HashMap<String,SymbolTableEntry> (a reference to the newly created current scope)
+	 * @return A reference to the newly created STScope
 	 */
-	public HashMap<String,SymbolTableEntry> enterScope() {
+	public STScope enterScope() {
 		// Add new scope as child of current scope
 		STScope newScope = new STScope();
 		newScope.setParent(currentScope);
@@ -162,7 +162,7 @@ public class SymbolTable {
 			rootScope = newScope;
 		}
 
-		return currentScope.getSymbols();
+		return currentScope;
 	}
 
 	/**

@@ -11,12 +11,15 @@ import compiler488.symbol.SymbolTable.SymbolType;
  * Represents the parameters and instructions associated with a function or
  * procedure.
  */
-public class AnonFuncExpn extends Expn {
+public class AnonFuncExpn extends Expn implements ScopeCreator {
 	/** Execute these statements. */
 	private ASTList<Stmt> body;
 
 	/** The expression whose value is yielded. */
 	private Expn expn;
+
+	/** The symbol table scope created by this expn **/
+	private STScope stScope;
 
 	public AnonFuncExpn(ASTList<Stmt> body, Expn expn, SourceCoord sourceCoord) {
 		super(sourceCoord);
@@ -33,6 +36,14 @@ public class AnonFuncExpn extends Expn {
 
 	public Expn getExpn() {
 		return expn;
+	}
+
+	public void setSTScope(STScope scope) {
+		stScope = scope;
+	}
+
+	public STScope getSTScope() {
+		return stScope;
 	}
 
 	public void prettyPrint(PrettyPrinter p) {
@@ -53,15 +64,9 @@ public class AnonFuncExpn extends Expn {
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
 
-		// S04: start anonymous function scope
-		((Semantics)visitor).getSymbolTable().enterScope();
-		
 		body.accept(visitor);
 		expn.accept(visitor);
-		
-		// S05: end anonymous function scope
-		((Semantics)visitor).getSymbolTable().exitScope();
-		
+
 		visitor.exitVisit(this);
 	}
 

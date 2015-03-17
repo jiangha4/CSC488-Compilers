@@ -6,9 +6,12 @@ import compiler488.symbol.*;
 /**
  * Represents the declarations and instructions of a scope construct.
  */
-public class Scope extends Stmt {
+public class Scope extends Stmt implements ScopeCreator {
 	/** Body of the scope, mixed list of declarations and statements. */
 	protected ASTList<Stmt> body;
+
+	/** The symbol table scope created by this expn **/
+	private STScope stScope;
 
 	public Scope(ASTList<Stmt> body, SourceCoord sourceCoord) {
 		super(sourceCoord);
@@ -24,6 +27,14 @@ public class Scope extends Stmt {
 
 	public ASTList<Stmt> getBody() {
 		return body;
+	}
+
+	public void setSTScope(STScope scope) {
+		stScope = scope;
+	}
+
+	public STScope getSTScope() {
+		return stScope;
 	}
 
 	/**

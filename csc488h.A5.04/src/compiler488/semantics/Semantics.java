@@ -22,7 +22,7 @@ import compiler488.symbol.SymbolTable.*;
  *						 Chandeep Singh (g2singh)
  *				 </B>
  */
-public class Semantics implements ASTVisitor {
+public class Semantics extends BaseASTVisitor {
 	/*
 	 * Flag for tracing semantic analysis.
 	 */
@@ -179,7 +179,7 @@ public class Semantics implements ASTVisitor {
 		}
 
 		// Begin new scope
-		symbolTable.enterScope();
+		routineDecl.setSTScope(symbolTable.enterScope());
 	}
 
 	@Override
@@ -446,12 +446,12 @@ public class Semantics implements ASTVisitor {
 	}
 
 	@Override
-	public void enterVisit(Program program) {
-		symbolTable.enterScope();
+	public void enterVisit(Scope scope) {
+		scope.setSTScope(symbolTable.enterScope());
 	}
 
 	@Override
-	public void exitVisit(Program program) {
+	public void exitVisit(Scope scope) {
 		symbolTable.exitScope();
 	}
 
@@ -523,6 +523,16 @@ public class Semantics implements ASTVisitor {
 	@Override
 	public void exitVisit(WhileDoStmt whileDoStmt) {
 		assertIsBoolExpn(whileDoStmt.getExpn());
+	}
+
+	@Override
+	public void enterVisit(AnonFuncExpn anonFuncExpn) {
+		anonFuncExpn.setSTScope(symbolTable.enterScope());
+	}
+
+	@Override
+	public void exitVisit(AnonFuncExpn anonFuncExpn) {
+		symbolTable.exitScope();
 	}
 
 	// S30: check that type of expression is boolean
