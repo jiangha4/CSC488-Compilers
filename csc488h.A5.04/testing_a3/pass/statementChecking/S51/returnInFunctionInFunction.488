@@ -1,0 +1,11 @@
+begin
+	boolean function b begin
+		boolean function c begin
+			return (true)
+		end
+		return (c)
+	end
+
+	boolean a
+	a <= b
+end

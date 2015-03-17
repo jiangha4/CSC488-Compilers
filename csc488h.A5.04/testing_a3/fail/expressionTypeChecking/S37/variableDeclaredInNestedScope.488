@@ -1,0 +1,6 @@
+begin
+	begin
+		integer x
+	end
+	x <= 1
+end
