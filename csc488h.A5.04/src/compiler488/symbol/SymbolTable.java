@@ -125,14 +125,22 @@ public class SymbolTable {
 	}
 
 	/**
-	 * searchGlobal - look up if symbol table entry is visible in current scope (i.e. defined in any scope so far)
-	 * (e.g., use to check whether an identifier has been declared or not)
-	 *
-	 * @param id : the symbol (identifier) to search the symbol table for
-	 * @return SymbolTableEntry if found, or null if not found
+	 * searchGlobal - searchGlobalFrom the current scope.
 	 */
 	public SymbolTableEntry searchGlobal(String id) {
-		STScope scope = currentScope;
+		return searchGlobalFrom(id, currentScope);
+	}
+
+	/**
+	 * searchGlobalFrom - look up if symbol table entry is visible in the given
+	 * scope (i.e. it's in the given scope or a contained scope)
+	 * Can be used to check whether an identifier has been declared or not.
+	 *
+	 * @param id : the symbol (identifier) to search the symbol table for
+	 * @param scope : the scope to start the search from
+	 * @return SymbolTableEntry if found, or null if not found
+	 */
+	public SymbolTableEntry searchGlobalFrom(String id, STScope scope) {
 		while(scope != null) {
 			HashMap<String, SymbolTableEntry> symbols = scope.getSymbols();
 			if (symbols.containsKey(id)) {
