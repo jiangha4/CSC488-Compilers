@@ -125,7 +125,7 @@ public class Semantics implements ASTVisitor {
 				errors.add(elem.getSourceCoord(), msg);
 			}
 			else {
-				boolean success = symbolTable.insert(elemName, declType, elemKind, "", elem);
+				boolean success = symbolTable.insert(elemName, declType, elemKind, elem);
 				if (success) {
 					elem.setSTEntry(symbolTable.search(elemName));
 				} else {
@@ -170,7 +170,7 @@ public class Semantics implements ASTVisitor {
 			);
 			errors.add(routineDecl.getSourceCoord(), msg);
 		} else {
-			boolean success = symbolTable.insert(routineName, routineType, routineKind, "", routineDecl);
+			boolean success = symbolTable.insert(routineName, routineType, routineKind, routineDecl);
 			if (success) {
 				routineDecl.setSTEntry(symbolTable.search(routineName));
 			} else {
@@ -202,7 +202,7 @@ public class Semantics implements ASTVisitor {
 			);
 			errors.add(scalarDecl.getSourceCoord(), msg);
 		} else {
-			boolean success = symbolTable.insert(declName, declType, SymbolKind.PARAMETER, "", scalarDecl);
+			boolean success = symbolTable.insert(declName, declType, SymbolKind.PARAMETER, scalarDecl);
 			if (success) {
 				scalarDecl.setSTEntry(symbolTable.search(declName));
 			} else {
