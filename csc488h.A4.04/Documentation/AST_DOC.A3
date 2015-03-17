@@ -1,0 +1,114 @@
+CSC488
+Assignment 3
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+    
+
+AST Design
+----------
+
+1. Building the AST
+
+	The grammar cup file was changed so that every nonterminal recognized by the parser
+    is associated with an AST type (i.e., a class that implements the AST interface),
+    and jcup callbacks in the grammar rules were used to invoke the appropriate constructor
+    for that AST class at the time of parsing the nonterminal. The "left" and "right"
+    variables in the callbacks were used to pass line and column information to the
+    constructor of the AST class.
+
+	We used the official A2 grammar file provided by the instructor.
+
+2. Source Coordinate Field
+
+	We created a "SourceCoord" class which contains a line and column from the source
+    program, and methods for printing them out (used in semantic error reporting).
+    We added a SourceCoord field to the BaseAST class which is set in the constructor
+    of every AST node (i.e., at parse time). During semantic checking, this SourceCoor
+    field was used to print out detailed source line and column information when a
+    semantic error was detected in the visit method for the AST node.
+
+3. Symbol Table Links
+
+	We created a "SymbolTableEntry" class which represents a symbol from the symbol
+    table (containing an id, type, kind, value and AST node reference). We added a 
+    SymbolTableEntry field to the BaseAST class, so that every AST node which
+    represents an identifier (i.e., scalar variables, arrays, functions, procedures
+    and parameters) has a reference to its entry in the symbol table. This reference
+    is set when the AST node declaration is being processed by the visitor and the
+    symbol is created in the symbol table.
+
+4. Parent Tracking
+
+	We added a "BaseAST parentNode" field to the BaseAST class, so that every AST node
+    would have a reference to its parent, which is set in the constructor
+    (e.g., the RoutineDecl constructor sets the parentNode of its body field). This
+    allowed us to easily check parent nodes and see if conditions were violated during
+    semantic checking. For example, to check S50 and ensure that an exit statement is
+    contained in a loop, we can simply trace the parent nodes back to find if a loop
+    symbol was identified. 
+
+5. Type Tracking
+
+	In our symbol table, we created a "SymbolType" enum, which holds the possible
+    values for the type of an expression (i.e., INTEGER, BOOLEAN, UNKNOWN, TEXT, SKIP).
+    For each Expn node, we added a SymbolType field and a related getExpnType method.
+    The first time the getExpnType method gets called, it computes the type of the
+    expression and stores it in the field, which is used directly for subsequent calls.
+    The type of each expression gets computed as follows:
+	
+	IdentExpn: looks up the identifier name in the symbol table; if found returns the
+    type found in the symbol table; otherwise returns UNKNOWN
+	
+	ArithExpn: recursively checks if both operands are of type INTEGER and if yes,
+    returns INTEGER; otherwise returns UNKNOWN
+	BoolExpn: recursively checks if both operands are of type BOOLEAN and if yes,
+    returns BOOLEAN; otherwise returns UNKNOWN
+	EqualsExpn: recursively checks if both operands are of the same type *and* that the
+    type is either INTEGER or BOOLEAN. If both conditions hold, returns BOOLEAN;
+    otherwise returns UNKNOWN
+	CompareExpn: recursively checks if both operands are of type INTEGER and if yes,
+    returns BOOLEAN; otherwise returns UNKNOWN
+	
+	BoolConstExpn: always returns a BOOLEAN type
+	IntConstExpn: always returns an INTEGER type
+	SkipConstExpn: always returns a SKIP type
+	TextConstExpn: always returns a TEXT type
+
+	FunctionCallExpn: looks up the function name in the symbol table; if found returns
+    the type found in the symbol table; otherwise returns UNKNOWN
+	
+	AnonFuncExpn: recursively returns the type of the expression of the anon func
+	
+	SubsExpn: looks up the array name in the symbol table; if found returns the type
+    found in the symbol table; otherwise returns UNKNOWN
+	
+	NotExpn: recursively checks if the operand is of type BOOLEAN and if yes, returns
+    BOOLEAN; otherwise returns UNKNOWN
+	UnaryMinusExpn: recursively checks if the operand is of type INTEGER and if yes,
+    returns INTEGER; otherwise returns UNKNOWN
+	
+	
+AST Traversal
+-------------
+
+We implemented the visitor pattern for AST traversal. An "ASTVisitor" interface was
+created for the purposes of visiting each AST node; it is implemented by the Semantics
+class which provides a visit method for each type of AST node. An "ASTVisitable"
+interface was created for each AST node that can be visited containing an 'accept'
+method that determines what happens when the visitor visits the node; it is extended by
+the AST interface and hence implemented by all AST node classes which implement AST.
+The 'accept' method of each node visits itself and also calls the accept method of any
+children.
+
+The AST traversal begins in the Main program, where the programAST node is returned by
+the parser, and its accept method is invoked with the Semantics visitor.
+
+The Semantics class uses the visit methods to perform all symbol table building operations
+(such as inserting new symbols when an identifier declaration is visited or opening/
+closing of scopes when a function declaration is visited), as well as all semantic
+analysis (e.g., checking for an ancestral function or procedure node when a return
+statement is visited).

@@ -1,0 +1,62 @@
+CSC488
+Assignment 3
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+    
+
+Symbol Table Design
+-------------------
+
+1. Data Structure:
+For the data structure of our symbol table, we decided to go for a tree structure:
+    -Each node in the tree is called an "STScope", where each STScope corresponds to a scope in the program.
+    -Each STScope can have a parent node, which is the scope that it is itself contained in (the global/program scope is the root of the tree and has a null parent node pointer)
+    -Each STScope can have any number of children nodes, which link to all scopes declared 1 level within
+    -Siblings in the tree are scopes all declared at the same level
+    -Each STScope contains a HashMap (called "symbols"), mapping a String to a
+    SymbolTableEntry object
+        -The string is the name of the identifier
+        -The SymbolTableEntry object is a container with fields: identifier, type, kind, value, and node (pointer to corresponding AST node). The SymbolTableEntry is defined in a separate class. The 'type' is a SymbolType enum with possible values: { INTEGER, BOOLEAN, UNKNOWN, TEXT, SKIP }. The 'kind' is a SymbolType enum with possible values: { VARIABLE, ARRAY, FUNCTION, PROCEDURE, PARAMETER }.
+	-The symbol table keeps an "STScope currentScope" pointer which points to the current scope at the point of processing of the program (at the end of processing it is null because all scopes are exited)
+	-The symbol table keeps an "STScope rootScope" pointer which points to the first scope in the program (used to enable traversing of the full tree even after program processing has finished)
+
+2. Operations:
+For the symbol table, the key features we needed were inserting identifiers from particular scopes, entering/exiting scopes, searching particular scope for an identifier, searching visibility of identifier within a scope, and useful toString and fullTraversal methods (for at-a-glance debugging that displays the full tree).
+    -Inserting an Identifier (method name: "insert")
+        -The SymbolTable class keeps a pointer to the current scope's STScope object, and
+        simply adds an entry into its "symbols" HashMap
+    -Deleting an Identifier (method name: "delete")
+        -Delete the given identifier from the current scope's HashMap
+    -Entering a New Scope (method name: "enterScope")
+        -Create a new STScope object, and add it as a child to the current scope (if the current scope is not null). Set the new scope's parent to the current scope. Update the "currentScope" pointer to point to the newly created STScope. If the rootScope pointer is null (i.e., this is the first scope being created), then set it to point to the new scope.
+    -Exiting a Scope (method name: "exitScope")
+        -Simply update the "currentScope" pointer to currentScope's parent STScope. Note that the STScope being exited is not deleted; only the currentScope pointer is updated.
+	-Searching a Particular Scope for an Identifier (method name: "search")
+		-Search the currentScope's HashMap for the identifier. If found, return the SymbolTableEntry for the identifier. If not found, return null. This method is used to test for re-declarations within same scope.
+    -Searching Visibility of Identifier within a Scope (method name: "searchGlobal")
+        -Search the currentScope's HashMap for the identifier. If nothing found, go to parent STScope and search there. If identifier found, return its SymbolTableEntry object, otherwise continue searching up the tree until we reach the root. If nothing found even in the root, return null.
+    -SymbolTable Printing for Debugging (method name: "toString"/"fullTraversal")
+        -toString:
+            -Print out current node and recursively travel to parent and print.
+        -fullTraversal:
+            -SymbolTable keeps a pointer to the root node. This method performs a recursive travel from root down the tree leaves to visit every node. Each time we enter a level deeper into the tree, the print is indented with more tabbing in the front. This makes it easy to see the tree structure at a glance. 
+
+3. Handling major and minor scopes:
+The major scopes (program, function, procedure) are handled by calling the enterScope method in the appropriate enterVisit method for the Program and RoutineDecl AST nodes, and the exitScope method in the exitVisit method for the Program and RoutineDecl nodes. 
+
+The ordinary scope (delimited with "begin"/"end" keywords) is handled by invoking enterScope and exitScope around a Scope statement that is encountered in the body of statements.
+
+If statements and loops do not invoke creation of a new scope because all identifiers declared within them are declared in their containing scope (i.e., they do not behave as a new scope as indicated by Prof. Wortman on the forum).
+
+4. Handling function/procedure parameters:
+The function and procedure declarations create symbol table entries whose "node" field points back to the AST node for the function or procedure (i.e., RoutineDecl). This means that the SymbolTableEntry for a function or procedure has access to the parameters of the function or procedure through its node as follows: ((RoutineDecl)node).getParameters(). Thus no additional counting/storing of parameters is needed.
+
+5. Handling array declarations:
+The array declarations create symbol table entries whose "node" field points back to the AST node for the array (i.e., ArrayDeclPart). This means that the SymbolTableEntry for an array has access to the declared array dimensions through its node as follows: ((ArrayDeclPart)node).getLowerBoundary1(), ((ArrayDeclPart)node).getLowerBoundary2(), ((ArrayDeclPart)node).getUpperBoundary1(), ((ArrayDeclPart)node).getUpperBoundary2(), ((ArrayDeclPart)node).getSize(). Thus no additional storing of array dimensions/bounds is needed.
+			
+6. Comments:
+We had initially started with a stack structure for our symbol table, where entering a scope involved adding an STScope to the top of a stack, searching was done from the top level downwards, and exiting a scope popped off the top of the stack. However, we realized that since this method was destroying information (i.e., once a scope was exited, we deleted all information from it), it might be smarter to switch to a structure which preserved all data, so we would be able to easily reuse it in future assignments (i.e., code generation).
