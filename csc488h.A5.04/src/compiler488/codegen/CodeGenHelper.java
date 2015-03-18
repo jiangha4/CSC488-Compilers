@@ -104,7 +104,12 @@ public class CodeGenHelper {
 				emitPush(value);
 				instrs.add(Machine.DUP);
 				break;
-
+			case 3:
+				emitPush(value);
+				instrs.add(Machine.DUP);
+				instrs.add(Machine.DUP);
+				break;
+				
 			default:
 				emitPush(value);
 				emitPush(numDuplicates);
