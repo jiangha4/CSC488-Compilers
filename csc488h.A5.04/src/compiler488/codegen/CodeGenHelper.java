@@ -165,10 +165,43 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Emit an unconditional branch instruction.
+	 * Emit an unconditional branch instruction. Assumes address is already on
+	 * the stack.
 	 */
 	public void emitBranch() {
 		instrs.add(Machine.BR);
+	}
+
+	/*
+	 * Emit instructions that push a branch address and unconditional branch
+	 * instruction on the stack. Return index of branch address for later
+	 * patching.
+	 */
+	public short emitBranchToUnknown() {
+		// Insert branch location
+		short brLocation = (short)(instrs.size() + 1);
+		emitPushValue(Machine.UNDEFINED);
+
+		// Insert branch instruction
+		emitBranch();
+
+		return brLocation;
+	}
+
+	/*
+	 * Emit instructions that push a branch address and branch-if-false
+	 * instruction on the stack. Return index of branch address for later
+	 * patching.
+	 */
+	public short emitBranchIfFalseToUnknown() {
+		// Insert branch location
+		short brLocation = (short)(instrs.size() + 1);
+		emitPushValue(Machine.UNDEFINED);
+
+		// Insert branch instruction
+		instrs.add(Machine.BF);
+
+		return brLocation;
 	}
 
 	/*
@@ -366,6 +399,14 @@ public class CodeGenHelper {
 		// Remove it from the stack
 		int numToPop = ar.getNumWordsToPopForCleanUp();
 		emitPop(numToPop);
+	}
+
+	/*
+	 * Update the value at the given index to be the offset to the current end
+	 * of the instruction list.
+	 */
+	public void fixForwardBranchToCurrentLocation(short index) {
+		instrs.set(index, (short)instrs.size());
 	}
 
 	/*

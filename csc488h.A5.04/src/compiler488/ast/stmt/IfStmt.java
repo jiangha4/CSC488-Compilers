@@ -20,6 +20,10 @@ public class IfStmt extends Stmt {
 	/** Represents the statement to execute when the condition is false. */
 	private ASTList<Stmt> whenFalse = null;
 
+	/** Instruction locations to patch later during code gen **/
+	public short shouldPointToFalse;
+	public short shouldPointToEnd;
+
 	public IfStmt(Expn condition, ASTList<Stmt> whenTrue, ASTList<Stmt> whenFalse, SourceCoord sourceCoord) {
 		super(sourceCoord);
 
@@ -95,7 +99,9 @@ public class IfStmt extends Stmt {
 		visitor.enterVisit(this);
 
 		condition.accept(visitor);
+		visitor.exitVisitCondition(this);
 		whenTrue.accept(visitor);
+		visitor.exitVisitWhenTrue(this);
 		if (whenFalse != null) {
 			whenFalse.accept(visitor);
 		}

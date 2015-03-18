@@ -135,6 +135,25 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void exitVisitCondition(IfStmt ifStmt)
+	{
+		ifStmt.shouldPointToFalse = instrs.emitBranchIfFalseToUnknown();
+	}
+
+	@Override
+	public void exitVisitWhenTrue(IfStmt ifStmt)
+	{
+		ifStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
+		instrs.fixForwardBranchToCurrentLocation(ifStmt.shouldPointToFalse);
+	}
+
+	@Override
+	public void exitVisit(IfStmt ifStmt)
+	{
+		instrs.fixForwardBranchToCurrentLocation(ifStmt.shouldPointToEnd);
+	}
+
+	@Override
 	public void exitVisit(TextConstExpn textConstExpn)
 	{
 		instrs.emitPrintText(textConstExpn.getValue());
