@@ -11,6 +11,7 @@ import compiler488.compiler.*;
 import compiler488.runtime.*;
 import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.*;
+import compiler488.symbol.STScope.ScopeKind;
 
 /*
  * Activation record.
@@ -19,32 +20,29 @@ public class ActivationRecord
 {
 	private static int BLOCK_MARK_SIZE = 2;
 
-	/* What kind of scope this is (program, function, ...) */
-	public enum ScopeKind {
-		PROGRAM,
-		NORMAL,
-		FUNCTION,
-		PROCEDURE
-	}
-	private ScopeKind scopeKind;
-
 	/* STScope, used to look up var offset */
 	private STScope scope;
 
 	/* Sizes (in words) of the amount of storage reuqired for local storage
 	 * of variables and parameters respectively */
-	private int memSizeForVariables;
-	private int memSizeForParameters;
+	private short memSizeForVariables;
+	private short memSizeForParameters;
 
 	/*
 	 * Constructor.
 	 */
-	public ActivationRecord(ScopeKind kind, STScope stScope)
+	public ActivationRecord(STScope stScope)
 	{
-		this.scopeKind = kind;
 		this.scope = stScope;
 		this.memSizeForParameters = getMemSizeForKind(SymbolKind.PARAMETER);
-		this.memSizeForVariables = getMemSizeForKind(SymbolKind.VARIABLE) + getMemSizeForKind(SymbolKind.ARRAY);
+		this.memSizeForVariables = getMemSizeForKinds(SymbolKind.VARIABLE, SymbolKind.ARRAY);
+	}
+
+	/*
+	 * Return the lexical level of the associated scope.
+	 */
+	public short getLexicalLevel() {
+		return scope.getLexicalLevel();
 	}
 
 	/*
@@ -88,9 +86,9 @@ public class ActivationRecord
 	/*
 	 * Get the offset within the record to the return address.
 	 */
-	public int getOffsetToReturnAddress() {
+	public short getOffsetToReturnAddress() {
 		// Functions have a return value first
-		int offset = 0;
+		short offset = 0;
 		if (hasReturnValue()) {
 			offset += 1;
 		}
@@ -101,37 +99,29 @@ public class ActivationRecord
 	/*
 	 * Get the offset within the record to the dynamic link addr.
 	 */
-	public int getOffsetToDynamicLinkAddr() {
-		return getOffsetToReturnAddress() + 1;
+	public short getOffsetToDynamicLinkAddr() {
+		return (short)(getOffsetToReturnAddress() + 1);
 	}
 
 	/*
 	 * Get the offset within the record to the saved display value.
 	 */
-	public int getOffsetToSavedDisplayValue() {
-		return getOffsetToDynamicLinkAddr() + 1;
+	public short getOffsetToSavedDisplayValue() {
+		return (short)(getOffsetToDynamicLinkAddr() + 1);
 	}
 
 	/*
 	 * Get the offset within the record to the local parameter storage.
 	 */
-	public int getOffsetToParameterStorage() {
-		if (scopeIsKind(ScopeKind.PROGRAM) || scopeIsKind(ScopeKind.NORMAL)) {
-			throw new UnsupportedOperationException("Program and normal scopes don't have parameters");
-		}
-
-		return getOffsetToSavedDisplayValue() + 1;
+	public short getOffsetToParameterStorage() {
+		return (short)(getOffsetToSavedDisplayValue() + 1);
 	}
 
 	/*
-	* Get the offset within the record to the local variable storage.
-	*/
-	public int getOffsetToVariableStorage() {
-		if (scopeIsKind(ScopeKind.PROGRAM) || scopeIsKind(ScopeKind.NORMAL)) {
-			return getOffsetToSavedDisplayValue() + 1;
-		} else {
-			return getOffsetToParameterStorage() + memSizeForParameters;
-		}
+	 * Get the offset within the record to the local variable storage.
+	 */
+	public short getOffsetToVariableStorage() {
+		return (short)(getOffsetToParameterStorage() + memSizeForParameters);
 	}
 
 	/*
@@ -151,11 +141,11 @@ public class ActivationRecord
 	}
 
 	private boolean scopeIsKind(ScopeKind kind) {
-		return kind == this.scopeKind;
+		return kind == this.scope.getScopeKind();
 	}
 
-	private int getMemSizeForKind(SymbolKind kind) {
-		int numOfKind = 0;
+	private short getMemSizeForKind(SymbolKind kind) {
+		short numOfKind = 0;
 		for (SymbolTableEntry ste : scope.getSymbols().values()) {
 			if (ste.getKind() == kind) {
 				if (ste.getKind() == SymbolKind.ARRAY) {
@@ -167,5 +157,9 @@ public class ActivationRecord
 		}
 
 		return numOfKind;
+	}
+
+	private short getMemSizeForKinds(SymbolKind kind1, SymbolKind kind2) {
+		return (short)(getMemSizeForKind(kind1) + getMemSizeForKind(kind2));
 	}
 }

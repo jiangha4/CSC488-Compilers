@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
 import compiler488.ast.decl.ArrayDeclPart;
-import compiler488.codegen.VarAddress;
+import compiler488.codegen.*;
 import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
@@ -29,12 +29,24 @@ public class STScope {
 	final static String scopeSep = "=======================================================\n";
 	final static String scopeIndent = "    ";
 
-	public STScope () {
+	/* What kind of scope this is (program, function, ...) */
+	public enum ScopeKind {
+		PROGRAM,
+		NORMAL,
+		FUNCTION,
+		PROCEDURE
+	}
+	private ScopeKind scopeKind;
+
+	public STScope (ScopeKind kind) {
 		this.parent = null;
 		this.children = new ArrayList<STScope>();
 		this.symbols = new HashMap<String,SymbolTableEntry>();
 		this.lexicalLevel = 0;
-		this.nextOrderNumber = 0;
+		this.scopeKind = kind;
+
+		ActivationRecord ar = new ActivationRecord(this);
+		this.nextOrderNumber = ar.getOffsetToVariableStorage();
 	}
 
 	public STScope getParent() {
@@ -74,6 +86,10 @@ public class STScope {
 
 	public short getLexicalLevel() {
 		return lexicalLevel;
+	}
+
+	public ScopeKind getScopeKind() {
+		return scopeKind;
 	}
 
 	@Override

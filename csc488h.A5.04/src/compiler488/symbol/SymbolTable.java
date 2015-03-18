@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
 import compiler488.ast.decl.ArrayDeclPart;
+import compiler488.symbol.STScope.ScopeKind;
 
 
 /**
@@ -170,9 +171,9 @@ public class SymbolTable {
 	 *
 	 * @return A reference to the newly created STScope
 	 */
-	public STScope enterScope() {
+	public STScope enterScope(ScopeKind kind) {
 		// Add new scope as child of current scope
-		STScope newScope = new STScope();
+		STScope newScope = new STScope(kind);
 		newScope.setParent(currentScope);
 		if (currentScope != null) {
 			currentScope.addChild(newScope);

@@ -12,6 +12,7 @@ import compiler488.codegen.ActivationRecord.*;
 import compiler488.runtime.*;
 import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.*;
+import compiler488.symbol.STScope.ScopeKind;
 
 /**	  CodeGenerator.java
  *<pre>
@@ -103,7 +104,7 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void enterVisit(Program program)
 	{
-		ActivationRecord ar = new ActivationRecord(ScopeKind.PROGRAM, program.getSTScope());
+		ActivationRecord ar = new ActivationRecord(program.getSTScope());
 		instrs.emitActivationRecord(ar, 0);
 	}
 

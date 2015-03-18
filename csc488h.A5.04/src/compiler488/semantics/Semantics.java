@@ -12,6 +12,7 @@ import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 import compiler488.symbol.*;
 import compiler488.symbol.SymbolTable.*;
+import compiler488.symbol.STScope.ScopeKind;
 
 
 /*
@@ -146,10 +147,12 @@ public class Semantics extends BaseASTVisitor {
 		String routineName = routineDecl.getName();
 		SymbolType routineType = null;
 		SymbolKind routineKind = SymbolKind.PROCEDURE;
+		ScopeKind scopeKind = ScopeKind.PROCEDURE;
 
 		if (routineDecl.isFunctionDecl()) {
 			routineType = routineDecl.getType().toSymbolType();
 			routineKind = SymbolKind.FUNCTION;
+			scopeKind = ScopeKind.FUNCTION;
 
 			// S53: check that a function body contains at least one return statement
 			Scope routineScope = routineDecl.getBody();
@@ -179,7 +182,7 @@ public class Semantics extends BaseASTVisitor {
 		}
 
 		// Begin new scope
-		routineDecl.setSTScope(symbolTable.enterScope());
+		routineDecl.setSTScope(symbolTable.enterScope(scopeKind));
 	}
 
 	@Override
@@ -447,7 +450,8 @@ public class Semantics extends BaseASTVisitor {
 
 	@Override
 	public void enterVisit(Scope scope) {
-		scope.setSTScope(symbolTable.enterScope());
+		ScopeKind kind = (scope instanceof Program) ? ScopeKind.PROGRAM : ScopeKind.NORMAL;
+		scope.setSTScope(symbolTable.enterScope(kind));
 	}
 
 	@Override
@@ -493,7 +497,7 @@ public class Semantics extends BaseASTVisitor {
 		if (parentRoutineDecl.isFunctionDecl()) {
 			Expn returnValue = returnStmt.getValue();
 			SymbolType routineType = parentRoutineDecl.getType().toSymbolType();
-			
+
 			// Check that a return expression exists, then check its type
 			if (returnValue != null) {
 				SymbolType returnStatementType = returnValue.getExpnType(symbolTable);
@@ -527,7 +531,7 @@ public class Semantics extends BaseASTVisitor {
 
 	@Override
 	public void enterVisit(AnonFuncExpn anonFuncExpn) {
-		anonFuncExpn.setSTScope(symbolTable.enterScope());
+		anonFuncExpn.setSTScope(symbolTable.enterScope(ScopeKind.FUNCTION));
 	}
 
 	@Override
