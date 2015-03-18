@@ -29,6 +29,9 @@ public class CodeGenHelper {
 		return instrs;
 	}
 
+	/*
+	 * Prints a list of all the instructions emitted to standard out.
+	 */
 	public void printDebug()
 	{
 		System.out.println();
@@ -60,15 +63,25 @@ public class CodeGenHelper {
 		System.out.println();
 	}
 
+	/*
+	 * Emit instructions for pushing a constant on to the stack.
+	 */
 	public void emitPush(short value) {
 		instrs.add(Machine.PUSH);
 		instrs.add(value);
 	}
 
+	/*
+	 * Emit instructions for pushing a constant on to the stack.
+	 */
 	public void emitPush(int value) {
 		emitPush((short)value);
 	}
 
+	/*
+	 * Emit instructions for pushing a constant on to the stack N times.
+	 * Where N is allowed to be any integer >= 0.
+	 */
 	public void emitPushN(int value, int numDuplicates) {
 		if (numDuplicates < 0) {
 			throw new IllegalArgumentException("numDuplicates must be >= 0");
@@ -92,6 +105,10 @@ public class CodeGenHelper {
 		}
 	}
 
+	/*
+	 * Emit instructions for popping the top N items from the stack.
+	 * Where N is allowed to be any integer >= 0.
+	 */
 	public void emitPop(int numToPop) {
 		if (numToPop < 0) {
 			throw new IllegalArgumentException("numToPop must be >= 0");
@@ -114,29 +131,47 @@ public class CodeGenHelper {
 		}
 	}
 
+	/*
+	 * Emit instructions to pop a single item from the stack.
+	 */
 	public void emitPop() {
 		emitPop(1);
 	}
 
+	/*
+	 * Emit an unconditional branch instruction.
+	 */
 	public void emitBranch() {
 		instrs.add(Machine.BR);
 	}
 
+	/*
+	 * Emit instructions to print a single character to the screen.
+	 */
 	public void emitPrintChar(char charVal) {
 		emitPush((short)charVal);
 		instrs.add(Machine.PRINTC);
 	}
 
+	/*
+	 * Emit instructions to print an entire string to the screen.
+	 */
 	public void emitPrintText(String text) {
 		for (char ch: text.toCharArray()) {
 			emitPrintChar(ch);
 		}
 	}
 
+	/*
+	 * Emit instructions to print a newline to the screen.
+	 */
 	public void emitPrintSkip() {
 		emitPrintChar('\n');
 	}
 
+	/*
+	 * Emit instructions to push the program activation record on to the stack.
+	 */
 	public void emitProgramActivationRecord(Program program) {
 		// Return address
 		emitPush(0);
@@ -147,6 +182,9 @@ public class CodeGenHelper {
 		emitPushN(Machine.UNDEFINED, spaceRequired);
 	}
 
+	/*
+	 * Emit instructions to pop the program activation record from to the stack.
+	 */
 	public void emitCleanProgramActivationRecord(Program program) {
 		// Count how much memory needs to be cleaned up. This is all the local
 		// storage, and the control block minus the return addr;
