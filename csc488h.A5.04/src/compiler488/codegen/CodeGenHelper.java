@@ -175,6 +175,20 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to print N integers to the screen.
+	 * Where N is allowed to be any integer >= 0.
+	 */
+	public void emitPrintInt(int numToPrint) {
+		if (numToPrint < 0) {
+			throw new IllegalArgumentException("numToPrint must be >= 0");
+		}
+
+		for (int i = 0; i < numToPrint; i++) {
+			instrs.add(Machine.PRINTI);
+		}
+	}
+
+	/*
 	 * Emit instructions to print a newline to the screen.
 	 */
 	public void emitPrintSkip() {

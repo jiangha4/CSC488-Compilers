@@ -1,10 +1,9 @@
 package compiler488.ast.stmt;
 
-import compiler488.ast.ASTList;
-import compiler488.ast.ASTVisitor;
-import compiler488.ast.PrettyPrinter;
-import compiler488.ast.Printable;
-import compiler488.ast.SourceCoord;
+import compiler488.ast.*;
+import compiler488.ast.expn.*;
+import compiler488.symbol.*;
+import compiler488.symbol.SymbolTable.*;
 
 
 /**
@@ -23,6 +22,17 @@ public class PutStmt extends Stmt {
 
 	public ASTList<Printable> getOutputs() {
 		return outputs;
+	}
+
+	public int getNumChildrenOfType(SymbolTable st, SymbolType expnType) {
+		int count = 0;
+		for (Printable p : outputs) {
+			if (((Expn)p).getExpnType(st) == expnType) {
+				count++;
+			}
+		}
+
+		return count;
 	}
 
 	@Override

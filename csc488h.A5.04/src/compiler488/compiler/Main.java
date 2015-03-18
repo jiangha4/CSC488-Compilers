@@ -401,7 +401,7 @@ public class Main {
    *   @param  programAST	the Abstract Syntax Tree produced during parsing
    */
 
-  private static void semanticAnalysis( Program  programAST ) {
+  private static SymbolTable semanticAnalysis( Program  programAST ) {
 
 	  Semantics visitor = new Semantics(traceSemantics);
 	  try {
@@ -414,10 +414,12 @@ public class Main {
 		errorOccurred = true ;
 	}
 
+      SymbolTable st = visitor.getSymbolTable();
 	  if (dumpSymbolTable) {
-		  String stDump = visitor.getSymbolTable().fullTraversal();
-		  dumpSymbolTable( stDump , "Exception during SymbolTable dump after SymbolTable building" );
+		  dumpSymbolTable( st.fullTraversal() , "Exception during SymbolTable dump after SymbolTable building" );
 	  }
+
+      return st;
    }
 
 
@@ -425,7 +427,7 @@ public class Main {
 	/**  function to do code generation
 	 *   @param  programAST   the Abstract Syntax Tree to generate code for
 	 */
-	private static void generateCode( Program  programAST ) {
+	private static void generateCode(SymbolTable st, Program  programAST ) {
 		// Initialize Machine before code generation
 		try {
 			Machine.powerOn();
@@ -437,7 +439,7 @@ public class Main {
 		}
 
 		try{
-			CodeGen generator = new CodeGen();
+			CodeGen generator = new CodeGen(st);
 			programAST.accept(generator);
 			generator.writeToMachine();
 		} catch(Exception e) {
@@ -536,7 +538,7 @@ public class Main {
 		   dumpAST( programAST , "Exception during AST dump after AST building" );
 
  	/*  Do semantic analysis on the program		*/
-		semanticAnalysis( programAST );
+		SymbolTable st = semanticAnalysis( programAST );
 
 		if( errorOccurred ){
 		System.out.println("Processing Terminated due to errors during semantic analysis");
@@ -549,7 +551,7 @@ public class Main {
 
 
 		/* do code generation for the program 	*/
-		generateCode( programAST );
+		generateCode( st, programAST );
 
 		if( errorOccurred ){
 		System.out.println("Processing Terminated due to errors during code generation");

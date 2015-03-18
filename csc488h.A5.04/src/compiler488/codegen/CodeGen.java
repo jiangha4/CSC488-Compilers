@@ -10,6 +10,8 @@ import compiler488.ast.type.*;
 import compiler488.compiler.*;
 import compiler488.codegen.ActivationRecord.*;
 import compiler488.runtime.*;
+import compiler488.symbol.*;
+import compiler488.symbol.SymbolTable.*;
 
 /**	  CodeGenerator.java
  *<pre>
@@ -57,11 +59,15 @@ public class CodeGen extends BaseASTVisitor
 	/** helper to emit code **/
 	private CodeGenHelper instrs;
 
+	/** Symbol table from semantic analysis **/
+	private SymbolTable symbolTable;
+
 	/**
 	 * Constructor to initialize code generation
 	 */
-	public CodeGen()
+	public CodeGen(SymbolTable st)
 	{
+		symbolTable = st;
 		instrs = new CodeGenHelper();
 	}
 
@@ -106,6 +112,13 @@ public class CodeGen extends BaseASTVisitor
 	{
 		instrs.emitActivationRecordCleanUp();
 		instrs.emitBranch();
+	}
+
+	@Override
+	public void exitVisit(PutStmt putStmt)
+	{
+		int numIntExpns = putStmt.getNumChildrenOfType(symbolTable, SymbolType.INTEGER);
+		instrs.emitPrintInt(numIntExpns);
 	}
 
 	@Override
