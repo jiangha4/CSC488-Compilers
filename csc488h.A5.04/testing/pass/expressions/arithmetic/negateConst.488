@@ -1,0 +1,3 @@
+begin
+	put "Should be -4: ", -(4)
+end

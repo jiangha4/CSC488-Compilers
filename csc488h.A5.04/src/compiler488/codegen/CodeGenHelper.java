@@ -235,6 +235,13 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to negate an integer.
+	 */
+	public void emitNegateInt() {
+		instrs.add(Machine.NEG);
+	}
+
+	/*
 	 * Emit instructions to push an activation record on to the stack.
 	 */
 	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {

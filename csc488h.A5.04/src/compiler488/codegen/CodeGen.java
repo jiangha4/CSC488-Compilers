@@ -158,6 +158,24 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void exitVisit(UnaryMinusExpn unaryMinusExpn)
+	{
+		instrs.emitNegateInt();
+	}
+
+	@Override
+	public void enterVisit(NotExpn notExpn)
+	{
+		instrs.emitPushBoolValue(true);
+	}
+
+	@Override
+	public void exitVisit(NotExpn notExpn)
+	{
+		instrs.emitSubtract();
+	}
+
+	@Override
 	public void exitVisit(IntConstExpn intConstExpn)
 	{
 		instrs.emitPushValue(intConstExpn.getValue());
