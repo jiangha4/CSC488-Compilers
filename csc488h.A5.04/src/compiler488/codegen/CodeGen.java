@@ -87,9 +87,8 @@ public class CodeGen extends BaseASTVisitor
 		}
 
 		// Write instructions to machine memory
-		short counter = 1;
+		short counter = 0;
 		List<Short> instructions = instrs.getInstructions();
-		Machine.writeMemory((short)0, Machine.HALT);
 		for (short instr : instructions) {
 			Machine.writeMemory(counter, instr);
 			counter++;
@@ -104,6 +103,7 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void enterVisit(Program program)
 	{
+		instrs.emitHalt();
 		ActivationRecord ar = new ActivationRecord(program.getSTScope());
 		instrs.emitActivationRecord(ar, 0);
 	}

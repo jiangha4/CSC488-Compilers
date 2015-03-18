@@ -67,6 +67,13 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit halt instruction
+	 */
+	public void emitHalt() {
+		instrs.add(Machine.HALT);
+	}
+
+	/*
 	 * Emit instructions for pushing a constant on to the stack.
 	 */
 	public void emitPushValue(short value) {
