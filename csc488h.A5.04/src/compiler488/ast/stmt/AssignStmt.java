@@ -45,6 +45,7 @@ public class AssignStmt extends Stmt {
 		visitor.enterVisit(this);
 
 		lval.accept(visitor);
+		visitor.exitVisitLHS(this);
 		rval.accept(visitor);
 
 		visitor.exitVisit(this);

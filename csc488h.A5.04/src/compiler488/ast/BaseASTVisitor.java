@@ -98,6 +98,7 @@ public abstract class BaseASTVisitor implements ASTVisitor {
 
 	/* Statements */
 	public void enterVisit(AssignStmt assignStmt) {};
+	public void exitVisitLHS(AssignStmt assignStmt) {};
 	public void exitVisit(AssignStmt assignStmt) {};
 	public void enterVisit(ExitStmt exitStmt) {};
 	public void exitVisit(ExitStmt exitStmt) {};

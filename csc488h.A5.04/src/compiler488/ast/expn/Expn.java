@@ -25,7 +25,7 @@ public abstract class Expn extends BaseAST implements Printable {
 	 */
 	public abstract SymbolType getExpnType(SymbolTable st);
 
-	private STScope getContainingSTScope() {
+	public STScope getContainingSTScope() {
 		BaseAST curNode = this;
 		while (!(curNode instanceof ScopeCreator)) {
 			curNode = curNode.getParentNode();

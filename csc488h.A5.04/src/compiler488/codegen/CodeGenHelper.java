@@ -11,10 +11,6 @@ import compiler488.runtime.Machine;;
 import compiler488.symbol.STScope;
 
 public class CodeGenHelper {
-	/** Sizes of control blocks of activation records **/
-	private static int FUNC_AR_CTRLBLOCK_SIZE = 4;
-	private static int PROC_AR_CTRLBLOCK_SIZE = 3;
-
 	/** flag for tracing code generation */
 	private boolean trace = Main.traceCodeGen;
 
@@ -242,6 +238,48 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to load a value from memory.
+	 */
+	public void emitLoad() {
+		instrs.add(Machine.LOAD);
+	}
+
+	/*
+	 * Emit instructions to push the address of the activation record referenced
+	 * in the given display register, plus the given offset.
+	 */
+	public void emitGetAddr(short disp, short offset) {
+		instrs.add(Machine.ADDR);
+		instrs.add(disp);
+		instrs.add(offset);
+	}
+
+	/*
+	 * Emit instructions to push the address of the given identifier as seen
+	 * from the given scope.
+	 */
+	public void emitGetVarAddr(STScope scope, String name) {
+		VarAddress addr = scope.getVarAddress(name);
+		emitGetAddr(addr.getLexicalLevel(), addr.getOrderNumber());
+	}
+
+	/*
+	 * Emit instructions to load the current value of the identifier with the
+	 * given name, as seen from the given scope.
+	 */
+	public void emitLoadVar(STScope scope, String name) {
+		emitGetVarAddr(scope, name);
+		emitLoad();
+	}
+
+	/*
+	 * Emit instructions to store the value at the top of the stack at the
+	 * memory address indicated by the value right below it on the stack.
+	 */
+	public void emitStore() {
+		instrs.add(Machine.STORE);
+	}
+
 	/*
 	 * Emit instructions to set the display register for the given lexical
 	 * level to whatever is currently on the top of the stack.
@@ -259,6 +297,8 @@ public class CodeGenHelper {
 		instrs.add(Machine.PUSHMT);
 		emitSetDisplay(lexicalLevel);
 	}
+
+	/*
 	 * Emit instructions to push an activation record on to the stack.
 	 */
 	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {
@@ -312,5 +352,21 @@ public class CodeGenHelper {
 		// Remove it from the stack
 		int numToPop = ar.getNumWordsToPopForCleanUp();
 		emitPop(numToPop);
+	}
+
+	/*
+	 * Removes the last emitted instruction if it's a LOAD. Throws an exception
+	 * otherwise.
+	 */
+	public void removeLastEmittedLoad() {
+		// Check if the last instruction is a LOAD
+		int lastIndex = instrs.size() - 1;
+		short instr = instrs.get(lastIndex);
+		if (instr != Machine.LOAD) {
+			throw new UnsupportedOperationException("Last instruction is not a LOAD");
+		}
+
+		// Remove this instruction
+		instrs.remove(lastIndex);
 	}
 }

@@ -123,6 +123,18 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void exitVisitLHS(AssignStmt assignStmt)
+	{
+		instrs.removeLastEmittedLoad();
+	}
+
+	@Override
+	public void exitVisit(AssignStmt assignStmt)
+	{
+		instrs.emitStore();
+	}
+
+	@Override
 	public void exitVisit(TextConstExpn textConstExpn)
 	{
 		instrs.emitPrintText(textConstExpn.getValue());
@@ -186,5 +198,22 @@ public class CodeGen extends BaseASTVisitor
 	public void exitVisit(BoolConstExpn boolConstExpn)
 	{
 		instrs.emitPushBoolValue(boolConstExpn.getValue());
+	}
+
+	@Override
+	public void exitVisit(IdentExpn identExpn) {
+		// Get the symbol table entry
+		STScope scope = identExpn.getContainingSTScope();
+		String ident = identExpn.getIdent();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, scope);
+
+		if (ste.getKind() == SymbolKind.FUNCTION) {
+			// Function call without parameters
+			throw new UnsupportedOperationException("Not implemented yet");
+		}
+		else {
+			// Variable or parameter
+			instrs.emitLoadVar(scope, ident);
+		}
 	}
 }
