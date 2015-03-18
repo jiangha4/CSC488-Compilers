@@ -84,11 +84,12 @@ public class CodeGen extends BaseASTVisitor
 		Machine.writeMemory((short)0, Machine.HALT);
 		for (short instr : instructions) {
 			Machine.writeMemory(counter, instr);
+			counter++;
 		}
 
 		// Set initial values for registers
 		Machine.setPC((short)1);
-		Machine.setMSP((short)instructions.size());
+		Machine.setMSP((short)(counter + 1));
 		Machine.setMLP((short)(Machine.memorySize - 1));
 	}
 }
