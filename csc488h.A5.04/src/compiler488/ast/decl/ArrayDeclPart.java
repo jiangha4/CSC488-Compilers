@@ -66,16 +66,13 @@ public class ArrayDeclPart extends DeclarationPart {
 		return SymbolKind.ARRAY;
 	}
 
-	/**
-	 * Calculates the number of values held in an array declared in this way.
-	 *
-	 * TODO: Add a correct computation of the size of this array.
-	 *
-	 * @return size of the array
-	 */
 	public int getSize() {
-		// FIXME: This is broken.
-		throw new UnsupportedOperationException();
+		int size = (this.ub1 - this.lb1 + 1);
+		if (this.isTwoDimensional) {
+			size *= (this.ub2 - this.lb2 + 1);
+		}
+
+		return size;
 	}
 
 	public Integer getLowerBoundary1() {
