@@ -346,9 +346,11 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Emit instructions to push an activation record on to the stack.
+	 * Emit instructions to push an activation record on to the stack. Return
+	 * the index in the instrs array where the return value is, to be patched
+	 * later.
 	 */
-	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {
+	public short emitActivationRecord(ActivationRecord ar, short returnAddress) {
 		activationRecords.push(ar);
 
 		// Set display
@@ -362,31 +364,32 @@ public class CodeGenHelper {
 
 		// Return address
 		emitPushValue(returnAddress);
+		short returnAddrIndex = (short)(instrs.size() - 1);
 
 		// Space for block mark and local vars
 		int blockMark = ar.getNumWordsToAllocateForBlockMark();
 		int localStorage = ar.getNumWordsToAllocateForLocalStorage();
 		emitPushValue(Machine.UNDEFINED, blockMark + localStorage);
+
+		return returnAddrIndex;
 	}
 
 	/*
-	 * Emit instructions to push the activation record on to the stack.
+	 * Emit instructions to push an activation record on to the stack. Return
+	 * the index in the instrs array where the return value is, to be patched
+	 * later.
 	 */
-	public void emitActivationRecord(ActivationRecord ar, int returnAddress) {
-		emitActivationRecord(ar, (short)returnAddress);
+	public short emitActivationRecord(ActivationRecord ar, int returnAddress) {
+		return emitActivationRecord(ar, (short)returnAddress);
 	}
 
 	/*
-	 * Emit instructions to push the activation record on to the stack, given
-	 * that we do not know the return address yet. Return the index in the
-	 * instrs array where this value needs to be filled in.
+	 * Emit instructions to push an activation record on to the stack. Return
+	 * the index in the instrs array where the return value is, to be patched
+	 * later.
 	 */
-	public int emitActivationRecord(ActivationRecord ar) {
-		int curOffset = instrs.size() - 1;
-		int returnAddrOffset = instrs.size() + ar.getOffsetToReturnAddress() * 2 - 1;
-		emitActivationRecord(ar, Machine.UNDEFINED);
-
-		return returnAddrOffset;
+	public short emitActivationRecord(ActivationRecord ar) {
+		return emitActivationRecord(ar, Machine.UNDEFINED);
 	}
 
 	/*
