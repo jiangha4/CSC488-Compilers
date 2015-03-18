@@ -1,0 +1,7 @@
+begin
+	if false & false then
+		put "FAILURE"
+	else
+		put "SUCCESS"
+	end
+end
