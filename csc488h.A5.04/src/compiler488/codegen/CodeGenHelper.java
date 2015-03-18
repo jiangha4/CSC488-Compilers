@@ -242,10 +242,31 @@ public class CodeGenHelper {
 	}
 
 	/*
+	/*
+	 * Emit instructions to set the display register for the given lexical
+	 * level to whatever is currently on the top of the stack.
+	 */
+	public void emitSetDisplay(short lexicalLevel) {
+		instrs.add(Machine.SETD);
+		instrs.add(lexicalLevel);
+	}
+
+	/*
+	 * Emit instructions to set the display register for the given lexical
+	 * level to the current stack pointer.
+	 */
+	public void emitSetDisplayToStackPointer(short lexicalLevel) {
+		instrs.add(Machine.PUSHMT);
+		emitSetDisplay(lexicalLevel);
+	}
 	 * Emit instructions to push an activation record on to the stack.
 	 */
 	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {
 		activationRecords.push(ar);
+
+		// Set display
+		short lexicalLevel = ar.getLexicalLevel();
+		emitSetDisplayToStackPointer(lexicalLevel);
 
 		// Return value if applicable
 		if (ar.hasReturnValue()) {
