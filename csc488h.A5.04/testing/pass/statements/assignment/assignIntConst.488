@@ -1,0 +1,5 @@
+begin
+	integer x
+	x <= 3
+	put "Should be 9: ", x
+end
