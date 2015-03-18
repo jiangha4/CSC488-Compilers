@@ -122,6 +122,21 @@ public class CodeGenHelper {
 		instrs.add(Machine.BR);
 	}
 
+	public void emitPrintChar(char charVal) {
+		emitPush((short)charVal);
+		instrs.add(Machine.PRINTC);
+	}
+
+	public void emitPrintText(String text) {
+		for (char ch: text.toCharArray()) {
+			emitPrintChar(ch);
+		}
+	}
+
+	public void emitPrintSkip() {
+		emitPrintChar('\n');
+	}
+
 	public void emitProgramActivationRecord(Program program) {
 		// Return address
 		emitPush(0);

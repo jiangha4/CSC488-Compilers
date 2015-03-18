@@ -105,4 +105,16 @@ public class CodeGen extends BaseASTVisitor
 		instrs.emitCleanProgramActivationRecord(program);
 		instrs.emitBranch();
 	}
+
+	@Override
+	public void exitVisit(TextConstExpn textConstExpn)
+	{
+		instrs.emitPrintText(textConstExpn.getValue());
+	}
+
+	@Override
+	public void exitVisit(SkipConstExpn skipConstExpn)
+	{
+		instrs.emitPrintSkip();
+	}
 }
