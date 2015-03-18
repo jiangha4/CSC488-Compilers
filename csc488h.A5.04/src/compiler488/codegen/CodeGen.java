@@ -54,14 +54,14 @@ public class CodeGen extends BaseASTVisitor
 	private boolean trace = Main.traceCodeGen ;
 
 	/** helper to emit code **/
-	private CodeGenCollector instrs;
+	private CodeGenHelper instrs;
 
 	/**
 	 * Constructor to initialize code generation
 	 */
 	public CodeGen()
 	{
-		instrs = new CodeGenCollector();
+		instrs = new CodeGenHelper();
 	}
 
 	/**
@@ -91,5 +91,18 @@ public class CodeGen extends BaseASTVisitor
 		Machine.setPC((short)1);
 		Machine.setMSP((short)(counter + 1));
 		Machine.setMLP((short)(Machine.memorySize - 1));
+	}
+
+	@Override
+	public void enterVisit(Program program)
+	{
+		instrs.emitProgramActivationRecord(program);
+	}
+
+	@Override
+	public void exitVisit(Program program)
+	{
+		instrs.emitCleanProgramActivationRecord(program);
+		instrs.emitBranch();
 	}
 }

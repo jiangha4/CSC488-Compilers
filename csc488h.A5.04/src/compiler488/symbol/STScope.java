@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
+import compiler488.ast.decl.ArrayDeclPart;
+import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
  * Symbol Table Scope
@@ -59,6 +61,29 @@ public class STScope {
 
 	public void setSymbols(HashMap<String, SymbolTableEntry> symbols) {
 		this.symbols = symbols;
+	}
+
+	private int measureKind(SymbolKind kind) {
+		int numOfKind = 0;
+		for (SymbolTableEntry ste : symbols.values()) {
+			if (ste.kind == kind) {
+				if (ste.kind == SymbolKind.ARRAY) {
+					numOfKind += ((ArrayDeclPart)ste.node).getSize();
+				} else {
+					numOfKind += 1;
+				}
+			}
+		}
+
+		return numOfKind;
+	}
+
+	public int getVariableMemSize() {
+		return measureKind(SymbolKind.VARIABLE) + measureKind(SymbolKind.ARRAY);
+	}
+
+	public int getParameterMemSize() {
+		return measureKind(SymbolKind.PARAMETER);
 	}
 
 	@Override
