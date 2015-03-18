@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
 import compiler488.ast.decl.ArrayDeclPart;
+import compiler488.codegen.VarAddress;
 import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
@@ -22,6 +23,9 @@ public class STScope {
 	private STScope parent;
 	private List<STScope> children;
 	private HashMap<String,SymbolTableEntry> symbols;
+	private short lexicalLevel;
+	public short nextOrderNumber;
+
 	final static String scopeSep = "=======================================================\n";
 	final static String scopeIndent = "    ";
 
@@ -29,6 +33,8 @@ public class STScope {
 		this.parent = null;
 		this.children = new ArrayList<STScope>();
 		this.symbols = new HashMap<String,SymbolTableEntry>();
+		this.lexicalLevel = 0;
+		this.nextOrderNumber = 0;
 	}
 
 	public STScope getParent() {
@@ -37,6 +43,7 @@ public class STScope {
 
 	public void setParent(STScope parent) {
 		this.parent = parent;
+		this.lexicalLevel = (short)(parent.getLexicalLevel() + 1);
 	}
 
 	public List<STScope> getChildren() {
@@ -61,6 +68,10 @@ public class STScope {
 
 	public void setSymbols(HashMap<String, SymbolTableEntry> symbols) {
 		this.symbols = symbols;
+	}
+
+	public short getLexicalLevel() {
+		return lexicalLevel;
 	}
 
 	@Override
@@ -108,5 +119,18 @@ public class STScope {
 		}
 
 		return s;
+	}
+
+	/*
+	 *
+	 */
+	public VarAddress getVarAddress(String ident) {
+		SymbolTableEntry ste = symbols.get(ident);
+		if (ste != null) {
+			return new VarAddress(lexicalLevel, ste.orderNumber);
+		}
+		else {
+			return parent.getVarAddress(ident);
+		}
 	}
 }

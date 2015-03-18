@@ -9,12 +9,14 @@ public class SymbolTableEntry {
 	SymbolType type;  //Type of the symbol(integer, boolean)
 	SymbolKind kind;  //Kind of the symbol(variable, function, procedure, parameter)
 	BaseAST node; //AST node which this symbol represents
+	short orderNumber;
 
-	public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, BaseAST node) {
+	public SymbolTableEntry(String id, SymbolType type, SymbolKind kind, BaseAST node, short orderNumber) {
 		this.id = id;
 		this.type = type;
 		this.kind = kind;
 		this.node = node;
+		this.orderNumber = orderNumber;
 	}
 
 	public String getId() {

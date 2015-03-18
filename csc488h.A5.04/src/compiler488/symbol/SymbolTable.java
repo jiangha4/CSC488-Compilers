@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import compiler488.ast.BaseAST;
+import compiler488.ast.decl.ArrayDeclPart;
+
 
 /**
  * Symbol Table
@@ -66,13 +68,24 @@ public class SymbolTable {
 	 * @return boolean: true if successful, false otherwise
 	 */
 	public boolean insert(STScope scope, String id, SymbolType type, SymbolKind kind, BaseAST node) {
-		// Create a new entry and add to designated scope
 		HashMap<String,SymbolTableEntry> symbols = scope.getSymbols();
 		if (!symbols.containsKey(id)) {
-			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node);
+			// Create a new entry and add to designated scope
+			SymbolTableEntry entry = new SymbolTableEntry(id, type, kind, node, scope.nextOrderNumber);
 			symbols.put(id, entry);
+
+			// Increment order number
+			short size = 0;
+			if (kind == SymbolKind.VARIABLE || kind == SymbolKind.PARAMETER) {
+				size = 1;
+			} else if (kind == SymbolKind.ARRAY) {
+				size = (short)((ArrayDeclPart)node).getSize();
+			}
+			scope.nextOrderNumber += size;
+
 			return true;
 		}
+
 		return false;
 	}
 
