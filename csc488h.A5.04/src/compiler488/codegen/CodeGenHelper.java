@@ -238,6 +238,13 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to perform an addition.
+	 */
+	public void emitOr() {
+		instrs.add(Machine.OR);
+	}
+
+	/*
 	 * Emit instructions to load a value from memory.
 	 */
 	public void emitLoad() {

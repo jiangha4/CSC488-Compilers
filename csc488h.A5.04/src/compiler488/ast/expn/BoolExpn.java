@@ -25,6 +25,7 @@ public class BoolExpn extends BinaryExpn {
 		visitor.enterVisit(this);
 
 		left.accept(visitor);
+		visitor.exitVisitLHS(this);
 		right.accept(visitor);
 
 		visitor.exitVisit(this);

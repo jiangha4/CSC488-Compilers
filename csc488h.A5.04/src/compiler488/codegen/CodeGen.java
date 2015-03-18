@@ -177,6 +177,48 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void enterVisit(BoolExpn boolExpn)
+	{
+		if (boolExpn.getOpSymbol() == BoolExpn.OP_AND) {
+			// A and B <=> not(not A or not B)
+			// Set up the outer not, and the not for A
+			instrs.emitPushBoolValue(true);
+			instrs.emitPushBoolValue(true);
+		}
+	}
+
+	@Override
+	public void exitVisitLHS(BoolExpn boolExpn)
+	{
+		if (boolExpn.getOpSymbol() == BoolExpn.OP_AND) {
+			// Complete not for A, set up not for B
+			instrs.emitSubtract();
+			instrs.emitPushBoolValue(true);
+		}
+	}
+
+	@Override
+	public void exitVisit(BoolExpn boolExpn)
+	{
+		String operation = boolExpn.getOpSymbol();
+		switch (operation) {
+			case BoolExpn.OP_OR:
+				instrs.emitOr();
+				break;
+			case BoolExpn.OP_AND:
+				// Complete not for B, OR reults, and complete outer not
+				instrs.emitSubtract();
+				instrs.emitOr();
+				instrs.emitSubtract();
+				break;
+
+			default:
+				String msg = "Unknown BoolExpn operation: " + operation;
+				throw new UnsupportedOperationException(msg);
+		}
+	}
+
+	@Override
 	public void enterVisit(NotExpn notExpn)
 	{
 		instrs.emitPushBoolValue(true);

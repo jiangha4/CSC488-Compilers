@@ -72,6 +72,7 @@ public interface ASTVisitor {
 	public void enterVisit(BoolConstExpn boolConstExpn);
 	public void exitVisit(BoolConstExpn boolConstExpn);
 	public void enterVisit(BoolExpn boolExpn);
+	public void exitVisitLHS(BoolExpn boolExpn);
 	public void exitVisit(BoolExpn boolExpn);
 	public void enterVisit(CompareExpn compareExpn);
 	public void exitVisit(CompareExpn compareExpn);
