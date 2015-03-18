@@ -98,7 +98,8 @@ def run_test(test_path, compiler_path, should_pass):
         msg = "Runtime error, see '" + file_name + "'"
         return TestResult(test_path, ResultType.failed, msg)
     else:
-        return TestResult(test_path, ResultType.passed)
+        details = str.join("\n", parser_output.split('\n')[:])
+        return TestResult(test_path, ResultType.passed, details)
 
 
 '''
@@ -115,9 +116,22 @@ def print_test_result(result):
 
 
 '''
+Write the standard output from the test to the given file.
+'''
+def write_output_to_file(test_path, file, result):
+    file.write(test_path + ":")
+
+    start = result.details.find("Start Execution  pc")
+    end = result.details.find("End Execution")
+    output_lines = result.details[start:end].split('\n')[2:-1]
+    file.write('\n\t' + str.join("\n\t", output_lines))
+    file.write('\n\n')
+
+
+'''
 Run all tests in the directory at the given path and print the results.
 '''
-def run_tests(test_dir_path, compiler_path, should_pass):
+def run_tests(test_dir_path, compiler_path, test_output_file, should_pass):
     # Get subdirectories and tests in this directory
     dir_items = [d for d in os.listdir(test_dir_path) if not d.startswith(".")]
     item_paths = [os.path.join(test_dir_path, d) for d in dir_items]
@@ -133,6 +147,8 @@ def run_tests(test_dir_path, compiler_path, should_pass):
         # Run parser on test, print result
         result = run_test(test_path, compiler_path, should_pass)
         print_test_result(result)
+        if should_pass:
+            write_output_to_file(test_path, test_output_file, result)
         results.append(result)
     if len(tests):
         print("\n")
@@ -154,7 +170,7 @@ def run_tests(test_dir_path, compiler_path, should_pass):
 
     # Recursively run tests in subdirectories
     for subdir in subdirs:
-        results += run_tests(subdir, compiler_path, should_pass)
+        results += run_tests(subdir, compiler_path, test_output_file, should_pass)
 
     return results
 
@@ -192,9 +208,10 @@ if __name__ == '__main__':
     start = timer()
     shutil.rmtree("./test_logs", True)
     os.mkdir("./test_logs")
+    test_output_file = open("./test_logs/OUTPUT", 'w+')
     compiler_path = sys.argv[1] if len(sys.argv) > 1 else "./dist/compiler488.jar"
-    results = run_tests("./testing/pass/", compiler_path, True)
-    results += run_tests("./testing/fail/", compiler_path, False)
+    results = run_tests("./testing/pass/", compiler_path, test_output_file, True)
+    results += run_tests("./testing/fail/", compiler_path, test_output_file, False)
     run_time = int(1000 * (timer() - start))
 
     # Print results
