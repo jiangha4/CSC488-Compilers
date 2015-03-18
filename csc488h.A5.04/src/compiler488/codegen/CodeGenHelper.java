@@ -18,13 +18,20 @@ public class CodeGenHelper {
 	/** flag for tracing code generation */
 	private boolean trace = Main.traceCodeGen;
 
+	/** stack of activation records pushed but not cleaned up **/
+	private Stack<ActivationRecord> activationRecords;
+
 	/** emitted instructions **/
 	private List<Short> instrs;
 
 	public CodeGenHelper() {
+		activationRecords = new Stack<ActivationRecord>();
 		instrs = new ArrayList<Short>();
 	}
 
+	/*
+	 * Return all emitted instructions as a list of shorts.
+	 */
 	public List<Short> getInstructions() {
 		return instrs;
 	}
@@ -170,28 +177,54 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Emit instructions to push the program activation record on to the stack.
+	 * Emit instructions to push an activation record on to the stack.
 	 */
-	public void emitProgramActivationRecord(Program program) {
-		// Return address
-		emitPush(0);
+	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {
+		activationRecords.push(ar);
 
-		// Space for control block (minus return address) and local vars
-		int varMemSize = program.getSTScope().getVariableMemSize();
-		int spaceRequired = (PROC_AR_CTRLBLOCK_SIZE - 1) + varMemSize;
-		emitPushN(Machine.UNDEFINED, spaceRequired);
+		// Return value if applicable
+		if (ar.hasReturnValue()) {
+			emitPush(Machine.UNDEFINED);
+		}
+
+		// Return address
+		emitPush(returnAddress);
+
+		// Space for block mark and local vars
+		int blockMark = ar.getNumWordsToAllocateForBlockMark();
+		int localStorage = ar.getNumWordsToAllocateForLocalStorage();
+		emitPushN(Machine.UNDEFINED, blockMark + localStorage);
+	}
+
+	/*
+	 * Emit instructions to push the activation record on to the stack.
+	 */
+	public void emitActivationRecord(ActivationRecord ar, int returnAddress) {
+		emitActivationRecord(ar, (short)returnAddress);
+	}
+
+	/*
+	 * Emit instructions to push the activation record on to the stack, given
+	 * that we do not know the return address yet. Return the index in the
+	 * instrs array where this value needs to be filled in.
+	 */
+	public int emitActivationRecord(ActivationRecord ar) {
+		int curOffset = instrs.size() - 1;
+		int returnAddrOffset = instrs.size() + ar.getOffsetToReturnAddress() * 2 - 1;
+		emitActivationRecord(ar, Machine.UNDEFINED);
+
+		return returnAddrOffset;
 	}
 
 	/*
 	 * Emit instructions to pop the program activation record from to the stack.
 	 */
-	public void emitCleanProgramActivationRecord(Program program) {
-		// Count how much memory needs to be cleaned up. This is all the local
-		// storage, and the control block minus the return addr;
-		int varMemSize = program.getSTScope().getVariableMemSize();
-		int numToPop = varMemSize + (PROC_AR_CTRLBLOCK_SIZE - 1);
+	public void emitActivationRecordCleanUp() {
+		// Get activation record
+		ActivationRecord ar = activationRecords.pop();
 
-		// Pop this memory
+		// Remove it from the stack
+		int numToPop = ar.getNumWordsToPopForCleanUp();
 		emitPop(numToPop);
 	}
 }

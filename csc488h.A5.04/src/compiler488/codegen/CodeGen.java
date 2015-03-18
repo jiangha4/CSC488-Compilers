@@ -8,6 +8,7 @@ import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 import compiler488.compiler.*;
+import compiler488.codegen.ActivationRecord.*;
 import compiler488.runtime.*;
 
 /**	  CodeGenerator.java
@@ -96,13 +97,14 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void enterVisit(Program program)
 	{
-		instrs.emitProgramActivationRecord(program);
+		ActivationRecord ar = new ActivationRecord(ScopeKind.PROGRAM, program.getSTScope());
+		instrs.emitActivationRecord(ar, 0);
 	}
 
 	@Override
 	public void exitVisit(Program program)
 	{
-		instrs.emitCleanProgramActivationRecord(program);
+		instrs.emitActivationRecordCleanUp();
 		instrs.emitBranch();
 	}
 

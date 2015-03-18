@@ -63,29 +63,6 @@ public class STScope {
 		this.symbols = symbols;
 	}
 
-	private int measureKind(SymbolKind kind) {
-		int numOfKind = 0;
-		for (SymbolTableEntry ste : symbols.values()) {
-			if (ste.kind == kind) {
-				if (ste.kind == SymbolKind.ARRAY) {
-					numOfKind += ((ArrayDeclPart)ste.node).getSize();
-				} else {
-					numOfKind += 1;
-				}
-			}
-		}
-
-		return numOfKind;
-	}
-
-	public int getVariableMemSize() {
-		return measureKind(SymbolKind.VARIABLE) + measureKind(SymbolKind.ARRAY);
-	}
-
-	public int getParameterMemSize() {
-		return measureKind(SymbolKind.PARAMETER);
-	}
-
 	@Override
 	public String toString() {
 		return toString(0);
