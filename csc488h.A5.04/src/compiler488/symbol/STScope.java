@@ -42,8 +42,10 @@ public class STScope {
 	}
 
 	public void setParent(STScope parent) {
-		this.parent = parent;
-		this.lexicalLevel = (short)(parent.getLexicalLevel() + 1);
+		if (parent != null) {
+			this.parent = parent;
+			this.lexicalLevel = (short)(parent.getLexicalLevel() + 1);
+		}
 	}
 
 	public List<STScope> getChildren() {
