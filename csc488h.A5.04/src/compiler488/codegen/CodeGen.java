@@ -3,6 +3,10 @@ package compiler488.codegen;
 import java.io.*;
 import java.util.*;
 import compiler488.ast.*;
+import compiler488.ast.decl.*;
+import compiler488.ast.expn.*;
+import compiler488.ast.stmt.*;
+import compiler488.ast.type.*;
 import compiler488.compiler.*;
 import compiler488.runtime.*;
 
@@ -46,23 +50,18 @@ import compiler488.runtime.*;
  */
 public class CodeGen extends BaseASTVisitor
 {
-
-	/** initial value for memory stack pointer */
-	private short startMSP;
-	/** initial value for program counter */
-	private short startPC;
-	/** initial value for memory limit pointer */
-	private short startMLP;
-
 	/** flag for tracing code generation */
-	private boolean traceCodeGen = Main.traceCodeGen ;
+	private boolean trace = Main.traceCodeGen ;
+
+	/** helper to emit code **/
+	private CodeGenCollector instrs;
 
 	/**
 	 * Constructor to initialize code generation
 	 */
 	public CodeGen()
 	{
-
+		instrs = new CodeGenCollector();
 	}
 
 	/**
@@ -71,13 +70,25 @@ public class CodeGen extends BaseASTVisitor
 	 *  @throws MemoryAddressException  from Machine.writeMemory
 	 *  @throws ExecutionException	  from Machine.writeMemory
 	 */
-	void Finalize()
+	public void writeToMachine()
 		throws MemoryAddressException, ExecutionException
 	{
-		Machine.writeMemory((short)0, Machine.HALT);
+		// Trace emitted instruction
+		if (trace) {
+			instrs.printDebug();
+		}
 
-        Machine.setPC((short)0);
-        Machine.setMSP((short)1);
-        Machine.setMLP((short)(Machine.memorySize - 1));
+		// Write instructions to machine memory
+		short counter = 1;
+		List<Short> instructions = instrs.getInstructions();
+		Machine.writeMemory((short)0, Machine.HALT);
+		for (short instr : instructions) {
+			Machine.writeMemory(counter, instr);
+		}
+
+		// Set initial values for registers
+		Machine.setPC((short)1);
+		Machine.setMSP((short)instructions.size());
+		Machine.setMLP((short)(Machine.memorySize - 1));
 	}
 }
