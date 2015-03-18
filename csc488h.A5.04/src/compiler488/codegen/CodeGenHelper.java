@@ -42,9 +42,9 @@ public class CodeGenHelper {
 	public void printDebug()
 	{
 		System.out.println();
-		System.out.println("=======================");
-		System.out.println("    Instrs Emitted:    ");
-		System.out.println("=======================");
+		System.out.println("=========================");
+		System.out.println("     Instrs Emitted:     ");
+		System.out.println("=========================");
 
 		int i = 0;
 		int numInstrs = instrs.size();
@@ -66,7 +66,7 @@ public class CodeGenHelper {
 			i += opLength;
 		}
 
-		System.out.println("=======================");
+		System.out.println("=========================");
 		System.out.println();
 	}
 
@@ -109,7 +109,7 @@ public class CodeGenHelper {
 				instrs.add(Machine.DUP);
 				instrs.add(Machine.DUP);
 				break;
-				
+
 			default:
 				emitPush(value);
 				emitPush(numDuplicates);
