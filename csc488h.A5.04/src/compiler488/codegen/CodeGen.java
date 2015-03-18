@@ -132,4 +132,40 @@ public class CodeGen extends BaseASTVisitor
 	{
 		instrs.emitPrintSkip();
 	}
+
+	@Override
+	public void exitVisit(ArithExpn arithExpn)
+	{
+		String operation = arithExpn.getOpSymbol();
+		switch (operation) {
+			case ArithExpn.OP_PLUS:
+				instrs.emitAdd();
+				break;
+			case ArithExpn.OP_MINUS:
+				instrs.emitSubtract();
+				break;
+			case ArithExpn.OP_TIMES:
+				instrs.emitMultiply();
+				break;
+			case ArithExpn.OP_DIVIDE:
+				instrs.emitDivide();
+				break;
+
+			default:
+				String msg = "Unknown ArithExpn operation: " + operation;
+				throw new UnsupportedOperationException(msg);
+		}
+	}
+
+	@Override
+	public void exitVisit(IntConstExpn intConstExpn)
+	{
+		instrs.emitPushValue(intConstExpn.getValue());
+	}
+
+	@Override
+	public void exitVisit(BoolConstExpn boolConstExpn)
+	{
+		instrs.emitPushBoolValue(boolConstExpn.getValue());
+	}
 }

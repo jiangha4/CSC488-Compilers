@@ -73,7 +73,7 @@ public class CodeGenHelper {
 	/*
 	 * Emit instructions for pushing a constant on to the stack.
 	 */
-	public void emitPush(short value) {
+	public void emitPushValue(short value) {
 		instrs.add(Machine.PUSH);
 		instrs.add(value);
 	}
@@ -81,15 +81,15 @@ public class CodeGenHelper {
 	/*
 	 * Emit instructions for pushing a constant on to the stack.
 	 */
-	public void emitPush(int value) {
-		emitPush((short)value);
+	public void emitPushValue(int value) {
+		emitPushValue((short)value);
 	}
 
 	/*
 	 * Emit instructions for pushing a constant on to the stack N times.
 	 * Where N is allowed to be any integer >= 0.
 	 */
-	public void emitPushN(int value, int numDuplicates) {
+	public void emitPushValue(int value, int numDuplicates) {
 		if (numDuplicates < 0) {
 			throw new IllegalArgumentException("numDuplicates must be >= 0");
 		}
@@ -98,22 +98,33 @@ public class CodeGenHelper {
 			case 0:
 				break;
 			case 1:
-				emitPush(value);
+				emitPushValue(value);
 				break;
 			case 2:
-				emitPush(value);
+				emitPushValue(value);
 				instrs.add(Machine.DUP);
 				break;
 			case 3:
-				emitPush(value);
+				emitPushValue(value);
 				instrs.add(Machine.DUP);
 				instrs.add(Machine.DUP);
 				break;
 
 			default:
-				emitPush(value);
-				emitPush(numDuplicates);
+				emitPushValue(value);
+				emitPushValue(numDuplicates);
 				instrs.add(Machine.DUPN);
+		}
+	}
+
+	/*
+	 * Emit instructions to push a single TRUE or FALSE on to the stack.
+	 */
+	public void emitPushBoolValue(boolean value) {
+		if (value) {
+			emitPushValue(Machine.MACHINE_TRUE);
+		} else {
+			emitPushValue(Machine.MACHINE_FALSE);
 		}
 	}
 
@@ -138,7 +149,7 @@ public class CodeGenHelper {
 				break;
 
 			default:
-				emitPush(numToPop);
+				emitPushValue(numToPop);
 				instrs.add(Machine.POPN);
 		}
 	}
@@ -161,7 +172,7 @@ public class CodeGenHelper {
 	 * Emit instructions to print a single character to the screen.
 	 */
 	public void emitPrintChar(char charVal) {
-		emitPush((short)charVal);
+		emitPushValue((short)charVal);
 		instrs.add(Machine.PRINTC);
 	}
 
@@ -196,6 +207,34 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to perform an addition.
+	 */
+	public void emitAdd() {
+		instrs.add(Machine.ADD);
+	}
+
+	/*
+	 * Emit instructions to perform an addition.
+	 */
+	public void emitSubtract() {
+		instrs.add(Machine.SUB);
+	}
+
+	/*
+	 * Emit instructions to perform an addition.
+	 */
+	public void emitMultiply() {
+		instrs.add(Machine.MUL);
+	}
+
+	/*
+	 * Emit instructions to perform an addition.
+	 */
+	public void emitDivide() {
+		instrs.add(Machine.DIV);
+	}
+
+	/*
 	 * Emit instructions to push an activation record on to the stack.
 	 */
 	public void emitActivationRecord(ActivationRecord ar, short returnAddress) {
@@ -203,16 +242,16 @@ public class CodeGenHelper {
 
 		// Return value if applicable
 		if (ar.hasReturnValue()) {
-			emitPush(Machine.UNDEFINED);
+			emitPushValue(Machine.UNDEFINED);
 		}
 
 		// Return address
-		emitPush(returnAddress);
+		emitPushValue(returnAddress);
 
 		// Space for block mark and local vars
 		int blockMark = ar.getNumWordsToAllocateForBlockMark();
 		int localStorage = ar.getNumWordsToAllocateForLocalStorage();
-		emitPushN(Machine.UNDEFINED, blockMark + localStorage);
+		emitPushValue(Machine.UNDEFINED, blockMark + localStorage);
 	}
 
 	/*

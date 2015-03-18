@@ -1,0 +1,3 @@
+begin
+	put "Should be 56: ", 8 * 7
+end

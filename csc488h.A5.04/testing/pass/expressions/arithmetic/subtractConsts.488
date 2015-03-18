@@ -1,0 +1,3 @@
+begin
+	put "Should be 2: ", 9 - 7
+end
