@@ -45,7 +45,10 @@ public class PutStmt extends Stmt {
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
 
-		outputs.accept(visitor);
+		for (ASTVisitable node : outputs) {
+			node.accept(visitor);
+			visitor.exitVisitPutExpn((Expn)node);
+		}
 
 		visitor.exitVisit(this);
 	}

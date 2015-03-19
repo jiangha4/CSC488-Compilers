@@ -116,6 +116,7 @@ public interface ASTVisitor {
 	public void enterVisit(Program program);
 	public void exitVisit(Program program);
 	public void enterVisit(PutStmt putStmt);
+	public void exitVisitPutExpn(Expn putStmtChild);
 	public void exitVisit(PutStmt putStmt);
 	public void enterVisit(ReturnStmt returnStmt);
 	public void exitVisit(ReturnStmt returnStmt);

@@ -116,10 +116,15 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
-	public void exitVisit(PutStmt putStmt)
+	public void exitVisitPutExpn(Expn putStmtChild)
 	{
-		int numIntExpns = putStmt.getNumChildrenOfType(symbolTable, SymbolType.INTEGER);
-		instrs.emitPrintInt(numIntExpns);
+		if (putStmtChild instanceof TextConstExpn) {
+			instrs.emitPrintText(((TextConstExpn)putStmtChild).getValue());
+		} else if (putStmtChild instanceof SkipConstExpn) {
+			instrs.emitPrintSkip();
+		} else {
+			instrs.emitPrintInt();
+		}
 	}
 
 	@Override
@@ -151,18 +156,6 @@ public class CodeGen extends BaseASTVisitor
 	public void exitVisit(IfStmt ifStmt)
 	{
 		instrs.fixForwardBranchToCurrentLocation(ifStmt.shouldPointToEnd);
-	}
-
-	@Override
-	public void exitVisit(TextConstExpn textConstExpn)
-	{
-		instrs.emitPrintText(textConstExpn.getValue());
-	}
-
-	@Override
-	public void exitVisit(SkipConstExpn skipConstExpn)
-	{
-		instrs.emitPrintSkip();
 	}
 
 	@Override
