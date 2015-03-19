@@ -66,7 +66,7 @@ Run the given test and return a TestResult.
 '''
 def run_test(test_path, compiler_path, should_pass):
     # Run parser on test
-    args = ["java", "-jar", compiler_path, "-T", "cx", test_path]
+    args = ["java", "-jar", compiler_path, "-T", "c", test_path]
     raw_output = subprocess.check_output(args, stderr=subprocess.STDOUT)
     parser_output = raw_output.decode("utf-8")
 

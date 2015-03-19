@@ -189,23 +189,10 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
-	public void enterVisit(BoolExpn boolExpn)
-	{
-		if (boolExpn.getOpSymbol() == BoolExpn.OP_AND) {
-			// A and B <=> not(not A or not B)
-			// Set up the outer not, and the not for A
-			instrs.emitPushBoolValue(true);
-			instrs.emitPushBoolValue(true);
-		}
-	}
-
-	@Override
 	public void exitVisitLHS(BoolExpn boolExpn)
 	{
 		if (boolExpn.getOpSymbol() == BoolExpn.OP_AND) {
-			// Complete not for A, set up not for B
-			instrs.emitSubtract();
-			instrs.emitPushBoolValue(true);
+			instrs.emitNot();
 		}
 	}
 
@@ -218,10 +205,9 @@ public class CodeGen extends BaseASTVisitor
 				instrs.emitOr();
 				break;
 			case BoolExpn.OP_AND:
-				// Complete not for B, OR reults, and complete outer not
-				instrs.emitSubtract();
+				instrs.emitNot();
 				instrs.emitOr();
-				instrs.emitSubtract();
+				instrs.emitNot();
 				break;
 
 			default:
@@ -231,15 +217,9 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
-	public void enterVisit(NotExpn notExpn)
-	{
-		instrs.emitPushBoolValue(true);
-	}
-
-	@Override
 	public void exitVisit(NotExpn notExpn)
 	{
-		instrs.emitSubtract();
+		instrs.emitNot();
 	}
 
 	@Override

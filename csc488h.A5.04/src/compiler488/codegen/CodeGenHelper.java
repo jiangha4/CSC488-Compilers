@@ -278,6 +278,21 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to check the top two items on the stack for equality.
+	 */
+	public void emitEquals() {
+		instrs.add(Machine.EQ);
+	}
+
+	/*
+	 * Emit instructions to perform a not operation on the top of the stack.
+	 */
+	public void emitNot() {
+		emitPushValue(Machine.FALSE)
+		emitEquals();
+	}
+
+	/*
 	 * Emit instructions to load a value from memory.
 	 */
 	public void emitLoad() {
