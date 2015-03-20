@@ -7,7 +7,7 @@ import compiler488.ast.expn.*;
 import compiler488.ast.stmt.*;
 import compiler488.ast.type.*;
 import compiler488.compiler.Main;
-import compiler488.runtime.Machine;;
+import compiler488.runtime.Machine;
 import compiler488.symbol.STScope;
 
 public class CodeGenHelper {
