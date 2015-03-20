@@ -288,7 +288,7 @@ public class CodeGenHelper {
 	 * Emit instructions to perform a not operation on the top of the stack.
 	 */
 	public void emitNot() {
-		emitPushValue(Machine.FALSE);
+		emitPushValue(Machine.MACHINE_FALSE);
 		emitEquals();
 	}
 
