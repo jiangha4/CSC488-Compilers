@@ -58,7 +58,7 @@ public class CodeGenHelper {
 				params += "\t" + paramStr;
 			}
 
-			System.out.println(String.format("%05d", i+1) + "\t" + opName + params);
+			System.out.println(String.format("%05d", i) + "\t" + opName + params);
 			i += opLength;
 		}
 
