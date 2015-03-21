@@ -124,5 +124,6 @@ public abstract class BaseASTVisitor implements ASTVisitor {
 	public void exitVisit(Scope scope) {};
 	public void enterVisit(WhileDoStmt whileDoStmt) {};
 	public void exitVisit(WhileDoStmt whileDoStmt) {};
+	public void enterVisitBeforeWhileExpn(WhileDoStmt whileDoStmt) {};
 	public void enterVisitAfterWhileExpn(WhileDoStmt visitor) {};
 }

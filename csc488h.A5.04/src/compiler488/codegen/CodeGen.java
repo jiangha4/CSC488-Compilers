@@ -304,21 +304,23 @@ public class CodeGen extends BaseASTVisitor
 	}
 	
 	@Override
-	public void enterVisitAfterWhileExpn(WhileDoStmt whileDoStmt) {
-		// expn will have been evaluated at this point.
-		// save branch instruction as start of loop
-		// and save branch-to address for later patching
+	public void enterVisitBeforeWhileExpn(WhileDoStmt whileDoStmt) {
+		// expn will be start to be evaluated in next instruction,
+		// so save addr as start of loop
 		whileDoStmt.startOfLoop = instrs.getNextInstructionAddr();
+	}
+	
+	@Override
+	public void enterVisitAfterWhileExpn(WhileDoStmt whileDoStmt) {
+		// expn will have been evaluated at this point,
+		// save branch-to address for later patching
 		short addr = instrs.emitBranchIfFalseToUnknown();
 		whileDoStmt.shouldPointToEnd.add(addr);
 	}
 	
 	@Override
 	public void exitVisit(WhileDoStmt whileDoStmt) {
-		// emit expression code for re-evaluation
-		whileDoStmt.getExpn().accept(this);
-		
-		// branch to branch-if-false at start of loop
+		// branch to start of loop
 		instrs.emitPushValue(whileDoStmt.startOfLoop);
 		instrs.emitBranch();
 		
