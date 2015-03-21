@@ -1,5 +1,8 @@
 package compiler488.ast.stmt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import compiler488.ast.ASTList;
 import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
@@ -14,6 +17,10 @@ public abstract class LoopingStmt extends Stmt {
 
 	/** The body of the looping construct. */
 	protected ASTList<Stmt> body;
+	
+	/** Instruction locations to patch later during code gen **/
+	public short startOfLoop;
+	public ArrayList<Short> shouldPointToEnd;
 
 	public LoopingStmt(Expn expn, ASTList<Stmt> body, SourceCoord sourceCoord) {
 		super(sourceCoord);
@@ -24,6 +31,8 @@ public abstract class LoopingStmt extends Stmt {
 		this.expn = expn;
 		body.setParentNode(this);
 		this.body = body;
+		this.startOfLoop = 0;
+		this.shouldPointToEnd = new ArrayList<Short>();
 	}
 
 	public LoopingStmt(ASTList<Stmt> body, SourceCoord sourceCoord) {

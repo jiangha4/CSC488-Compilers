@@ -2,6 +2,7 @@ package compiler488.codegen;
 
 import java.io.*;
 import java.util.*;
+
 import compiler488.ast.*;
 import compiler488.ast.decl.*;
 import compiler488.ast.expn.*;
@@ -249,5 +250,20 @@ public class CodeGen extends BaseASTVisitor
 			// Variable or parameter
 			instrs.emitLoadVar(scope, ident);
 		}
+	}
+	
+	@Override
+	public void enterVisit(LoopStmt loopStmt) {
+		// body will be visited after this and we
+		// need to save addr of the first stmt in body,
+		// so save the addr of the next instruction.
+		// [note: current addr is size() - 1, so next is just size()]
+		loopStmt.startOfLoop = (short)(instrs.getInstructions().size());
+	}
+	
+	@Override
+	public void exitVisit(LoopStmt loopStmt) {
+		instrs.emitPushValue(loopStmt.startOfLoop);
+		instrs.emitBranch();
 	}
 }
