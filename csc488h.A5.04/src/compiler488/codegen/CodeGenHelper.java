@@ -31,6 +31,20 @@ public class CodeGenHelper {
 	public List<Short> getInstructions() {
 		return instrs;
 	}
+	
+	/*
+	 * Return address of next instruction to be put into memory
+	 */
+	public short getNextInstructionAddr() {
+		return (short)(this.instrs.size());
+	}
+	
+	/*
+	 * Patch value at instrAddr to be newVal
+	 */
+	public void patchInstruction(short instrAddr, short newVal) {
+		instrs.set(instrAddr, newVal);
+	}
 
 	/*
 	 * Prints a list of all the instructions emitted to standard out.
@@ -413,11 +427,19 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Update the value at the given index to be the offset to the current end
-	 * of the instruction list.
+	 * Update the value at the given index to branch to addr of next instruction
 	 */
-	public void fixForwardBranchToCurrentLocation(short index) {
-		instrs.set(index, (short)instrs.size());
+	public void patchForwardBranchToNextInstruction(short index) {
+		instrs.set(index, getNextInstructionAddr());
+	}
+	
+	/*
+	 * Update all values at the given indices to branch to addr of next instruction
+	 */
+	public void patchForwardBranchToNextInstruction(List<Short> indices) {
+		for (short index : indices) {
+			this.patchForwardBranchToNextInstruction(index);
+		}
 	}
 
 	/*

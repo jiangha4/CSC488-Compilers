@@ -150,13 +150,13 @@ public class CodeGen extends BaseASTVisitor
 	public void exitVisitWhenTrue(IfStmt ifStmt)
 	{
 		ifStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
-		instrs.fixForwardBranchToCurrentLocation(ifStmt.shouldPointToFalse);
+		instrs.patchForwardBranchToNextInstruction(ifStmt.shouldPointToFalse);
 	}
 
 	@Override
 	public void exitVisit(IfStmt ifStmt)
 	{
-		instrs.fixForwardBranchToCurrentLocation(ifStmt.shouldPointToEnd);
+		instrs.patchForwardBranchToNextInstruction(ifStmt.shouldPointToEnd);
 	}
 
 	@Override
@@ -257,14 +257,41 @@ public class CodeGen extends BaseASTVisitor
 		// body will be visited after this and we
 		// need to save addr of the first stmt in body,
 		// so save the addr of the next instruction.
-		// [note: current addr is size() - 1, so next is just size()]
-		loopStmt.startOfLoop = (short)(instrs.getInstructions().size());
+		loopStmt.startOfLoop = instrs.getNextInstructionAddr();
 	}
 	
 	@Override
 	public void exitVisit(LoopStmt loopStmt) {
 		instrs.emitPushValue(loopStmt.startOfLoop);
 		instrs.emitBranch();
+		
+		// next instruction is end of loop, so patch everything that needs to point there
+		instrs.patchForwardBranchToNextInstruction(loopStmt.shouldPointToEnd);
+	}
+	
+	@Override
+	public void exitVisit(ExitStmt exitStmt) {
+		if (exitStmt.getExpn() == null) {
+			// if exitStmt is unconditional exit, push True which is later
+			// negated, so we always branch on the branch-false
+			instrs.emitPushValue(Machine.MACHINE_TRUE);
+		}
+		
+		// exit statement in form "exit when expr is true", but we only have
+		// a branch-on-false, and unconditional branch. So we can just use
+		// the branch-on-false after negating the expressing, to act as a
+		// branch-on-true
+		instrs.emitNot();
+
+		// save addr, so we can patch to end of loop later
+		short addr = instrs.emitBranchIfFalseToUnknown();
+		
+		LoopingStmt containingLoop = exitStmt.getContainingLoop();
+		// shouldn't be null if it passed semantic analysis
+		assert(containingLoop != null);
+		
+		// add addr to list of addrs to patch
+		containingLoop.shouldPointToEnd.add(addr);
 	}
 	
 	@Override
