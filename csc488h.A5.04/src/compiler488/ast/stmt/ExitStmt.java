@@ -1,8 +1,11 @@
 package compiler488.ast.stmt;
 
 import compiler488.ast.ASTVisitor;
+import compiler488.ast.BaseAST;
 import compiler488.ast.PrettyPrinter;
 import compiler488.ast.SourceCoord;
+import compiler488.ast.decl.RoutineDecl;
+import compiler488.ast.expn.AnonFuncExpn;
 import compiler488.ast.expn.Expn;
 
 
@@ -28,6 +31,27 @@ public class ExitStmt extends Stmt {
 
 	public Expn getExpn() {
 		return expn;
+	}
+	
+	/**
+	 * Traverses the AST upwards and returns the first loop
+	 * containing the exit statement. If none found, returns null
+	 * @return containing LoopingStmt if found, null otherwise
+	 */
+	public LoopingStmt getContainingLoop() {
+		LoopingStmt loop = null;
+		
+		BaseAST currNode = this;
+		while(currNode != null && !(currNode instanceof RoutineDecl) && !(currNode instanceof AnonFuncExpn))
+		{
+			if (currNode instanceof LoopStmt || currNode instanceof WhileDoStmt) {
+				loop = (LoopingStmt)currNode;
+				break;
+			}
+			currNode = currNode.getParentNode();
+		}
+		
+		return loop;
 	}
 
 	@Override

@@ -372,17 +372,8 @@ public class Semantics extends BaseASTVisitor {
 	@Override
 	public void exitVisit(ExitStmt exitStmt) {
 		// S50: Check that exit statement is directly inside a loop
-		BaseAST currNode = exitStmt;
-		boolean foundLoop = false;
-		while(currNode != null && !(currNode instanceof RoutineDecl) && !(currNode instanceof AnonFuncExpn))
-		{
-			if (currNode instanceof LoopStmt || currNode instanceof WhileDoStmt) {
-				foundLoop = true;
-				break;
-			}
-			currNode = currNode.getParentNode();
-		}
-		if (!foundLoop){
+		LoopingStmt containingLoop = exitStmt.getContainingLoop();
+		if (containingLoop == null){
 			errors.add(exitStmt.getSourceCoord(), "EXIT must be in a LOOP or WHILE statement.");
 		}
 
