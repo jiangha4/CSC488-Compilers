@@ -27,8 +27,6 @@ public class WhileDoStmt extends LoopingStmt {
 	@Override
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
-		
-		visitor.enterVisitBeforeWhileExpn(this);
 
 		expn.accept(visitor);
 		

@@ -125,5 +125,4 @@ public interface ASTVisitor {
 	public void enterVisit(WhileDoStmt whileDoStmt);
 	public void exitVisit(WhileDoStmt whileDoStmt);
 	public void enterVisitAfterWhileExpn(WhileDoStmt visitor);
-	public void enterVisitBeforeWhileExpn(WhileDoStmt whileDoStmt);
 }

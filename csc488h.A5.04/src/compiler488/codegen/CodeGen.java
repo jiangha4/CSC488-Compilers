@@ -304,7 +304,7 @@ public class CodeGen extends BaseASTVisitor
 	}
 	
 	@Override
-	public void enterVisitBeforeWhileExpn(WhileDoStmt whileDoStmt) {
+	public void enterVisit(WhileDoStmt whileDoStmt) {
 		// expn will be start to be evaluated in next instruction,
 		// so save addr as start of loop
 		whileDoStmt.startOfLoop = instrs.getNextInstructionAddr();
