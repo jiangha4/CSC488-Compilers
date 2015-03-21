@@ -266,4 +266,13 @@ public class CodeGen extends BaseASTVisitor
 		instrs.emitPushValue(loopStmt.startOfLoop);
 		instrs.emitBranch();
 	}
+	
+	@Override
+	public void exitVisit(EqualsExpn equalsExpn) {
+		instrs.emitEquals();
+		
+		if (equalsExpn.getOpSymbol() == EqualsExpn.OP_NOT_EQUAL) {
+			instrs.emitNot();
+		}
+	}
 }
