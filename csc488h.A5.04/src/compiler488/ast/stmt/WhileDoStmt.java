@@ -29,6 +29,9 @@ public class WhileDoStmt extends LoopingStmt {
 		visitor.enterVisit(this);
 
 		expn.accept(visitor);
+		
+		visitor.enterVisitAfterWhileExpn(this);
+		
 		body.accept(visitor);
 
 		visitor.exitVisit(this);

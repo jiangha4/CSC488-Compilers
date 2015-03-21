@@ -124,4 +124,5 @@ public interface ASTVisitor {
 	public void exitVisit(Scope scope);
 	public void enterVisit(WhileDoStmt whileDoStmt);
 	public void exitVisit(WhileDoStmt whileDoStmt);
+	public void enterVisitAfterWhileExpn(WhileDoStmt visitor);
 }
