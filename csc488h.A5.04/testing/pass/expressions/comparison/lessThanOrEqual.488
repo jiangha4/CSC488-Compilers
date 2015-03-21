@@ -1,0 +1,9 @@
+begin
+
+if 1 <= 2 then
+    put "SUCCESS"
+else
+    put "FAIL"
+end
+
+end
