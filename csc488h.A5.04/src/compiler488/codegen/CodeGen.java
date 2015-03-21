@@ -328,4 +328,28 @@ public class CodeGen extends BaseASTVisitor
 		instrs.patchForwardBranchToNextInstruction(whileDoStmt.shouldPointToEnd);
 	}
 	
+	@Override
+	public void exitVisit(CompareExpn compareExpn) {
+		/*
+		 * Note: LESS/GREATER and LESS_EQUAL/GREATER_EQUAL
+		 * are differentiated by the order that the left and right
+		 * operands are processed.
+		 */
+		String op = compareExpn.getOpSymbol();
+		switch (op) {
+			case CompareExpn.OP_LESS:
+			case CompareExpn.OP_GREATER:
+				instrs.emitLessThan();
+				break;
+			case CompareExpn.OP_LESS_EQUAL:
+			case CompareExpn.OP_GREATER_EQUAL:
+				instrs.emitLessThan();
+				instrs.emitNot();
+				break;
+			default:
+				String msg = "Unknown CompareExpn operation: " + op;
+				throw new UnsupportedOperationException(msg);
+		}
+	}
+	
 }

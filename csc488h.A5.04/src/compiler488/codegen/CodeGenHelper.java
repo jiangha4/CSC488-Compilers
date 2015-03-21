@@ -297,6 +297,13 @@ public class CodeGenHelper {
 	public void emitEquals() {
 		instrs.add(Machine.EQ);
 	}
+	
+	/*
+	 * Emit instructions to perform < operation
+	 */
+	public void emitLessThan() {
+		instrs.add(Machine.LT);
+	}
 
 	/*
 	 * Emit instructions to perform a not operation on the top of the stack.
