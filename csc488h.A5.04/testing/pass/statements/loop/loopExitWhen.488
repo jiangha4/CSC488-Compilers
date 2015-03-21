@@ -1,0 +1,11 @@
+begin
+    put "Should print 56789:", skip
+    integer i
+    i <= 5
+    loop
+        put i
+        exit when i = 9
+        i <= i + 1
+    end
+    put skip, "END"
+end

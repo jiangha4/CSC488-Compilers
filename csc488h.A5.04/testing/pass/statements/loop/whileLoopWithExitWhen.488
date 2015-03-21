@@ -1,0 +1,16 @@
+begin
+
+    integer i
+    i <= 2
+
+    put "Should print 234: ", skip
+
+    while i != 9 do
+        put i
+        i <= i + 1
+        exit when i = 5
+    end
+
+    put skip, "END"
+
+end

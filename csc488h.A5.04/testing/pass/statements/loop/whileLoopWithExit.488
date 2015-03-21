@@ -1,0 +1,18 @@
+begin
+
+    integer i
+    i <= 1
+
+    put "Should print 123: ", skip
+
+    while i != 9 do
+        put i
+        i <= i + 1
+        if i = 4 then
+            exit
+        end
+    end
+
+    put skip, "END"
+
+end

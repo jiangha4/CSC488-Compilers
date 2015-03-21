@@ -1,0 +1,13 @@
+begin
+    put "Should print 12345:", skip
+    integer i
+    i <= 1
+    loop
+        put i
+        if i = 5 then
+            exit
+        end
+        i <= i + 1
+    end
+    put skip, "END"
+end
