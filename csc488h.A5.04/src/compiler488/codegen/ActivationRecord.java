@@ -23,7 +23,7 @@ public class ActivationRecord
 	/* STScope, used to look up var offset */
 	private STScope scope;
 
-	/* Sizes (in words) of the amount of storage reuqired for local storage
+	/* Sizes (in words) of the amount of storage required for local storage
 	 * of variables and parameters respectively */
 	private short memSizeForVariables;
 	private short memSizeForParameters;
