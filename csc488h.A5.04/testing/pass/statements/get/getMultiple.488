@@ -1,0 +1,8 @@
+begin
+    integer a, b, c
+    put "Enter 3 numbers, press enter after each:", skip
+    get a, b, c
+    put "First  : ", a, skip
+    put "Second : ", b, skip
+    put "Third  : ", c
+end

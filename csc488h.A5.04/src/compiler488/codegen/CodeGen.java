@@ -127,6 +127,12 @@ public class CodeGen extends BaseASTVisitor
 			instrs.emitPrintInt();
 		}
 	}
+	
+	@Override
+	public void exitVisitGetExpn(Expn getStmtChild) {
+		instrs.removeLastEmittedLoad();
+		instrs.emitReadIntAndStore();
+	}
 
 	@Override
 	public void exitVisitLHS(AssignStmt assignStmt)

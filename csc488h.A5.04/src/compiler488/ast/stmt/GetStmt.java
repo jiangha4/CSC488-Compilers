@@ -34,7 +34,10 @@ public class GetStmt extends Stmt {
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
 
-		inputs.accept(visitor);
+		for (Expn in : inputs) {
+			in.accept(visitor);
+			visitor.exitVisitGetExpn(in);
+		}
 
 		visitor.exitVisit(this);
 	}
