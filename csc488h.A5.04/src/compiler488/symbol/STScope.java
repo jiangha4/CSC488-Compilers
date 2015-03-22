@@ -25,6 +25,7 @@ public class STScope {
 	private List<STScope> children;
 	private HashMap<String,SymbolTableEntry> symbols;
 	private short lexicalLevel;
+	public short routineBodyAddress;
 	public short nextOrderNumber;
 
 	final static String scopeSep = "=======================================================\n";

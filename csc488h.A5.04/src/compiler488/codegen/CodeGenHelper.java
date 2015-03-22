@@ -14,14 +14,14 @@ public class CodeGenHelper {
 	/** flag for tracing code generation */
 	private boolean trace = Main.traceCodeGen;
 
-	/** stack of activation records pushed but not cleaned up **/
-	private Stack<ActivationRecord> activationRecords;
+	/** stack of scopes whose activation records have not been cleaned up **/
+	private Stack<STScope> scopes;
 
 	/** emitted instructions **/
 	private List<Short> instrs;
 
 	public CodeGenHelper() {
-		activationRecords = new Stack<ActivationRecord>();
+		scopes = new Stack<STScope>();
 		instrs = new ArrayList<Short>();
 	}
 
@@ -31,14 +31,14 @@ public class CodeGenHelper {
 	public List<Short> getInstructions() {
 		return instrs;
 	}
-	
+
 	/*
 	 * Return address of next instruction to be put into memory
 	 */
 	public short getNextInstructionAddr() {
 		return (short)(this.instrs.size());
 	}
-	
+
 	/*
 	 * Patch value at instrAddr to be newVal
 	 */
@@ -187,6 +187,14 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit an unconditional branch instruction.
+	 */
+	public void emitBranch(short offset) {
+		emitPushValue(offset);
+		emitBranch();
+	}
+
+	/*
 	 * Emit instructions that push a branch address and unconditional branch
 	 * instruction on the stack. Return index of branch address for later
 	 * patching.
@@ -297,7 +305,7 @@ public class CodeGenHelper {
 	public void emitEquals() {
 		instrs.add(Machine.EQ);
 	}
-	
+
 	/*
 	 * Emit instructions to perform < operation
 	 */
@@ -328,6 +336,14 @@ public class CodeGenHelper {
 		instrs.add(Machine.ADDR);
 		instrs.add(disp);
 		instrs.add(offset);
+	}
+
+	/*
+	 * Emit instructions to push the address of the activation record referenced
+	 * in the given display register, plus the given offset.
+	 */
+	public void emitGetAddr(int disp, int offset) {
+		emitGetAddr((short)disp, (short)offset);
 	}
 
 	/*
@@ -366,6 +382,20 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instructions to save the value in the callee's lexical level's
+	 * display register, in the caller's activation record.
+	 */
+	public void emitSaveDisplay(short calleeLexicalLevel) {
+		// Get current scope's activation record
+		STScope caller = scopes.peek();
+
+		// Get and save the current value for display[callee]
+		emitGetAddr(caller.getLexicalLevel(), ActivationRecord.getOffsetToSavedDisplayValue());
+		emitGetAddr(calleeLexicalLevel, 0);
+		emitStore();
+	}
+
+	/*
 	 * Emit instructions to set the display register for the given lexical
 	 * level to the current stack pointer.
 	 */
@@ -375,62 +405,113 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Emit instructions to push an activation record on to the stack. Return
-	 * the index in the instrs array where the return value is, to be patched
-	 * later.
+	 * Emit instructions to save space for the local storage for the given
+	 * activation record.
 	 */
-	public short emitActivationRecord(ActivationRecord ar, short returnAddress) {
-		activationRecords.push(ar);
+	public void emitAllocateSpaceForLocalStorage(STScope scope) {
+		int spaceForVars = ActivationRecord.getNumWordsToAllocateForVariables(scope);
+		emitPushValue(Machine.UNDEFINED, spaceForVars);
+	}
 
+	/*
+	 * Emit instructions for the routing entrance. This allocates space for
+	 * local variables.
+	 */
+	public void emitRoutineEntranceCode(STScope scope) {
+		// Mark this scope as requiring cleanup later
+		scopes.push(scope);
+		scope.routineBodyAddress = getNextInstructionAddr();
+
+		// Routing entrance code
+		emitAllocateSpaceForLocalStorage(scope);
+	}
+
+	/*
+	 * Emit instructions to push the dynamic link. If this is the program scope
+	 * there is no dynamic link, so push undefined.
+	 */
+	public void emitPushDynamicLink(short callerLexlevel) {
+		if (scopes.empty()) {
+			// Program scope, no dynamic link
+			emitPushValue(Machine.UNDEFINED);
+		} else {
+			emitGetAddr(callerLexlevel, 0);
+		}
+	}
+
+	/*
+	 * Emit instructions to restore the display value as it was before the
+	 * routine call we just returned from.
+	 */
+	public void emitRestoreDisplay(RoutineDecl routineDecl) {
+		emitPushValue(ActivationRecord.getOffsetToSavedDisplayValue());
+		emitAdd();
+		emitLoad();
+		emitSetDisplay(routineDecl.getLexicalLevel());
+	}
+
+	/*
+	 * Emit instructions to push an activation record on to the stack, except
+	 * for the local storage of parameters and variables. Return the index in
+	 * the instrs array where the return value is, to be patched later.
+	 */
+	public short emitActivationRecord(STScope scope, short returnAddress, short callerLexlevel) {
 		// Set display
-		short lexicalLevel = ar.getLexicalLevel();
+		short lexicalLevel = scope.getLexicalLevel();
 		emitSetDisplayToStackPointer(lexicalLevel);
 
-		// Return value if applicable
-		if (ar.hasReturnValue()) {
-			emitPushValue(Machine.UNDEFINED);
-		}
-
-		// Return address
+		// Return value and address
+		emitPushValue(Machine.UNDEFINED);
 		emitPushValue(returnAddress);
 		short returnAddrIndex = (short)(instrs.size() - 1);
 
-		// Space for block mark and local vars
-		int blockMark = ar.getNumWordsToAllocateForBlockMark();
-		int localStorage = ar.getNumWordsToAllocateForLocalStorage();
-		emitPushValue(Machine.UNDEFINED, blockMark + localStorage);
+		// Dynamic link
+		emitPushDynamicLink(callerLexlevel);
+
+		// Space for display[M]
+		emitPushValue(Machine.UNDEFINED);
 
 		return returnAddrIndex;
 	}
 
 	/*
-	 * Emit instructions to push an activation record on to the stack. Return
-	 * the index in the instrs array where the return value is, to be patched
-	 * later.
+	 * Emit instructions to push an activation record on to the stack, except
+	 * for the local storage of parameters and variables. Return the index in
+	 * the instrs array where the return value is, to be patched later.
 	 */
-	public short emitActivationRecord(ActivationRecord ar, int returnAddress) {
-		return emitActivationRecord(ar, (short)returnAddress);
+	public short emitActivationRecord(STScope scope, int returnAddress, short callerLexlevel) {
+		return emitActivationRecord(scope, (short)returnAddress, callerLexlevel);
 	}
 
 	/*
-	 * Emit instructions to push an activation record on to the stack. Return
-	 * the index in the instrs array where the return value is, to be patched
-	 * later.
-	 */
-	public short emitActivationRecord(ActivationRecord ar) {
-		return emitActivationRecord(ar, Machine.UNDEFINED);
-	}
-
-	/*
-	 * Emit instructions to pop the program activation record from to the stack.
+	 * Emit instructions to pop the top activation record from to the stack.
 	 */
 	public void emitActivationRecordCleanUp() {
 		// Get activation record
-		ActivationRecord ar = activationRecords.pop();
+		STScope scope = scopes.pop();
 
 		// Remove it from the stack
-		int numToPop = ar.getNumWordsToPopForCleanUp();
+		int numToPop = ActivationRecord.getNumWordsToPopForCleanUp(scope);
 		emitPop(numToPop);
+	}
+
+	/*
+	 * Clean up the program activation record, up to the return address.
+	 */
+	public void emitProgramActivationRecordCleanUp() {
+		// Pop up to dynamic link
+		emitActivationRecordCleanUp();
+
+		// Don't need to restore display, so can pop this too.
+		emitPop();
+	}
+
+	/*
+	 * Emit instructions to push the program activation record on the stack.
+	 */
+	public void emitProgramActivationRecord(STScope programScope) {
+		emitActivationRecord(programScope, 0, Machine.UNDEFINED);
+		emitRoutineEntranceCode(programScope);
 	}
 
 	/*
@@ -439,14 +520,56 @@ public class CodeGenHelper {
 	public void patchForwardBranchToNextInstruction(short index) {
 		instrs.set(index, getNextInstructionAddr());
 	}
-	
+
 	/*
-	 * Update all values at the given indices to branch to addr of next instruction
+	 * Update all values at the given indices to branch to addr of next
+	 * instruction
 	 */
 	public void patchForwardBranchToNextInstruction(List<Short> indices) {
 		for (short index : indices) {
 			this.patchForwardBranchToNextInstruction(index);
 		}
+	}
+
+	/*
+	 * Emit instructions to branch to the body of the routine we're calling.
+	 */
+	public void emitBranchToRoutineBody(STScope calleeScope) {
+		emitBranch(calleeScope.routineBodyAddress);
+	}
+
+	/*
+	 * Emit instructions set up a routine call. This involves saving the display
+	 * and emitting the activation record up to the parameter storage.
+	 */
+	public short emitRoutineCallSetup(STScope callerScope, STScope calleeScope) {
+		// Save current display addr of callee lexical level into the caller
+		emitSaveDisplay(calleeScope.getLexicalLevel());
+
+		// Emit the activation record
+		return emitActivationRecord(calleeScope, Machine.UNDEFINED, callerScope.getLexicalLevel());
+	}
+
+	/*
+	 * Emit instructions to branch to the body of the routine we're calling.
+	 * Fix the return address to point the instruction after the branch.
+	 */
+	public void emitRoutineCallBranch(STScope calleeScope, short returnAddrIndex) {
+		// Branch to procedure
+		emitBranchToRoutineBody(calleeScope);
+		patchForwardBranchToNextInstruction(returnAddrIndex);
+	}
+
+	/*
+	 * Emit instructions to branch to the body of the routine we're calling.
+	 * Fix the return address to point the instruction after the branch, which
+	 * is a pop, to discard the return value.
+	 */
+	public void emitProcedureCallBranch(STScope calleeScope, short returnAddrIndex) {
+		emitRoutineCallBranch(calleeScope, returnAddrIndex);
+
+		// Discard return value
+		emitPop();
 	}
 
 	/*

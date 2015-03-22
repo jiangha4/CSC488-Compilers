@@ -105,15 +105,15 @@ public class CodeGen extends BaseASTVisitor
 	public void enterVisit(Program program)
 	{
 		instrs.emitHalt();
-		ActivationRecord ar = new ActivationRecord(program.getSTScope());
-		instrs.emitActivationRecord(ar, 0);
+		instrs.emitProgramActivationRecord(program.getSTScope());
 	}
 
 	@Override
 	public void exitVisit(Program program)
 	{
-		instrs.emitActivationRecordCleanUp();
+		instrs.emitProgramActivationRecordCleanUp();
 		instrs.emitBranch();
+		instrs.emitPop();
 	}
 
 	@Override
@@ -251,7 +251,7 @@ public class CodeGen extends BaseASTVisitor
 			instrs.emitLoadVar(scope, ident);
 		}
 	}
-	
+
 	@Override
 	public void enterVisit(LoopStmt loopStmt) {
 		// body will be visited after this and we
@@ -259,16 +259,16 @@ public class CodeGen extends BaseASTVisitor
 		// so save the addr of the next instruction.
 		loopStmt.startOfLoop = instrs.getNextInstructionAddr();
 	}
-	
+
 	@Override
 	public void exitVisit(LoopStmt loopStmt) {
 		instrs.emitPushValue(loopStmt.startOfLoop);
 		instrs.emitBranch();
-		
+
 		// next instruction is end of loop, so patch everything that needs to point there
 		instrs.patchForwardBranchToNextInstruction(loopStmt.shouldPointToEnd);
 	}
-	
+
 	@Override
 	public void exitVisit(ExitStmt exitStmt) {
 		if (exitStmt.getExpn() == null) {
@@ -276,7 +276,7 @@ public class CodeGen extends BaseASTVisitor
 			// negated, so we always branch on the branch-false
 			instrs.emitPushValue(Machine.MACHINE_TRUE);
 		}
-		
+
 		// exit statement in form "exit when expr is true", but we only have
 		// a branch-on-false, and unconditional branch. So we can just use
 		// the branch-on-false after negating the expressing, to act as a
@@ -285,31 +285,31 @@ public class CodeGen extends BaseASTVisitor
 
 		// save addr, so we can patch to end of loop later
 		short addr = instrs.emitBranchIfFalseToUnknown();
-		
+
 		LoopingStmt containingLoop = exitStmt.getContainingLoop();
 		// shouldn't be null if it passed semantic analysis
 		assert(containingLoop != null);
-		
+
 		// add addr to list of addrs to patch
 		containingLoop.shouldPointToEnd.add(addr);
 	}
-	
+
 	@Override
 	public void exitVisit(EqualsExpn equalsExpn) {
 		instrs.emitEquals();
-		
+
 		if (equalsExpn.getOpSymbol() == EqualsExpn.OP_NOT_EQUAL) {
 			instrs.emitNot();
 		}
 	}
-	
+
 	@Override
 	public void enterVisit(WhileDoStmt whileDoStmt) {
 		// expn will be start to be evaluated in next instruction,
 		// so save addr as start of loop
 		whileDoStmt.startOfLoop = instrs.getNextInstructionAddr();
 	}
-	
+
 	@Override
 	public void enterVisitAfterWhileExpn(WhileDoStmt whileDoStmt) {
 		// expn will have been evaluated at this point,
@@ -317,17 +317,58 @@ public class CodeGen extends BaseASTVisitor
 		short addr = instrs.emitBranchIfFalseToUnknown();
 		whileDoStmt.shouldPointToEnd.add(addr);
 	}
-	
+
 	@Override
 	public void exitVisit(WhileDoStmt whileDoStmt) {
 		// branch to start of loop
 		instrs.emitPushValue(whileDoStmt.startOfLoop);
 		instrs.emitBranch();
-		
+
 		// next instruction is end of loop, so patch everything that needs to point there
 		instrs.patchForwardBranchToNextInstruction(whileDoStmt.shouldPointToEnd);
 	}
-	
+
+	@Override
+	public void enterVisit(ProcedureCallStmt callStmt) {
+		// Get the declaration's symbol table entry
+		STScope callerScope = callStmt.getContainingSTScope();
+		String ident = callStmt.getName();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
+		STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
+
+		// Emit procedure call setup
+		callStmt.shouldPointToAfterBranch = instrs.emitRoutineCallSetup(callerScope, calleeScope);
+	}
+
+	@Override
+	public void exitVisit(ProcedureCallStmt callStmt) {
+		// Get the declaration's symbol table entry
+		STScope callerScope = callStmt.getContainingSTScope();
+		String ident = callStmt.getName();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
+		STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
+
+		// Emit procedure call branch
+		instrs.emitProcedureCallBranch(calleeScope, callStmt.shouldPointToAfterBranch);
+	}
+
+	@Override
+	public void enterVisit(RoutineDecl routineDecl) {
+		// Branch past declaration
+		routineDecl.shouldPointToEnd = instrs.emitBranchToUnknown();
+
+		// Entrance code
+		instrs.emitRoutineEntranceCode(routineDecl.getSTScope());
+	}
+
+	@Override
+	public void exitVisit(RoutineDecl routineDecl) {
+		instrs.emitActivationRecordCleanUp();
+		instrs.emitRestoreDisplay(routineDecl);
+		instrs.emitBranch();
+		instrs.patchForwardBranchToNextInstruction(routineDecl.shouldPointToEnd);
+	}
+
 	@Override
 	public void exitVisit(CompareExpn compareExpn) {
 		/*
@@ -351,5 +392,4 @@ public class CodeGen extends BaseASTVisitor
 				throw new UnsupportedOperationException(msg);
 		}
 	}
-	
 }

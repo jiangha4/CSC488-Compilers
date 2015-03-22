@@ -21,6 +21,9 @@ public class ProcedureCallStmt extends Stmt {
 	 */
 	private ASTList<Expn> arguments;
 
+	/** Instruction location to patch later during code gen **/
+	public short shouldPointToAfterBranch;
+
 	public ProcedureCallStmt(String name, ASTList<Expn> arguments, SourceCoord sourceCoord) {
 		super(sourceCoord);
 

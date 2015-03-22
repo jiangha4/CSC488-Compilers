@@ -18,67 +18,33 @@ import compiler488.symbol.STScope.ScopeKind;
  */
 public class ActivationRecord
 {
-	private static int BLOCK_MARK_SIZE = 2;
-
-	/* STScope, used to look up var offset */
-	private STScope scope;
-
-	/* Sizes (in words) of the amount of storage required for local storage
-	 * of variables and parameters respectively */
-	private short memSizeForVariables;
-	private short memSizeForParameters;
-
 	/*
-	 * Constructor.
+	 * Return the number of words we need to allocate for the local storage
+	 * in the activation record.
 	 */
-	public ActivationRecord(STScope stScope)
-	{
-		this.scope = stScope;
-		this.memSizeForParameters = getMemSizeForKind(SymbolKind.PARAMETER);
-		this.memSizeForVariables = getMemSizeForKinds(SymbolKind.VARIABLE, SymbolKind.ARRAY);
-	}
-
-	/*
-	 * Return the lexical level of the associated scope.
-	 */
-	public short getLexicalLevel() {
-		return scope.getLexicalLevel();
-	}
-
-	/*
-	 * Return whether or not we need to allocate storage for the return value.
-	 */
-	public boolean hasReturnValue() {
-		return scopeIsKind(ScopeKind.FUNCTION);
+	public static short getNumWordsToAllocateForVariables(STScope stScope) {
+		return getMemSizeForKinds(stScope, SymbolKind.VARIABLE, SymbolKind.ARRAY);
 	}
 
 	/*
 	 * Return the number of words we need to allocate for the local storage
 	 * in the activation record.
 	 */
-	public int getNumWordsToAllocateForBlockMark() {
-		return BLOCK_MARK_SIZE;
+	public static short getNumWordsToAllocateForParameters(STScope stScope) {
+		return getMemSizeForKind(stScope, SymbolKind.PARAMETER);
 	}
 
 	/*
-	 * Return the number of words we need to allocate for the local storage
-	 * in the activation record.
+	 * Return the number of pops required to clean up all ofthis activation
+	 * record except for the return address and return value if appropriate.
 	 */
-	public int getNumWordsToAllocateForLocalStorage() {
-		return memSizeForVariables + memSizeForParameters;
-	}
-
-	/*
-	* Return the number of pops required to clean up all ofthis activation
-	* record except for the return address and return value if appropriate.
-	*/
-	public int getNumWordsToPopForCleanUp() {
+	public static short getNumWordsToPopForCleanUp(STScope stScope) {
 		// Local storage
-		int numRequired = memSizeForVariables;
-		numRequired += memSizeForParameters;
+		short numRequired = getNumWordsToAllocateForVariables(stScope);
+		numRequired += getNumWordsToAllocateForParameters(stScope);
 
-		// Block mark
-		numRequired += BLOCK_MARK_SIZE;
+		// Saved display
+		numRequired += 1;
 
 		return numRequired;
 	}
@@ -86,65 +52,42 @@ public class ActivationRecord
 	/*
 	 * Get the offset within the record to the return address.
 	 */
-	public short getOffsetToReturnAddress() {
+	public static short getOffsetToReturnAddress() {
 		// Functions have a return value first
-		short offset = 0;
-		if (hasReturnValue()) {
-			offset += 1;
-		}
-
-		return offset;
+		return 1;
 	}
 
 	/*
 	 * Get the offset within the record to the dynamic link addr.
 	 */
-	public short getOffsetToDynamicLinkAddr() {
+	public static short getOffsetToDynamicLinkAddr() {
 		return (short)(getOffsetToReturnAddress() + 1);
 	}
 
 	/*
 	 * Get the offset within the record to the saved display value.
 	 */
-	public short getOffsetToSavedDisplayValue() {
+	public static short getOffsetToSavedDisplayValue() {
 		return (short)(getOffsetToDynamicLinkAddr() + 1);
 	}
 
 	/*
 	 * Get the offset within the record to the local parameter storage.
 	 */
-	public short getOffsetToParameterStorage() {
+	public static short getOffsetToParameterStorage() {
 		return (short)(getOffsetToSavedDisplayValue() + 1);
 	}
 
 	/*
 	 * Get the offset within the record to the local variable storage.
 	 */
-	public short getOffsetToVariableStorage() {
-		return (short)(getOffsetToParameterStorage() + memSizeForParameters);
+	public static short getOffsetToVariableStorage(STScope stScope) {
+		short offset = getOffsetToParameterStorage();
+		offset += getNumWordsToAllocateForVariables(stScope);
+		return offset;
 	}
 
-	/*
-	 * Return the amount of memory (in words) required for local storage of
-	 * all variables in this scope.
-	 */
-	public int getMemSizeForVariables() {
-		return memSizeForVariables;
-	}
-
-	/*
-	 * Return the amount of memory (in words) required for local storage of
-	 * all parameters for this function/procedure.
-	 */
-	public int getMemSizeForParameters() {
-		return memSizeForParameters;
-	}
-
-	private boolean scopeIsKind(ScopeKind kind) {
-		return kind == this.scope.getScopeKind();
-	}
-
-	private short getMemSizeForKind(SymbolKind kind) {
+	private static short getMemSizeForKind(STScope scope, SymbolKind kind) {
 		short numOfKind = 0;
 		for (SymbolTableEntry ste : scope.getSymbols().values()) {
 			if (ste.getKind() == kind) {
@@ -156,10 +99,16 @@ public class ActivationRecord
 			}
 		}
 
+		for (STScope child : scope.getChildren()) {
+			if (child.getScopeKind() == ScopeKind.NORMAL) {
+				numOfKind += getMemSizeForKind(child, kind);
+			}
+		}
+
 		return numOfKind;
 	}
 
-	private short getMemSizeForKinds(SymbolKind kind1, SymbolKind kind2) {
-		return (short)(getMemSizeForKind(kind1) + getMemSizeForKind(kind2));
+	private static short getMemSizeForKinds(STScope scope, SymbolKind kind1, SymbolKind kind2) {
+		return (short)(getMemSizeForKind(scope, kind1) + getMemSizeForKind(scope, kind2));
 	}
 }

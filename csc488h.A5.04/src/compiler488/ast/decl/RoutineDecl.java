@@ -22,6 +22,9 @@ public class RoutineDecl extends Declaration implements ScopeCreator {
 	/** The symbol table scope created by this expn **/
 	private STScope stScope;
 
+	/** Instruction location to patch later during code gen **/
+	public short shouldPointToEnd;
+
 	/**
 	 * Construct a function with parameters, and a definition of the body.
 	 *   @param  name		  Name of the routine
@@ -92,6 +95,10 @@ public class RoutineDecl extends Declaration implements ScopeCreator {
 
 	public STScope getSTScope() {
 		return stScope;
+	}
+
+	public short getLexicalLevel() {
+		return stScope.getLexicalLevel();
 	}
 
 	@Override
