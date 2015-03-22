@@ -248,6 +248,21 @@ public class CodeGenHelper {
 	public void emitPrintSkip() {
 		emitPrintChar('\n');
 	}
+	
+	/*
+	 * Emit instruction to read in from stdin
+	 */
+	public void emitReadInt() {
+		instrs.add(Machine.READI);
+	}
+	
+	/*
+	 * Emit instructions to read int from stdin and store
+	 */
+	public void emitReadIntAndStore() {
+		emitReadInt();
+		emitStore();
+	}
 
 	/*
 	 * Emit instructions to perform an addition.
