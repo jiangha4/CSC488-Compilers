@@ -1,0 +1,8 @@
+begin
+	procedure a(integer b) begin
+		put b
+	end
+
+	put "Should be 4: "
+	a(4)
+end

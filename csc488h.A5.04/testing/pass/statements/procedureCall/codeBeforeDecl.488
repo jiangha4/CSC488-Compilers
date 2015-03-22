@@ -1,0 +1,9 @@
+begin
+	put "Should be 7: "
+
+	procedure a(integer b) begin
+		put b
+	end
+
+	a(7)
+end

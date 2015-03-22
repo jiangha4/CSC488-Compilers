@@ -1,0 +1,22 @@
+begin
+	integer a
+	a <= 3
+
+	procedure b(integer c) begin
+		boolean d
+		d <= false
+
+		procedure e(boolean f) begin
+			if f then
+				put "FAILED"
+			else
+				put c
+			end
+		end
+
+		e(d)
+	end
+
+	put "Should be 3: "
+	b(a)
+end

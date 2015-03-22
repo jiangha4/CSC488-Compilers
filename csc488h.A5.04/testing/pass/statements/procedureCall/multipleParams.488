@@ -1,0 +1,12 @@
+begin
+	procedure a(boolean b, integer c) begin
+		if b then
+			put "FAILED"
+		else
+			put c
+		end
+	end
+
+	put "Should be 9: "
+	a(false, 9)
+end

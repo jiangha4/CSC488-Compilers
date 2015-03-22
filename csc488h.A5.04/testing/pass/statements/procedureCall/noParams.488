@@ -1,0 +1,8 @@
+begin
+	procedure a begin
+		put "SUCCESS"
+	end
+
+	put "Should say SUCCESS: "
+	a
+end

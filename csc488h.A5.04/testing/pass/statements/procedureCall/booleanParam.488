@@ -1,0 +1,12 @@
+begin
+	procedure a(boolean b) begin
+		if b then
+			put "SUCCESS"
+		else
+			put "FAILED"
+		end
+	end
+
+	put "Should say SUCCESS: "
+	a(true)
+end
