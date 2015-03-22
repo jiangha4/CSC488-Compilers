@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import compiler488.ast.BaseAST;
 import compiler488.ast.decl.ArrayDeclPart;
 import compiler488.codegen.*;
+import compiler488.runtime.*;
 import compiler488.symbol.SymbolTable.SymbolKind;
 
 /**
@@ -38,26 +39,25 @@ public class STScope {
 	}
 	private ScopeKind scopeKind;
 
-	public STScope (ScopeKind kind) {
-		this.parent = null;
+	public STScope (ScopeKind kind, STScope parent) {
+		this.parent = parent;
 		this.children = new ArrayList<STScope>();
 		this.symbols = new HashMap<String,SymbolTableEntry>();
 		this.lexicalLevel = 0;
 		this.scopeKind = kind;
+		this.routineBodyAddress = Machine.UNDEFINED;
 
-		ActivationRecord ar = new ActivationRecord(this);
-		this.nextOrderNumber = ar.getOffsetToVariableStorage();
+		if (kind == ScopeKind.NORMAL) {
+			this.lexicalLevel = parent.lexicalLevel;
+			this.nextOrderNumber = parent.nextOrderNumber;
+		} else {
+			this.lexicalLevel = (parent == null) ? (short)0 : (short)(parent.lexicalLevel + 1);
+			this.nextOrderNumber = ActivationRecord.getOffsetToVariableStorage(this);
+		}
 	}
 
 	public STScope getParent() {
 		return parent;
-	}
-
-	public void setParent(STScope parent) {
-		if (parent != null) {
-			this.parent = parent;
-			this.lexicalLevel = (short)(parent.getLexicalLevel() + 1);
-		}
 	}
 
 	public List<STScope> getChildren() {

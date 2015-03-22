@@ -173,8 +173,7 @@ public class SymbolTable {
 	 */
 	public STScope enterScope(ScopeKind kind) {
 		// Add new scope as child of current scope
-		STScope newScope = new STScope(kind);
-		newScope.setParent(currentScope);
+		STScope newScope = new STScope(kind, currentScope);
 		if (currentScope != null) {
 			currentScope.addChild(newScope);
 		}
@@ -193,7 +192,11 @@ public class SymbolTable {
 	public void exitScope() {
 		// Exit to parent scope
 		if (this.currentScope != null) {
-			this.currentScope = this.currentScope.getParent();
+			STScope parent = this.currentScope.getParent();
+			if (parent != null) {
+				parent.nextOrderNumber = this.currentScope.nextOrderNumber;
+			}
+			this.currentScope = parent;
 		}
 	}
 

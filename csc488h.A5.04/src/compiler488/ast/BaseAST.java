@@ -1,6 +1,6 @@
 package compiler488.ast;
 
-import compiler488.symbol.SymbolTableEntry;
+import compiler488.symbol.*;
 
 
 /**
@@ -90,6 +90,17 @@ public abstract class BaseAST implements AST {
 	@Override
 	public void prettyPrint(PrettyPrinter p) {
 		p.print(toString());
+	}
+
+	/*
+	 * Get the STScope that this node is contained in.
+	 */
+	public STScope getContainingSTScope() {
+		BaseAST curNode = this;
+		while (!(curNode instanceof ScopeCreator)) {
+			curNode = curNode.getParentNode();
+		}
+		return ((ScopeCreator)curNode).getSTScope();
 	}
 
 	/**

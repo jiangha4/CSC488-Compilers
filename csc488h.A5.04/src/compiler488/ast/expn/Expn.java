@@ -25,14 +25,6 @@ public abstract class Expn extends BaseAST implements Printable {
 	 */
 	public abstract SymbolType getExpnType(SymbolTable st);
 
-	public STScope getContainingSTScope() {
-		BaseAST curNode = this;
-		while (!(curNode instanceof ScopeCreator)) {
-			curNode = curNode.getParentNode();
-		}
-		return ((ScopeCreator)curNode).getSTScope();
-	}
-
 	/**
 	 * getSTETypeOrUnknown : for expressions representing identifiers (scalar vars, arrays, functions,
 	 * procedures, params), look up the identifier name in the symbol table. If found, then return the
