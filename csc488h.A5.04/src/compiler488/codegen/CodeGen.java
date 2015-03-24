@@ -127,7 +127,7 @@ public class CodeGen extends BaseASTVisitor
 			instrs.emitPrintInt();
 		}
 	}
-	
+
 	@Override
 	public void exitVisitGetExpn(Expn getStmtChild) {
 		instrs.removeLastEmittedLoad();
@@ -163,6 +163,12 @@ public class CodeGen extends BaseASTVisitor
 	public void exitVisit(IfStmt ifStmt)
 	{
 		instrs.patchForwardBranchToNextInstruction(ifStmt.shouldPointToEnd);
+	}
+
+	@Override
+	public void exitVisit(ReturnStmt returnStmt)
+	{
+		returnStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
 	}
 
 	@Override
@@ -369,6 +375,10 @@ public class CodeGen extends BaseASTVisitor
 
 	@Override
 	public void exitVisit(RoutineDecl routineDecl) {
+		// Make return statements point here
+		instrs.patchReturnStmtBranches(routineDecl);
+
+		// Routine epilogue
 		instrs.emitActivationRecordCleanUp();
 		instrs.emitRestoreDisplay(routineDecl);
 		instrs.emitBranch();

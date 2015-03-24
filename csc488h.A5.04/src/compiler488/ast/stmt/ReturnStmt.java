@@ -13,6 +13,9 @@ public class ReturnStmt extends Stmt {
 	/* The value to be returned by the function (if any.) */
 	private Expn value = null;
 
+	/** Instruction locations to patch later during code gen **/
+	public short shouldPointToEnd;
+
 	/**
 	 * Construct a function <code>return <em>value</em></code> statement with a value expression.
 	 *   @param  value  AST for the return expression

@@ -1,6 +1,6 @@
 begin
     integer i
-    put "Enter a number: "
+    put "Enter a number: ", skip
     get i
-    put "You entered   : ", i
+    put "You entered: ", i
 end

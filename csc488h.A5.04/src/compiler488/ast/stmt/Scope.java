@@ -1,5 +1,6 @@
 package compiler488.ast.stmt;
 
+import java.util.*;
 import compiler488.ast.*;
 import compiler488.symbol.*;
 
@@ -38,18 +39,17 @@ public class Scope extends Stmt implements ScopeCreator {
 	}
 
 	/**
-	 * containsReturn - the scope statement will recursively check each of its child statements for a return statement
+	 * Recursively check each of its child statements return statements,
+	 * returning them as a list.
 	 */
 	@Override
-	public ReturnStmt containsReturn() {
+	public ArrayList<ReturnStmt> getReturnStmts() {
+		ArrayList<ReturnStmt> returnStmts = new ArrayList<ReturnStmt>();
 		for (Stmt child : body) {
-			ReturnStmt rs = child.containsReturn();
-			if (rs != null) {
-				return rs;
-			}
+			returnStmts.addAll(child.getReturnStmts());
 		}
 
-		return null;
+		return returnStmts;
 	}
 
 	@Override

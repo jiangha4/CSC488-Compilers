@@ -1,0 +1,13 @@
+begin
+	procedure a begin
+		procedure b begin
+			put "SUCCESS"
+		end
+
+		b
+		return
+		put "FAILED"
+	end
+
+	a
+end

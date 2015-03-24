@@ -256,14 +256,14 @@ public class CodeGenHelper {
 	public void emitPrintSkip() {
 		emitPrintChar('\n');
 	}
-	
+
 	/*
 	 * Emit instruction to read in from stdin
 	 */
 	public void emitReadInt() {
 		instrs.add(Machine.READI);
 	}
-	
+
 	/*
 	 * Emit instructions to read int from stdin and store
 	 */
@@ -543,6 +543,18 @@ public class CodeGenHelper {
 	public void patchForwardBranchToNextInstruction(List<Short> indices) {
 		for (short index : indices) {
 			this.patchForwardBranchToNextInstruction(index);
+		}
+	}
+
+	/*
+	 * Update all the branch addresses of the return statements in this routine
+	 * to point to the next instruction.
+	 */
+	public void patchReturnStmtBranches(RoutineDecl routineDecl) {
+		Scope routineScope = routineDecl.getBody();
+		ArrayList<ReturnStmt> returnStmts = routineScope.getReturnStmts();
+		for (ReturnStmt stmt : returnStmts) {
+			this.patchForwardBranchToNextInstruction(stmt.shouldPointToEnd);
 		}
 	}
 

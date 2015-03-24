@@ -1,5 +1,6 @@
 package compiler488.ast.stmt;
 
+import java.util.*;
 import compiler488.ast.BaseAST;
 import compiler488.ast.SourceCoord;
 
@@ -13,17 +14,15 @@ public abstract class Stmt extends BaseAST {
 	}
 
 	/**
-	 * containsReturn - find whether a statement is or contains (within its body) a ReturnStmt
-	 * By default, return the ReturnStmt object if of correct type; otherwise return null (no recursion).
-	 * Specific subclasses of Stmt will override this method to provide required behaviour of searching the bodies of
-	 * nested ordinary scopes, if statements and loops (while and loop).
-	 *
-	 * @return ReturnStmt : 'this' if self is a ReturnStmt; 'null' otherwise
+	 * Return the current statement (as a list) if this is a ReturnStmt, or
+	 * an empty list otherwise.
 	 */
-	public ReturnStmt containsReturn() {
+	public ArrayList<ReturnStmt> getReturnStmts() {
+		ArrayList<ReturnStmt> returnStmts = new ArrayList<ReturnStmt>();
 		if (this instanceof ReturnStmt) {
-			return (ReturnStmt)this;
+			returnStmts.add((ReturnStmt)this);
 		}
-		return null;
+
+		return returnStmts;
 	}
 }

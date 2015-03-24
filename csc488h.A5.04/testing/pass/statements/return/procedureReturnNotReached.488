@@ -1,0 +1,10 @@
+begin
+	procedure a begin
+		if false then
+			return
+		end
+		put "SUCCESS"
+	end
+
+	a
+end

@@ -1,8 +1,6 @@
 package compiler488.ast.stmt;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 import compiler488.ast.ASTList;
 import compiler488.ast.SourceCoord;
 import compiler488.ast.expn.Expn;
@@ -17,7 +15,7 @@ public abstract class LoopingStmt extends Stmt {
 
 	/** The body of the looping construct. */
 	protected ASTList<Stmt> body;
-	
+
 	/** Instruction locations to patch later during code gen **/
 	public short startOfLoop;
 	public ArrayList<Short> shouldPointToEnd;
@@ -48,16 +46,16 @@ public abstract class LoopingStmt extends Stmt {
 	}
 
 	/**
-	 * containsReturn - the looping statement will recursively check each of its child statements for a return statement
+	 * Recursively check each of its child statements return statements,
+	 * returning them as a list.
 	 */
 	@Override
-	public ReturnStmt containsReturn() {
+	public ArrayList<ReturnStmt> getReturnStmts() {
+		ArrayList<ReturnStmt> returnStmts = new ArrayList<ReturnStmt>();
 		for (Stmt child : body) {
-			ReturnStmt rs = child.containsReturn();
-			if (rs != null) {
-				return rs;
-			}
+			returnStmts.addAll(child.getReturnStmts());
 		}
-		return null;
+
+		return returnStmts;
 	}
 }

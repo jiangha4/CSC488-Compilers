@@ -1,5 +1,6 @@
 package compiler488.ast.stmt;
 
+import java.util.*;
 import compiler488.ast.ASTList;
 import compiler488.ast.ASTVisitor;
 import compiler488.ast.PrettyPrinter;
@@ -54,25 +55,23 @@ public class IfStmt extends Stmt {
 	}
 
 	/**
-	 * containsReturn - the if statement will recursively check each of its child statements for a return statement
+	 * Recursively check each of its child statements return statements,
+	 * returning them as a list.
 	 */
 	@Override
-	public ReturnStmt containsReturn() {
+	public ArrayList<ReturnStmt> getReturnStmts() {
+		ArrayList<ReturnStmt> returnStmts = new ArrayList<ReturnStmt>();
 		for (Stmt child : whenTrue) {
-			ReturnStmt rs = child.containsReturn();
-			if (rs != null) {
-				return rs;
+			returnStmts.addAll(child.getReturnStmts());
+		}
+
+		if (whenFalse != null) {
+			for (Stmt child : whenFalse) {
+				returnStmts.addAll(child.getReturnStmts());
 			}
 		}
 
-		for (Stmt child : whenFalse) {
-			ReturnStmt rs = child.containsReturn();
-			if (rs != null) {
-				return rs;
-			}
-		}
-
-		return null;
+		return returnStmts;
 	}
 
 	/**

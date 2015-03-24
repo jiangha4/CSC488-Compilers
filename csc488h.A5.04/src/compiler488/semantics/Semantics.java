@@ -1,9 +1,7 @@
 package compiler488.semantics;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 import compiler488.ast.*;
 import compiler488.ast.decl.*;
@@ -156,8 +154,8 @@ public class Semantics extends BaseASTVisitor {
 
 			// S53: check that a function body contains at least one return statement
 			Scope routineScope = routineDecl.getBody();
-			ReturnStmt returnStatement = routineScope.containsReturn();
-			if (returnStatement == null) {
+			ArrayList<ReturnStmt> returnStatements = routineScope.getReturnStmts();
+			if (returnStatements.isEmpty()) {
 				String msg = String.format("Function '%s' must contain at least one return statement.", routineName);
 				errors.add(routineDecl.getSourceCoord(), msg);
 			}

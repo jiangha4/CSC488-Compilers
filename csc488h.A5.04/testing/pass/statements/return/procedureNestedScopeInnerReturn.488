@@ -1,0 +1,14 @@
+begin
+	procedure a begin
+		procedure b begin
+			return
+			put "FAILED"
+		end
+
+		b
+		put "SUCCESS"
+	end
+
+	put "Should say SUCCESS: "
+	a
+end
