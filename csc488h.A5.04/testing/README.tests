@@ -1,0 +1,25 @@
+CSC488
+Assignment 5
+Group 4
+Group Members:
+	Haohan Jiang (g3jiangh)
+	Chandeep Singh (g2singh)
+	Maria Yancheva (c2yanche)
+	Timo Vink (c4vinkti)
+
+
+Testing
+-------
+How to run all tests
+From the top-level directory (make sure "testrunner.py" is in the same directory), run:
+
+> ./RUNALLTESTS.sh
+
+Tests' folder structure:
+All tests can be found under the tests/pass and tests/fail folders, 
+separated into subfolders by the language constructs being tested (e.g., expressions, 
+statements, functions/procedures).
+
+Testing strategy:
+
+Index of test cases:
