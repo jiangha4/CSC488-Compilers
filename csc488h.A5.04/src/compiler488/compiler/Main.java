@@ -408,17 +408,23 @@ public class Main {
 		  programAST.accept(visitor);
 		  visitor.Finalize();
 	  }
+	  catch (SemanticErrorException e) {
+		  System.err.println("Exception during Semantic Analysis");
+		  System.err.println(e.getMessage());
+		  errorOccurred = true;
+	  }
 	  catch(Exception e) {
-		System.err.println("Exception during Semantic Analysis");
-		e.printStackTrace();
-		errorOccurred = true ;
-	}
+		  System.err.println("Exception during Semantic Analysis");
+		  System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		  e.printStackTrace ();
+		  errorOccurred = true;
+	  }
 
       SymbolTable st = visitor.getSymbolTable();
 	  if (dumpSymbolTable) {
 		  dumpSymbolTable( st.fullTraversal() , "Exception during SymbolTable dump after SymbolTable building" );
 	  }
-
+	  
       return st;
    }
 
@@ -498,70 +504,70 @@ public class Main {
   private static void compileOneProgram( String  sourceFileName ){
 
 	Object parserResult  ;	// the result of parsing and AST building
-		Program  programAST  = null ;
+	Program  programAST  = null ;
 
-		System.out.println(System.lineSeparator() + "Compiling file: " + sourceFileName );
+	System.out.println(System.lineSeparator() + "Compiling file: " + sourceFileName );
 
 	/* Scan and Parse the program	*/
 	try {
 		Parser p = new Parser(new Lexer(new FileReader(sourceFileName )));
-			if(  traceSyntax )
+		if(  traceSyntax )
 			 parserResult = p.debug_parse().value;  //DEBUG Output
 		else
 			 parserResult = p.parse().value;
 		programAST = (Program) parserResult ;
-		}
-		catch( FileNotFoundException e)
-		   {
-			  System.err.println("Unable to open file: " + sourceFileName );
-			  errorOccurred = true ;
-		   }
-		catch (SyntaxErrorException e)
-			{  // parser has already printed an error message
-			   errorOccurred = true ;
-			}
+	}
+	catch( FileNotFoundException e)
+	{
+		System.err.println("Unable to open file: " + sourceFileName );
+		errorOccurred = true ;
+	}
+	catch (SyntaxErrorException e)
+	{  // parser has already printed an error message
+		errorOccurred = true ;
+	}
 	catch (Exception e)
-		{
+	{
 		System.err.println("Exception during Parsing and AST building");
 		System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		e.printStackTrace ();
 		errorOccurred = true ;
-		}
+	}
 
-		if( errorOccurred ){
+	if( errorOccurred ){
 		System.out.println("Processing Terminated due to errors during parsing");
 		return ;
-		}
+	}
 
 	// Dump AST after parsing if requested
 	if( dumpAST1 )
-		   dumpAST( programAST , "Exception during AST dump after AST building" );
+		dumpAST( programAST , "Exception during AST dump after AST building" );
 
  	/*  Do semantic analysis on the program		*/
-		SymbolTable st = semanticAnalysis( programAST );
-
-		if( errorOccurred ){
+	SymbolTable st = semanticAnalysis( programAST );
+	
+	if( errorOccurred ){
 		System.out.println("Processing Terminated due to errors during semantic analysis");
 		return ;
-		}
+	}
 
 	// Dump AST after semantic analysis  if requested
 	if( dumpAST2 )
 		   dumpAST( programAST , "Exception during AST dump after semantic analysis");
 
 
-		/* do code generation for the program 	*/
-		generateCode( st, programAST );
+	/* do code generation for the program 	*/
+	generateCode( st, programAST );
 
-		if( errorOccurred ){
+	if( errorOccurred ){
 		System.out.println("Processing Terminated due to errors during code generation");
 		return ;
-		}
+	}
 	else
-			System.out.println("End of Compilation");
+		System.out.println("End of Compilation");
 
-		if( traceStream != null && traceStream != saveSysOut )
-			traceStream.close();	// finish compilation trace
+	if( traceStream != null && traceStream != saveSysOut )
+		traceStream.close();	// finish compilation trace
 
 	return ;		// normal termination after compilation
   }
