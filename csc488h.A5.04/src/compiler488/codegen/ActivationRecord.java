@@ -83,7 +83,7 @@ public class ActivationRecord
 	 */
 	public static short getOffsetToVariableStorage(STScope stScope) {
 		short offset = getOffsetToParameterStorage();
-		offset += getNumWordsToAllocateForVariables(stScope);
+		offset += getNumWordsToAllocateForParameters(stScope);
 		return offset;
 	}
 

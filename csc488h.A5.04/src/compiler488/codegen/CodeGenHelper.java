@@ -412,10 +412,15 @@ public class CodeGenHelper {
 
 	/*
 	 * Emit instructions to set the display register for the given lexical
-	 * level to the current stack pointer.
+	 * level to the beginning of the current activation record (since the 
+	 * control block has already been pushed to stack, need to subtract it
+	 * from current stack pointer).
 	 */
-	public void emitSetDisplayToStackPointer(short lexicalLevel) {
+	public void emitSetDisplayToStackPointer(STScope scope) {
+		short lexicalLevel = scope.getLexicalLevel();
 		instrs.add(Machine.PUSHMT);
+		emitPushValue(ActivationRecord.getOffsetToVariableStorage(scope));
+		emitSubtract();
 		emitSetDisplay(lexicalLevel);
 	}
 
@@ -437,6 +442,9 @@ public class CodeGenHelper {
 		scopes.push(scope);
 		scope.routineBodyAddress = getNextInstructionAddr();
 
+		// Set display (update display register)
+		emitSetDisplayToStackPointer(scope);
+		
 		// Routing entrance code
 		emitAllocateSpaceForLocalStorage(scope);
 	}
@@ -471,10 +479,6 @@ public class CodeGenHelper {
 	 * the instrs array where the return value is, to be patched later.
 	 */
 	public short emitActivationRecord(STScope scope, short returnAddress, short callerLexlevel) {
-		// Set display
-		short lexicalLevel = scope.getLexicalLevel();
-		emitSetDisplayToStackPointer(lexicalLevel);
-
 		// Return value and address
 		emitPushValue(Machine.UNDEFINED);
 		emitPushValue(returnAddress);
