@@ -193,7 +193,7 @@ public class SymbolTable {
 		// Exit to parent scope
 		if (this.currentScope != null) {
 			STScope parent = this.currentScope.getParent();
-			if (parent != null) {
+			if (parent != null && this.currentScope.getScopeKind() == ScopeKind.NORMAL) {
 				parent.nextOrderNumber = this.currentScope.nextOrderNumber;
 			}
 			this.currentScope = parent;
