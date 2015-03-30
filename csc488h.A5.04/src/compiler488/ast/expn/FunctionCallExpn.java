@@ -16,6 +16,9 @@ public class FunctionCallExpn extends Expn {
 
 	/** The arguments passed to the function. */
 	private ASTList<Expn> arguments;
+	
+	/** Instruction location to patch later during code gen **/
+	public short shouldPointToAfterBranch;
 
 	public FunctionCallExpn(String ident, ASTList<Expn> arguments, SourceCoord sourceCoord) {
 		super(sourceCoord);

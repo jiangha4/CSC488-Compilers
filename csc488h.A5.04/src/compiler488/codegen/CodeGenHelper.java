@@ -386,6 +386,13 @@ public class CodeGenHelper {
 	public void emitStore() {
 		instrs.add(Machine.STORE);
 	}
+	
+	/*
+	 * Emit instructions to swap the two values at the top of the stack.
+	 */
+	public void emitSwap() {
+		instrs.add(Machine.SWAP);
+	}
 
 	/*
 	 * Emit instructions to set the display register for the given lexical
@@ -592,8 +599,8 @@ public class CodeGenHelper {
 	}
 
 	/*
-	 * Emit instructions to branch to the body of the routine we're calling.
-	 * Fix the return address to point the instruction after the branch, which
+	 * Emit instructions to branch to the body of the procedure we're calling.
+	 * Fix the return address to point to the instruction after the branch, which
 	 * is a pop, to discard the return value.
 	 */
 	public void emitProcedureCallBranch(STScope calleeScope, short returnAddrIndex) {
@@ -601,6 +608,16 @@ public class CodeGenHelper {
 
 		// Discard return value
 		emitPop();
+	}
+	
+	/*
+	 * Emit instructions to branch to the body of the function we're calling.
+	 * Fix the return address to point to the instruction after the branch. At that point, 
+	 * the return value of the function will be on the top of the stack, and the 
+	 * subsequent code can make use of it.
+	 */
+	public void emitFunctionCallBranch(STScope calleeScope, short returnAddrIndex) {
+		emitRoutineCallBranch(calleeScope, returnAddrIndex);
 	}
 
 	/*
@@ -617,5 +634,17 @@ public class CodeGenHelper {
 
 		// Remove this instruction
 		instrs.remove(lastIndex);
+	}
+	
+	public void moveReturnVal(STScope scope) {
+		// The address of the designated "return value" memory location in the current activation record
+		emitGetAddr(scope.getLexicalLevel(), 0);
+		
+		// Swap, so that the address of the designated memory location comes first, and then the actual
+		// return value to be stored in the memory location
+		emitSwap();
+		
+		// Store the value
+		emitStore();
 	}
 }

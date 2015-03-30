@@ -168,6 +168,12 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void exitVisit(ReturnStmt returnStmt)
 	{
+		// If there is a return value, pop it from the stack and 
+		// put it in the "return value" memory location in the current activation record
+		// (i.e., the first word in the activation record)
+		if (returnStmt.getValue() != null) {
+			instrs.moveReturnVal(returnStmt.getContainingSTScope());
+		}
 		returnStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
 	}
 
@@ -339,7 +345,31 @@ public class CodeGen extends BaseASTVisitor
 		// next instruction is end of loop, so patch everything that needs to point there
 		instrs.patchForwardBranchToNextInstruction(whileDoStmt.shouldPointToEnd);
 	}
+	
+	@Override 
+	public void enterVisit(FunctionCallExpn functionCallExpn) {
+		// Get the declaration's symbol table entry
+		STScope callerScope = functionCallExpn.getContainingSTScope();
+		String ident = functionCallExpn.getIdent();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
+		STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
 
+		// Emit function call setup
+		functionCallExpn.shouldPointToAfterBranch = instrs.emitRoutineCallSetup(callerScope, calleeScope);
+	}
+	
+	@Override
+	public void exitVisit(FunctionCallExpn functionCallExpn) {
+		// Get the declaration's symbol table entry
+		STScope callerScope = functionCallExpn.getContainingSTScope();
+		String ident = functionCallExpn.getIdent();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
+		STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
+		
+		// Emit function call branch
+		instrs.emitFunctionCallBranch(calleeScope, functionCallExpn.shouldPointToAfterBranch);
+	}
+	
 	@Override
 	public void enterVisit(ProcedureCallStmt callStmt) {
 		// Get the declaration's symbol table entry
