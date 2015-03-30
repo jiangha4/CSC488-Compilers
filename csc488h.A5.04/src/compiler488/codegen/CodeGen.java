@@ -392,6 +392,7 @@ public class CodeGen extends BaseASTVisitor
 		// address onto the stack, to prepare for moving the return value into it
 		instrs.emitGetAddr(anonFuncExpn.getContainingSTScope().getLexicalLevel(), 0);
 	}
+	
 	@Override
 	public void exitVisit(AnonFuncExpn anonFuncExpn) {
 		
@@ -508,5 +509,68 @@ public class CodeGen extends BaseASTVisitor
 				String msg = "Unknown CompareExpn operation: " + op;
 				throw new UnsupportedOperationException(msg);
 		}
+	}
+	
+	@Override
+	public void enterVisit(SubsExpn subsExpn) {
+		// Push array base address onto stack
+		STScope scope = subsExpn.getContainingSTScope();
+		String arrayName = subsExpn.getVariable();
+		VarAddress addr = scope.getVarAddress(arrayName);
+		
+		instrs.emitGetAddr(addr.getLexicalLevel(), addr.getOrderNumber());
+	}
+	
+	@Override
+	public void exitVisitSubscript1(SubsExpn subsExpn) {
+		// At this point, the dimension 1 subscript is at the top of the stack.
+		// Push the dimension 1 lower bound, and subtract to get the row offset.
+		STScope scope = subsExpn.getContainingSTScope();
+		String arrayName = subsExpn.getVariable();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
+		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
+		
+		instrs.emitPushValue(arrayDecl.getLowerBoundary1());
+		instrs.emitSubtract();
+	}
+	
+	@Override
+	public void enterVisitSubscript2(SubsExpn subsExpn) {
+		// There is a second dimension: multiply the row offset by the
+		// stride for dimension 1.
+		
+		STScope scope = subsExpn.getContainingSTScope();
+		String arrayName = subsExpn.getVariable();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
+		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
+		
+		short strideDim1 = (short) (arrayDecl.getUpperBoundary1() - arrayDecl.getLowerBoundary1() + 1);
+		instrs.emitPushValue(strideDim1);
+		instrs.emitMultiply();
+	}
+	
+	@Override
+	public void exitVisitSubscript2(SubsExpn subsExpn) {
+		// At this point, the dimension 2 subscript is at the top of the stack.
+		// Push the dimension 2 lower bound, and subtract to get the column offset.
+		STScope scope = subsExpn.getContainingSTScope();
+		String arrayName = subsExpn.getVariable();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
+		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
+		
+		instrs.emitPushValue(arrayDecl.getLowerBoundary2());
+		instrs.emitSubtract();
+		
+		// Add the column offset to the row offset
+		instrs.emitAdd();
+	}
+	
+	@Override
+	public void exitVisit(SubsExpn subsExpn) {
+		// Add the offset to the base array address
+		instrs.emitAdd();
+		
+		// Load the value from the array element's address
+		instrs.emitLoad();
 	}
 }

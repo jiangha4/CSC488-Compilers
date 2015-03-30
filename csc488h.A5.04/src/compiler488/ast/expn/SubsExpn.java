@@ -71,8 +71,12 @@ public class SubsExpn extends Expn implements Readable {
 		visitor.enterVisit(this);
 
 		subscript1.accept(visitor);
+		visitor.exitVisitSubscript1(this);
+		
 		if (subscript2 != null) {
+			visitor.enterVisitSubscript2(this);
 			subscript2.accept(visitor);
+			visitor.exitVisitSubscript2(this);
 		}
 
 		visitor.exitVisit(this);

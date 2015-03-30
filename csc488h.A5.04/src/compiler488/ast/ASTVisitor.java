@@ -93,6 +93,9 @@ public interface ASTVisitor {
 	public void exitVisit(SkipConstExpn skipConstExpn);
 	public void enterVisit(SubsExpn subsExpn);
 	public void exitVisit(SubsExpn subsExpn);
+	public void exitVisitSubscript1(SubsExpn subsExpn);
+	public void enterVisitSubscript2(SubsExpn subsExpn);
+	public void exitVisitSubscript2(SubsExpn subsExpn);
 	public void enterVisit(TextConstExpn textConstExpn);
 	public void exitVisit(TextConstExpn textConstExpn);
 	public void enterVisit(UnaryMinusExpn unaryMinusExpn);
