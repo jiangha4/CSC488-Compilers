@@ -262,15 +262,38 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void enterVisit(IdentExpn identExpn) {
+		// Get the symbol table entry
+		STScope callerScope = identExpn.getContainingSTScope();
+		String ident = identExpn.getIdent();
+		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
+		
+		if (ste.getKind() == SymbolKind.FUNCTION) {
+			// Function call without parameters
+			
+			// Get the function's scope
+			STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
+			
+			// Emit function call setup
+			identExpn.shouldPointToAfterBranch = instrs.emitRoutineCallSetup(callerScope, calleeScope);
+		}
+	}
+	
+	@Override
 	public void exitVisit(IdentExpn identExpn) {
 		// Get the symbol table entry
 		STScope scope = identExpn.getContainingSTScope();
 		String ident = identExpn.getIdent();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, scope);
-
+		
 		if (ste.getKind() == SymbolKind.FUNCTION) {
 			// Function call without parameters
-			throw new UnsupportedOperationException("Not implemented yet");
+			
+			// Get the function's scope
+			STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
+			
+			// Emit function call branch
+			instrs.emitFunctionCallBranch(calleeScope, identExpn.shouldPointToAfterBranch);
 		}
 		else {
 			// Variable or parameter

@@ -14,6 +14,9 @@ import compiler488.ast.SourceCoord;
 public class IdentExpn extends Expn implements Readable {
 	/** Name of the identifier. */
 	private String ident;
+	
+	/** Used for function calls without parameters: instruction location to patch later during code gen **/
+	public short shouldPointToAfterBranch;
 
 	public IdentExpn(String ident, SourceCoord sourceCoord) {
 		super(sourceCoord);
