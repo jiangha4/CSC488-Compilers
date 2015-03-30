@@ -1,0 +1,14 @@
+begin
+	boolean function a(boolean b) begin
+		return(b)
+	end
+
+	boolean x
+	x <= a(false)
+	put "Should say SUCCESS: "
+	if x then
+		put "FAILED"
+	else
+		put "SUCCESS"
+	end
+end

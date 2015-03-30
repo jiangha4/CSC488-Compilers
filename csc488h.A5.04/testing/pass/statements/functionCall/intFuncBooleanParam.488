@@ -1,0 +1,9 @@
+begin
+	integer function a(boolean b) begin
+		return(5)
+	end
+
+	integer x
+	x <= a(true)
+	put "Should say 5: ", x
+end

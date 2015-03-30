@@ -1,0 +1,9 @@
+begin
+	integer function a(integer b) begin
+		return(b)
+	end
+
+	integer x
+	x <= a(5)
+	put "Should say 5: ", x
+end

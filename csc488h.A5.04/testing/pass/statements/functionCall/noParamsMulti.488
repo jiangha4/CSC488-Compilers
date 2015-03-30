@@ -1,0 +1,9 @@
+begin
+	integer function a begin
+		return(1)
+	end
+
+	integer x
+	x <= a
+	put "Should say 11: ", x, x
+end
