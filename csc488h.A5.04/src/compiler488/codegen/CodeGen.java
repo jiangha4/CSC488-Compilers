@@ -166,13 +166,21 @@ public class CodeGen extends BaseASTVisitor
 	}
 
 	@Override
+	public void enterVisit(ReturnStmt returnStmt) {
+		// If there is a return value, prepare to put it in the 
+		// "return value" memory location in the current activation record
+		if (returnStmt.getValue() != null) {
+			instrs.emitGetAddr(returnStmt.getContainingSTScope().getLexicalLevel(), 0);
+		}
+	}
+	
+	@Override
 	public void exitVisit(ReturnStmt returnStmt)
 	{
-		// If there is a return value, pop it from the stack and 
-		// put it in the "return value" memory location in the current activation record
-		// (i.e., the first word in the activation record)
 		if (returnStmt.getValue() != null) {
-			instrs.moveReturnVal(returnStmt.getContainingSTScope());
+			// Store the actual return value (currently on top of stack) into the designated "return value" 
+			// memory location in the activation record (currently second from the top of the stack)
+			instrs.emitStore();
 		}
 		returnStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
 	}

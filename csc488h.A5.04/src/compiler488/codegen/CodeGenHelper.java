@@ -386,13 +386,6 @@ public class CodeGenHelper {
 	public void emitStore() {
 		instrs.add(Machine.STORE);
 	}
-	
-	/*
-	 * Emit instructions to swap the two values at the top of the stack.
-	 */
-	public void emitSwap() {
-		instrs.add(Machine.SWAP);
-	}
 
 	/*
 	 * Emit instructions to set the display register for the given lexical
@@ -634,17 +627,5 @@ public class CodeGenHelper {
 
 		// Remove this instruction
 		instrs.remove(lastIndex);
-	}
-	
-	public void moveReturnVal(STScope scope) {
-		// The address of the designated "return value" memory location in the current activation record
-		emitGetAddr(scope.getLexicalLevel(), 0);
-		
-		// Swap, so that the address of the designated memory location comes first, and then the actual
-		// return value to be stored in the memory location
-		emitSwap();
-		
-		// Store the value
-		emitStore();
 	}
 }
