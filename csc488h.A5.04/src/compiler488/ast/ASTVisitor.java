@@ -67,6 +67,7 @@ public interface ASTVisitor {
 	/* Expressions */
 	public void enterVisit(AnonFuncExpn anonFuncExpn);
 	public void exitVisit(AnonFuncExpn anonFuncExpn);
+	public void enterVisitYieldExpn(AnonFuncExpn anonFuncExpn);
 	public void enterVisit(ArithExpn arithExpn);
 	public void exitVisit(ArithExpn arithExpn);
 	public void enterVisit(BoolConstExpn boolConstExpn);

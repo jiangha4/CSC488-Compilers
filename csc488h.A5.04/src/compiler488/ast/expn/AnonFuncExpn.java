@@ -20,6 +20,14 @@ public class AnonFuncExpn extends Expn implements ScopeCreator {
 
 	/** The symbol table scope created by this expn **/
 	private STScope stScope;
+	
+	/** Instruction location to patch later during code gen 
+	 * (points to instruction after the function call) **/
+	public short shouldPointToAfterCall;
+	
+	/** Instruction location to patch later during code gen 
+	 * (points to instruction after the function declaration) **/
+	public short shouldPointToAfterDecl;
 
 	public AnonFuncExpn(ASTList<Stmt> body, Expn expn, SourceCoord sourceCoord) {
 		super(sourceCoord);
@@ -45,6 +53,10 @@ public class AnonFuncExpn extends Expn implements ScopeCreator {
 	public STScope getSTScope() {
 		return stScope;
 	}
+	
+	public short getLexicalLevel() {
+		return stScope.getLexicalLevel();
+	}
 
 	public void prettyPrint(PrettyPrinter p) {
 		p.println("{");
@@ -65,6 +77,7 @@ public class AnonFuncExpn extends Expn implements ScopeCreator {
 		visitor.enterVisit(this);
 
 		body.accept(visitor);
+		visitor.enterVisitYieldExpn(this);
 		expn.accept(visitor);
 
 		visitor.exitVisit(this);

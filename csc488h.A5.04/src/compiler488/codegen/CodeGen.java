@@ -377,6 +377,46 @@ public class CodeGen extends BaseASTVisitor
 		instrs.patchForwardBranchToNextInstruction(whileDoStmt.shouldPointToEnd);
 	}
 	
+	@Override
+	public void enterVisit(AnonFuncExpn anonFuncExpn) {
+		// Branch past declaration
+		anonFuncExpn.shouldPointToAfterDecl = instrs.emitBranchToUnknown();
+		
+		// Entrance code
+		instrs.emitRoutineEntranceCode(anonFuncExpn.getSTScope());
+	}
+	
+	@Override
+	public void enterVisitYieldExpn(AnonFuncExpn anonFuncExpn) {
+		// Before evaluating the return expression, place the designated "return value" 
+		// address onto the stack, to prepare for moving the return value into it
+		instrs.emitGetAddr(anonFuncExpn.getContainingSTScope().getLexicalLevel(), 0);
+	}
+	@Override
+	public void exitVisit(AnonFuncExpn anonFuncExpn) {
+		
+		// At this point, the return value is at the top of the stack.
+		// Move it to the "return value" memory location in the anon func's
+		// activation record.
+		instrs.emitStore();
+		
+		// Routine epilogue (immediately after routine body, so no branching needed)
+		instrs.emitActivationRecordCleanUp();
+		instrs.emitRestoreDisplay(anonFuncExpn);
+		instrs.emitBranch();
+		instrs.patchForwardBranchToNextInstruction(anonFuncExpn.shouldPointToAfterDecl);
+		
+		// Now, call the function that was just declared
+		STScope callerScope = anonFuncExpn.getParentNode().getContainingSTScope();
+		STScope calleeScope = anonFuncExpn.getSTScope();
+		
+		// Emit function call setup
+		anonFuncExpn.shouldPointToAfterCall = instrs.emitRoutineCallSetup(callerScope, calleeScope);
+		
+		// Emit function call branch
+		instrs.emitFunctionCallBranch(calleeScope, anonFuncExpn.shouldPointToAfterCall);
+	}
+	
 	@Override 
 	public void enterVisit(FunctionCallExpn functionCallExpn) {
 		// Get the declaration's symbol table entry

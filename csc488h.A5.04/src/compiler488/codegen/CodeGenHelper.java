@@ -472,6 +472,17 @@ public class CodeGenHelper {
 		emitLoad();
 		emitSetDisplay(routineDecl.getLexicalLevel());
 	}
+	
+	/*
+	 * Emit instructions to restore the display value as it was before the
+	 * routine call we just returned from.
+	 */
+	public void emitRestoreDisplay(AnonFuncExpn anonFuncExpn) {
+		emitPushValue(ActivationRecord.getOffsetToSavedDisplayValue());
+		emitAdd();
+		emitLoad();
+		emitSetDisplay(anonFuncExpn.getLexicalLevel());
+	}
 
 	/*
 	 * Emit instructions to push an activation record on to the stack, except
