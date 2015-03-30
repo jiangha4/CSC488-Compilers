@@ -1,0 +1,5 @@
+begin
+	integer x
+	x <= { integer a a <= 3 yields a }
+	put "Should say 3: ", x
+end

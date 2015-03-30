@@ -1,0 +1,10 @@
+begin
+	boolean x
+	x <= { boolean a a <= true yields a }
+	put "Should say SUCCESS: "
+	if x then
+		put "SUCCESS"
+	else
+		put "FAILED"
+	end
+end
