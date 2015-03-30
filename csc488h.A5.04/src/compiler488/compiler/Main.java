@@ -409,7 +409,7 @@ public class Main {
 		  visitor.Finalize();
 	  }
 	  catch (SemanticErrorException e) {
-		  System.err.println("Exception during Semantic Analysis");
+		  System.err.println("SemanticErrorException during Semantic Analysis");
 		  System.err.println(e.getMessage());
 		  errorOccurred = true;
 	  }
