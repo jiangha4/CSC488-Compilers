@@ -7,5 +7,5 @@ begin
 	boolean a
 	a <= false | true | f
 
-	if !a then put "FAILED" end
+	if !a then put "FAILED" else put "SUCCESS" end
 end

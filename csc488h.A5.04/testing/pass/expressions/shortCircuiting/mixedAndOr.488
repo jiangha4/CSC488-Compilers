@@ -7,5 +7,5 @@ begin
 	boolean a
 	a <= (false & f) | ((true | f) & true)
 
-	if !a then put "FAILED" end
+	if !a then put "FAILED" else put "SUCCESS" end
 end
