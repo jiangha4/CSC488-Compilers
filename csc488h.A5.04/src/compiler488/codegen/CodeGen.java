@@ -218,29 +218,30 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void exitVisitLHS(BoolExpn boolExpn)
 	{
-		if (boolExpn.getOpSymbol() == BoolExpn.OP_AND) {
-			instrs.emitNot();
-		}
-	}
-
-	@Override
-	public void exitVisit(BoolExpn boolExpn)
-	{
 		String operation = boolExpn.getOpSymbol();
 		switch (operation) {
 			case BoolExpn.OP_OR:
-				instrs.emitOr();
+				instrs.emitDup();
+				instrs.emitNot();
+				boolExpn.shouldPointToEnd = instrs.emitBranchIfFalseToUnknown();
+				instrs.emitPop();
 				break;
 			case BoolExpn.OP_AND:
-				instrs.emitNot();
-				instrs.emitOr();
-				instrs.emitNot();
+				instrs.emitDup();
+				boolExpn.shouldPointToEnd = instrs.emitBranchIfFalseToUnknown();
+				instrs.emitPop();
 				break;
 
 			default:
 				String msg = "Unknown BoolExpn operation: " + operation;
 				throw new UnsupportedOperationException(msg);
 		}
+	}
+
+	@Override
+	public void exitVisit(BoolExpn boolExpn)
+	{
+		instrs.patchForwardBranchToNextInstruction(boolExpn.shouldPointToEnd);
 	}
 
 	@Override

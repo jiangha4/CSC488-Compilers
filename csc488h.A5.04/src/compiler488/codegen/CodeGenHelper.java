@@ -103,6 +103,13 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit instruction to duplicate value on top of the stack.
+	 */
+	public void emitDup() {
+		instrs.add(Machine.DUP);
+	}
+
+	/*
 	 * Emit instructions for pushing a constant on to the stack N times.
 	 * Where N is allowed to be any integer >= 0.
 	 */
@@ -119,12 +126,12 @@ public class CodeGenHelper {
 				break;
 			case 2:
 				emitPushValue(value);
-				instrs.add(Machine.DUP);
+				emitDup();
 				break;
 			case 3:
 				emitPushValue(value);
-				instrs.add(Machine.DUP);
-				instrs.add(Machine.DUP);
+				emitDup();
+				emitDup();
 				break;
 
 			default:

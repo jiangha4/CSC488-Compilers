@@ -14,6 +14,9 @@ public class BoolExpn extends BinaryExpn {
 	public final static String OP_OR 	= "|";
 	public final static String OP_AND	= "&";
 
+	/** Instruction locations to patch later during code gen **/
+	public short shouldPointToEnd;
+
 	public BoolExpn(String opSymbol, Expn left, Expn right, SourceCoord sourceCoord) {
 		super(opSymbol, left, right, sourceCoord);
 
