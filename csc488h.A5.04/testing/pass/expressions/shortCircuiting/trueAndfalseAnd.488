@@ -1,0 +1,11 @@
+begin
+	boolean function f begin
+		put "FAILED"
+		return (true)
+	end
+
+	boolean a
+	a <= true & false & f
+
+	if a then put "FAILED" end
+end
