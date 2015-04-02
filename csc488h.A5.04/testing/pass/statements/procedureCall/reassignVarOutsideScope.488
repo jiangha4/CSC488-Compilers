@@ -1,0 +1,18 @@
+begin
+    integer i, val
+    i <= 1
+    val <= 500
+
+    procedure reassignVarOutsideScope(integer num) begin
+        i <= num
+    end
+
+    reassignVarOutsideScope(val)
+
+    if (i = val) then
+        put "SUCCESS"
+    else
+        put "FAIL"
+    end
+
+end
