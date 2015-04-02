@@ -1,0 +1,25 @@
+begin
+    integer result, count, input_n
+    result <= 1
+    count <= 1
+
+    put "Welcome to the SUPER AWESOME (n!) calculator!", skip
+    put "That's right, in just ONE EASY STEP, you can get the answer to (n!)!", skip
+    put "Input an n, but only 0-7... because its not actually awesome enough to handle overflow :(... "
+    get input_n
+
+    procedure doFact(integer num) begin
+        if (count <= num) then
+            if (count > 1) then
+                result <= result * count
+            end
+            count <= count + 1
+            doFact(num);
+        end
+    end
+
+    doFact(input_n)
+
+    put "*drum roll* aaaaand your result is... ", result
+
+end
