@@ -1,0 +1,11 @@
+begin
+	procedure a(integer p) begin
+		put p
+	end
+
+	integer p
+	p <= 1
+
+	put "Should be 2: "
+	a(p + 1)
+end

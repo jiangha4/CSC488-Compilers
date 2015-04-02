@@ -1,0 +1,15 @@
+begin
+	procedure a(integer p) begin
+		put p
+	end
+
+	procedure b(integer p) begin
+		a(p + 1)
+	end
+
+	integer p
+	p <= 1
+
+	put "Should be 3: "
+	b(p + 1)
+end

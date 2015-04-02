@@ -1,0 +1,14 @@
+begin
+	integer function a(integer p) begin
+		return (p)
+	end
+
+	integer function b(integer p) begin
+		return (a(p + 1))
+	end
+
+	integer p
+	p <= 1
+
+	put "Should be 3: ", b(p + 1)
+end
