@@ -1,0 +1,15 @@
+begin
+    integer i
+
+    put "Should be 150: "
+    put {
+        integer i
+        i <= 10
+        loop
+            i <= i + 10
+            exit when i = 150
+        end
+        yields i
+    }
+
+end
