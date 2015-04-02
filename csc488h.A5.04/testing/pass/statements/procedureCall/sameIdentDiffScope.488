@@ -1,0 +1,19 @@
+begin
+    integer i, val
+    i <= 1
+    val <= 500
+
+    procedure sameIdentDiffScope(integer num) begin
+        integer i
+        i <= num
+    end
+
+    sameIdentDiffScope(val)
+
+    if (i = 1) then
+        put "SUCCESS"
+    else
+        put "FAIL"
+    end
+
+end
