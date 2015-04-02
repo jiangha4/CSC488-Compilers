@@ -1,0 +1,12 @@
+begin
+	integer function a begin
+        procedure b begin
+            put a, skip
+        end
+		return(1)
+	end
+
+	integer x
+	x <= a
+	put "Should be 1: ", x
+end
