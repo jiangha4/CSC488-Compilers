@@ -1,0 +1,11 @@
+begin
+    integer function foo(integer a) begin
+        if false then
+            return(a)
+        end
+    end
+    
+    integer x
+    x <= foo(1)
+    put "Should be ExecutionError (x is undefined): ", x
+end
