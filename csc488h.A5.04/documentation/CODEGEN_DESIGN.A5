@@ -11,6 +11,8 @@ Group Members:
 Code Generator Design
 ---------------------
 
+Our code generator for A5 uses a similar visitor pattern to the Semantic checker in A3. We added code-gen-specific "enterVisit" and "exitVisit" methods that are run before/after visiting nodes. For example, the enterVisit for a program node would contain the setup of the main activation record, and then the exit would contain the code for cleanup of that activation record. Most of the enter/exit Visit methods contain calls to the CodeGenHelper which helps with emitting and patching code, and contains methods for easily emitting a batch of instructions, such as what is required to allocate space for an activation record. (a bit more detail on the CodeGenHelper class can be found in INDEX_CLASSES.A5, and in the class docstrings)
+
 
 Changes since A4
 ----------------

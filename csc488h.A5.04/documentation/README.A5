@@ -17,6 +17,7 @@ Haohan Jiang (g3jiangh)
 Chandeep Singh (g2singh)
 - Implemented code generation for looping statements, exit statements and comparison operators
 - Added test cases
+- Documentation
 
 Maria Yancheva (c2yanche)
 - Implemented code generation for function calls (with and without params), anonymous functions, array subscripting

@@ -10,3 +10,25 @@ Group Members:
 
 Index of new classes
 --------------------
+
+-src/compiler488/codegen/ActivationRecord.java
+This class is a container for all helper functions that pertain to Activation Records. All methods are static, and help with calculations such as how many blocks of memory are required to be allocated for some local storage, getting various offset parameters or local variables, getting memory sizes for variables, etc.
+
+-src/compiler488/codegen/VarAddress.java
+Very simple container class used to store lexical level and order number for variables.
+
+-src/compiler488/codegen/CodeGenHelper.java
+This is our helper class for code generation. Essentially, it contains methods for emitting various kinds of instructions, but instead of emitting straight to the machine, it adds them to the class's internal list of shorts. This allows us to manipulate instructions more easily during code generation, and all emitting/patching is done on this internal instructions list. When we are finished with code generation, we can simply dump this list of instructions straight into the machine.
+
+Notable methods include (but not limited to):
+    -printDebug: a more visually-friendly dump of the instruction list
+    -emitBranchToUnknown: emit unconditional branch to UNDEFINED, and return instruction addr for later patching
+    -emitBranchIfFalseToUnknown: emit branch-if-false to UNDEFINED, and return instruction addr for later patching
+    -emitPrintText: easily print a java string by looping through each character and emitting puts
+    -emitActivationRecord: uses ActivationRecord static methods to help allocate space
+    -emitActivationRecordCleanup: clear all space used for activation record, leaving return value behind
+    -patchForwardBranchToNextInstruction: given an branch instruction's address (or list of branch instruction addresses), patch the branch location(s) to the next instruction in the program
+
+-src/compiler488/codegen/CodeGen.java
+This class implements an AST visitor in order to traverse our previously generated AST and generate code for the program. More information can be found in CODEGEN_DESIGN.A5
+
