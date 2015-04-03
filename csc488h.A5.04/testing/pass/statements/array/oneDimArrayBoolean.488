@@ -3,6 +3,4 @@ begin
     x[0] <= true
     x[1] <= true
     x[2] <= false
-
-    put "x[0] should be true: ", x[0]
 end
