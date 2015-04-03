@@ -82,7 +82,7 @@ public class CodeGen extends BaseASTVisitor
 	public void writeToMachine()
 		throws MemoryAddressException, ExecutionException
 	{
-		// Trace emitted instruction
+		// Print emitted instructions
 		if (trace) {
 			instrs.printDebug();
 		}
@@ -104,16 +104,20 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void enterVisit(Program program)
 	{
+		// We put HALT in memory location 0
 		instrs.emitHalt();
+
+		// Activation record is similar to that of a procedure
+		// program has return address 0 (i.e., the HALT)
 		instrs.emitProgramActivationRecord(program.getSTScope());
 	}
 
 	@Override
 	public void exitVisit(Program program)
 	{
+		// Clean up activation record, branch to HALT
 		instrs.emitProgramActivationRecordCleanUp();
 		instrs.emitBranch();
-		instrs.emitPop();
 	}
 
 	@Override
@@ -130,55 +134,65 @@ public class CodeGen extends BaseASTVisitor
 
 	@Override
 	public void exitVisitGetExpn(Expn getStmtChild) {
+		// This makes it so that we don't load the IdentExpn or SubsExpn
 		instrs.removeLastEmittedLoad();
+
 		instrs.emitReadIntAndStore();
 	}
 
 	@Override
 	public void exitVisitLHS(AssignStmt assignStmt)
 	{
+		// This makes it so that we don't load the IdentExpn or SubsExpn on the LHS
 		instrs.removeLastEmittedLoad();
 	}
 
 	@Override
 	public void exitVisit(AssignStmt assignStmt)
 	{
+		// At this point the address and value are on the stack
 		instrs.emitStore();
 	}
 
 	@Override
 	public void exitVisitCondition(IfStmt ifStmt)
 	{
+		// Emit branch to "else", will patch address later
 		ifStmt.shouldPointToFalse = instrs.emitBranchIfFalseToUnknown();
 	}
 
 	@Override
 	public void exitVisitWhenTrue(IfStmt ifStmt)
 	{
+		// Path branch to "else" emitted after the condition part of the ifstmt
 		ifStmt.shouldPointToEnd = instrs.emitBranchToUnknown();
+
+		// Emit branch to end of ifstmt, will patch address later
 		instrs.patchForwardBranchToNextInstruction(ifStmt.shouldPointToFalse);
 	}
 
 	@Override
 	public void exitVisit(IfStmt ifStmt)
 	{
+		// Patch branch to end of ifstmt emitted after visiting the "if" part
+		// of the stmt.
 		instrs.patchForwardBranchToNextInstruction(ifStmt.shouldPointToEnd);
 	}
 
 	@Override
 	public void enterVisit(ReturnStmt returnStmt) {
-		// If there is a return value, prepare to put it in the 
-		// "return value" memory location in the current activation record
+		// If there is a return value, prepare to put it in the "return value"
+		// memory location in the current activation record
 		if (returnStmt.getValue() != null) {
 			instrs.emitGetAddr(returnStmt.getContainingSTScope().getLexicalLevel(), 0);
 		}
 	}
-	
+
 	@Override
 	public void exitVisit(ReturnStmt returnStmt)
 	{
 		if (returnStmt.getValue() != null) {
-			// Store the actual return value (currently on top of stack) into the designated "return value" 
+			// Store the actual return value (currently on top of stack) into the designated "return value"
 			// memory location in the activation record (currently second from the top of the stack)
 			instrs.emitStore();
 		}
@@ -221,12 +235,19 @@ public class CodeGen extends BaseASTVisitor
 		String operation = boolExpn.getOpSymbol();
 		switch (operation) {
 			case BoolExpn.OP_OR:
+				// If LHS is true, skip past the RHS, leaving 'true' on the
+				// top of the stack. Else clean the 'true' from the top of the
+				// stack.
 				instrs.emitDup();
 				instrs.emitNot();
 				boolExpn.shouldPointToEnd = instrs.emitBranchIfFalseToUnknown();
 				instrs.emitPop();
 				break;
+
 			case BoolExpn.OP_AND:
+				// If LHS is false, skip past the RHS, leaving 'false' on the
+				// top of the stack. Else clean the 'false' from the top of the
+				// stack.
 				instrs.emitDup();
 				boolExpn.shouldPointToEnd = instrs.emitBranchIfFalseToUnknown();
 				instrs.emitPop();
@@ -241,6 +262,7 @@ public class CodeGen extends BaseASTVisitor
 	@Override
 	public void exitVisit(BoolExpn boolExpn)
 	{
+		// Patch branches emitted after visiting LHS of expn
 		instrs.patchForwardBranchToNextInstruction(boolExpn.shouldPointToEnd);
 	}
 
@@ -268,31 +290,31 @@ public class CodeGen extends BaseASTVisitor
 		STScope callerScope = identExpn.getContainingSTScope();
 		String ident = identExpn.getIdent();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
-		
+
 		if (ste.getKind() == SymbolKind.FUNCTION) {
 			// Function call without parameters
-			
+
 			// Get the function's scope
 			STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
-			
+
 			// Emit function call setup
 			identExpn.shouldPointToAfterBranch = instrs.emitRoutineCallSetup(callerScope, calleeScope);
 		}
 	}
-	
+
 	@Override
 	public void exitVisit(IdentExpn identExpn) {
 		// Get the symbol table entry
 		STScope scope = identExpn.getContainingSTScope();
 		String ident = identExpn.getIdent();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, scope);
-		
+
 		if (ste.getKind() == SymbolKind.FUNCTION) {
 			// Function call without parameters
-			
+
 			// Get the function's scope
 			STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
-			
+
 			// Emit function call branch
 			instrs.emitFunctionCallBranch(calleeScope, identExpn.shouldPointToAfterBranch);
 		}
@@ -315,7 +337,8 @@ public class CodeGen extends BaseASTVisitor
 		instrs.emitPushValue(loopStmt.startOfLoop);
 		instrs.emitBranch();
 
-		// next instruction is end of loop, so patch everything that needs to point there
+		// next instruction is end of loop, so patch everything that needs to
+		// point there
 		instrs.patchForwardBranchToNextInstruction(loopStmt.shouldPointToEnd);
 	}
 
@@ -377,49 +400,49 @@ public class CodeGen extends BaseASTVisitor
 		// next instruction is end of loop, so patch everything that needs to point there
 		instrs.patchForwardBranchToNextInstruction(whileDoStmt.shouldPointToEnd);
 	}
-	
+
 	@Override
 	public void enterVisit(AnonFuncExpn anonFuncExpn) {
 		// Branch past declaration
 		anonFuncExpn.shouldPointToAfterDecl = instrs.emitBranchToUnknown();
-		
+
 		// Entrance code
 		instrs.emitRoutineEntranceCode(anonFuncExpn.getSTScope());
 	}
-	
+
 	@Override
 	public void enterVisitYieldExpn(AnonFuncExpn anonFuncExpn) {
-		// Before evaluating the return expression, place the designated "return value" 
+		// Before evaluating the return expression, place the designated "return value"
 		// address onto the stack, to prepare for moving the return value into it
 		instrs.emitGetAddr(anonFuncExpn.getContainingSTScope().getLexicalLevel(), 0);
 	}
-	
+
 	@Override
 	public void exitVisit(AnonFuncExpn anonFuncExpn) {
-		
+
 		// At this point, the return value is at the top of the stack.
 		// Move it to the "return value" memory location in the anon func's
 		// activation record.
 		instrs.emitStore();
-		
+
 		// Routine epilogue (immediately after routine body, so no branching needed)
 		instrs.emitActivationRecordCleanUp();
 		instrs.emitRestoreDisplay(anonFuncExpn);
 		instrs.emitBranch();
 		instrs.patchForwardBranchToNextInstruction(anonFuncExpn.shouldPointToAfterDecl);
-		
+
 		// Now, call the function that was just declared
 		STScope callerScope = anonFuncExpn.getParentNode().getContainingSTScope();
 		STScope calleeScope = anonFuncExpn.getSTScope();
-		
+
 		// Emit function call setup
 		anonFuncExpn.shouldPointToAfterCall = instrs.emitRoutineCallSetup(callerScope, calleeScope);
-		
+
 		// Emit function call branch
 		instrs.emitFunctionCallBranch(calleeScope, anonFuncExpn.shouldPointToAfterCall);
 	}
-	
-	@Override 
+
+	@Override
 	public void enterVisit(FunctionCallExpn functionCallExpn) {
 		// Get the declaration's symbol table entry
 		STScope callerScope = functionCallExpn.getContainingSTScope();
@@ -430,7 +453,7 @@ public class CodeGen extends BaseASTVisitor
 		// Emit function call setup
 		functionCallExpn.shouldPointToAfterBranch = instrs.emitRoutineCallSetup(callerScope, calleeScope);
 	}
-	
+
 	@Override
 	public void exitVisit(FunctionCallExpn functionCallExpn) {
 		// Get the declaration's symbol table entry
@@ -438,11 +461,11 @@ public class CodeGen extends BaseASTVisitor
 		String ident = functionCallExpn.getIdent();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(ident, callerScope);
 		STScope calleeScope = ((RoutineDecl)ste.getNode()).getSTScope();
-		
+
 		// Emit function call branch
 		instrs.emitFunctionCallBranch(calleeScope, functionCallExpn.shouldPointToAfterBranch);
 	}
-	
+
 	@Override
 	public void enterVisit(ProcedureCallStmt callStmt) {
 		// Get the declaration's symbol table entry
@@ -490,38 +513,38 @@ public class CodeGen extends BaseASTVisitor
 
 	@Override
 	public void exitVisit(CompareExpn compareExpn) {
-		/*
-		 * Note: LESS/GREATER and LESS_EQUAL/GREATER_EQUAL
-		 * are differentiated by the order that the left and right
-		 * operands are processed.
-		 */
+		// The visitor visits the LHS first and then the RHS for LESS and
+		// GREATER_EQUAL, and the RHS first and then the LHS for GREATER and
+		// LESS_EQUAL
 		String op = compareExpn.getOpSymbol();
 		switch (op) {
 			case CompareExpn.OP_LESS:
 			case CompareExpn.OP_GREATER:
 				instrs.emitLessThan();
 				break;
+
 			case CompareExpn.OP_LESS_EQUAL:
 			case CompareExpn.OP_GREATER_EQUAL:
 				instrs.emitLessThan();
 				instrs.emitNot();
 				break;
+
 			default:
 				String msg = "Unknown CompareExpn operation: " + op;
 				throw new UnsupportedOperationException(msg);
 		}
 	}
-	
+
 	@Override
 	public void enterVisit(SubsExpn subsExpn) {
 		// Push array base address onto stack
 		STScope scope = subsExpn.getContainingSTScope();
 		String arrayName = subsExpn.getVariable();
 		VarAddress addr = scope.getVarAddress(arrayName);
-		
+
 		instrs.emitGetAddr(addr.getLexicalLevel(), addr.getOrderNumber());
 	}
-	
+
 	@Override
 	public void exitVisitSubscript1(SubsExpn subsExpn) {
 		// At this point, the dimension 1 subscript is at the top of the stack.
@@ -530,26 +553,26 @@ public class CodeGen extends BaseASTVisitor
 		String arrayName = subsExpn.getVariable();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
 		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
-		
+
 		instrs.emitPushValue(arrayDecl.getLowerBoundary1());
 		instrs.emitSubtract();
 	}
-	
+
 	@Override
 	public void enterVisitSubscript2(SubsExpn subsExpn) {
 		// There is a second dimension: multiply the row offset by the
 		// stride for dimension 1.
-		
+
 		STScope scope = subsExpn.getContainingSTScope();
 		String arrayName = subsExpn.getVariable();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
 		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
-		
+
 		short strideDim1 = (short) (arrayDecl.getUpperBoundary1() - arrayDecl.getLowerBoundary1() + 1);
 		instrs.emitPushValue(strideDim1);
 		instrs.emitMultiply();
 	}
-	
+
 	@Override
 	public void exitVisitSubscript2(SubsExpn subsExpn) {
 		// At this point, the dimension 2 subscript is at the top of the stack.
@@ -558,19 +581,19 @@ public class CodeGen extends BaseASTVisitor
 		String arrayName = subsExpn.getVariable();
 		SymbolTableEntry ste = symbolTable.searchGlobalFrom(arrayName, scope);
 		ArrayDeclPart arrayDecl = (ArrayDeclPart)ste.getNode();
-		
+
 		instrs.emitPushValue(arrayDecl.getLowerBoundary2());
 		instrs.emitSubtract();
-		
+
 		// Add the column offset to the row offset
 		instrs.emitAdd();
 	}
-	
+
 	@Override
 	public void exitVisit(SubsExpn subsExpn) {
 		// Add the offset to the base array address
 		instrs.emitAdd();
-		
+
 		// Load the value from the array element's address
 		instrs.emitLoad();
 	}
