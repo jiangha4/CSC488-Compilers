@@ -7,7 +7,7 @@ Group Members:
 	Maria Yancheva (c2yanche)
 	Timo Vink (c4vinkti)
 
-	
+
 Who Did What
 ------------
 
@@ -15,12 +15,14 @@ Haohan Jiang (g3jiangh)
 - Documentation and testing
 
 Chandeep Singh (g2singh)
-- Implemented code generation for looping statements, exit statements and comparison operators
+- Implemented code generation for looping statements, exit statements and
+  comparison operators
 - Added test cases
 - Documentation
 
 Maria Yancheva (c2yanche)
-- Implemented code generation for function calls (with and without params), anonymous functions, array subscripting
+- Implemented code generation for function calls (with and without params),
+  anonymous functions, array subscripting
 - Added test cases
 
 Timo Vink (c4vinkti)

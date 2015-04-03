@@ -7,12 +7,29 @@ Group Members:
 	Maria Yancheva (c2yanche)
 	Timo Vink (c4vinkti)
 
-    
+
 Code Generator Design
 ---------------------
 
-Our code generator for A5 uses a similar visitor pattern to the Semantic checker in A3. We added code-gen-specific "enterVisit" and "exitVisit" methods that are run before/after visiting nodes. For example, the enterVisit for a program node would contain the setup of the main activation record, and then the exit would contain the code for cleanup of that activation record. Most of the enter/exit Visit methods contain calls to the CodeGenHelper which helps with emitting and patching code, and contains methods for easily emitting a batch of instructions, such as what is required to allocate space for an activation record. (a bit more detail on the CodeGenHelper class can be found in INDEX_CLASSES.A5, and in the class docstrings)
+Our code generator for A5 uses a similar visitor pattern to the Semantic checker
+in A3. We added code-gen-specific "enterVisit" and "exitVisit" implementations
+that are run before/after visiting nodes. For example, the enterVisit for a
+program node would contain the setup of the main activation record, and then
+the exit would contain the code for cleanup of that activation record. Most of
+the enter/exit visit methods contain calls to the CodeGenHelper which helps with
+emitting and patching code, and contains methods for easily emitting a batch of
+instructions, such as what is required to allocate space for an activation
+record. (a bit more detail on the CodeGenHelper class can be found in
+INDEX_CLASSES.A5, and in the class docstrings)
 
 
 Changes since A4
 ----------------
+
+The only changes that were required for existing code were some additions to the
+symbol table related classes. Specifically, every scope now has a lexical level
+associated with it, and every variable in a scope an order number.
+
+Minor scopes are automatically given the same lexical level as their containing
+scopes, and the order numbers are guarenteed not to clash with those of its
+containing scope (and nor will it be wasteful, of course).
