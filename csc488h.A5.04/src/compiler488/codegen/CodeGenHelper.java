@@ -329,10 +329,41 @@ public class CodeGenHelper {
 	}
 
 	/*
+	 * Emit an instruction to swap the top two items on the stack.
+	 */
+	public void emitSwap() {
+		instrs.add(Machine.SWAP);
+	}
+
+	/*
 	 * Emit instructions to perform < operation
 	 */
 	public void emitLessThan() {
 		instrs.add(Machine.LT);
+	}
+
+	/*
+	 * Emit instructions to perform > operation
+	 */
+	public void emitGreaterThan() {
+		emitSwap();
+		emitLessThan();
+	}
+
+	/*
+	 * Emit instructions to perform <= operation
+	 */
+	public void emitLessThanOrEqual() {
+		emitGreaterThan();
+		emitNot();
+	}
+
+	/*
+	 * Emit instructions to perform >= operation
+	 */
+	public void emitGreaterThanOrEqual() {
+		emitLessThan();
+		emitNot();
 	}
 
 	/*
@@ -419,7 +450,7 @@ public class CodeGenHelper {
 
 	/*
 	 * Emit instructions to set the display register for the given lexical
-	 * level to the beginning of the current activation record (since the 
+	 * level to the beginning of the current activation record (since the
 	 * control block has already been pushed to stack, need to subtract it
 	 * from current stack pointer).
 	 */
@@ -451,7 +482,7 @@ public class CodeGenHelper {
 
 		// Set display (update display register)
 		emitSetDisplayToStackPointer(scope);
-		
+
 		// Routing entrance code
 		emitAllocateSpaceForLocalStorage(scope);
 	}
@@ -479,7 +510,7 @@ public class CodeGenHelper {
 		emitLoad();
 		emitSetDisplay(routineDecl.getLexicalLevel());
 	}
-	
+
 	/*
 	 * Emit instructions to restore the display value as it was before the
 	 * routine call we just returned from.
@@ -620,11 +651,11 @@ public class CodeGenHelper {
 		// Discard return value
 		emitPop();
 	}
-	
+
 	/*
 	 * Emit instructions to branch to the body of the function we're calling.
-	 * Fix the return address to point to the instruction after the branch. At that point, 
-	 * the return value of the function will be on the top of the stack, and the 
+	 * Fix the return address to point to the instruction after the branch. At that point,
+	 * the return value of the function will be on the top of the stack, and the
 	 * subsequent code can make use of it.
 	 */
 	public void emitFunctionCallBranch(STScope calleeScope, short returnAddrIndex) {

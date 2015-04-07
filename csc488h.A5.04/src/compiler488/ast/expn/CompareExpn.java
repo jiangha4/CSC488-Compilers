@@ -28,18 +28,9 @@ public class CompareExpn extends BinaryExpn {
   @Override
 	public void accept(ASTVisitor visitor) {
 		visitor.enterVisit(this);
-		
-		/*
-		 * Visit order different depending on op
-		 * See 2.5 in our A4
-		 */
-		if (opSymbol == OP_GREATER || opSymbol == OP_LESS_EQUAL) {
-			right.accept(visitor);
-			left.accept(visitor);
-		} else {
-			left.accept(visitor);
-			right.accept(visitor);
-		}
+
+		left.accept(visitor);
+		right.accept(visitor);
 
 		visitor.exitVisit(this);
 	}

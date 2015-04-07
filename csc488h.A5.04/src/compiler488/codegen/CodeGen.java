@@ -519,14 +519,19 @@ public class CodeGen extends BaseASTVisitor
 		String op = compareExpn.getOpSymbol();
 		switch (op) {
 			case CompareExpn.OP_LESS:
-			case CompareExpn.OP_GREATER:
 				instrs.emitLessThan();
 				break;
 
+			case CompareExpn.OP_GREATER:
+				instrs.emitGreaterThan();
+				break;
+
 			case CompareExpn.OP_LESS_EQUAL:
+				instrs.emitLessThanOrEqual();
+				break;
+
 			case CompareExpn.OP_GREATER_EQUAL:
-				instrs.emitLessThan();
-				instrs.emitNot();
+				instrs.emitGreaterThanOrEqual();
 				break;
 
 			default:
